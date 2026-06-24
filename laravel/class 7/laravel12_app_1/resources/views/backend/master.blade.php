@@ -9,6 +9,7 @@
     <link href="{{asset('')}}assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" >
     <link href="{{asset('')}}assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet">
     <link href="{{asset('')}}assets/plugins/simplebar/css/simplebar.css" rel="stylesheet">
+    @stack('styles')
     <!-- loader-->
 	  <link href="{{asset('')}}assets/css/pace.min.css" rel="stylesheet">
 	  <script src="{{asset('')}}assets/js/pace.min.js"></script>
@@ -137,6 +138,7 @@
    <script src="{{asset('')}}assets/plugins/simplebar/js/simplebar.min.js"></script>
    <script src="{{asset('')}}assets/plugins/apex/apexcharts.min.js"></script>
    <script src="{{asset('')}}assets/js/index.js"></script>
+   @stack('scripts')
     <!--BS Scripts-->
     <script src="{{asset('')}}assets/js/bootstrap.bundle.min.js"></script>
     <script src="{{asset('')}}assets/js/main.js"></script>
