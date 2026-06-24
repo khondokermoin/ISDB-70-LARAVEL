@@ -12,9 +12,10 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::latest()->get();
-
-        return view('backend.product.index', compact('products'));
+        $products = Product::all();
+        return view('backend.product.index', ['items'=>$products]);
+        /* $products = Product::latest()->get();
+        return view('backend.product.index', compact('products')); */
     }
 
     /**
