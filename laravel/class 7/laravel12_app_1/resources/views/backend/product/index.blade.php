@@ -82,7 +82,8 @@
                                         @endif
                                     </td>
                                     <td>{{ $item->name }}</td>
-                                    <td>{{ $item->category->cat_name ?? 'N/A' }}</td>
+                                    {{-- <td>{{ $item->category->cat_name ?? 'N/A' }}</td> --}}
+                                    <td>{{ $item->category?->cat_name ?? 'N/A' }}</td>
                                     <td>৳ {{ number_format($item->price, 2) }}</td>
                                     <td>
                                         @if ($item->status == 1)

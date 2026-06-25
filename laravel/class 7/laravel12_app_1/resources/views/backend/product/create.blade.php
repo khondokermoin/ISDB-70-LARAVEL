@@ -38,7 +38,7 @@
                 <div class="col-12 col-lg-8">
                     <div class="card">
                         <div class="card-body">
-                            
+
                             <div class="mb-4">
                                 <h5 class="mb-3">Product Name</h5>
                                 <input type="text" name="name" class="form-control"
@@ -75,11 +75,12 @@
                                 <div class="col-12">
                                     <label for="AddCategory" class="form-label fw-bold">Category</label>
                                     <!-- FIXED: Added name="category" so the value is sent to the backend -->
-                                    <select class="form-select" id="AddCategory" name="category">
-                                        <option value="0">Topwear</option>
-                                        <option value="1">Bottomwear</option>
-                                        <option value="2">Casual Tshirt</option>
-                                        <option value="3">Electronic</option>
+                                    <select class="form-select" id="AddCategory" name="category_id">
+                                        <option value="">Slect One</option>
+                                        @foreach ($items as $item)
+                                            <option value="{{ $item->id }}">{{ $item->cat_name }}</option>
+                                        @endforeach
+
                                     </select>
                                 </div>
 

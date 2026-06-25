@@ -98,4 +98,8 @@
         <!--end row-->
 
     </main>
+    @if(request()->routeIs('dashboard'))
+    <script src="{{ asset('assets/plugins/apex/apexcharts.min.js') }}"></script>
+    <script src="{{ asset('assets/js/index.js') }}"></script>
+@endif
 @endsection

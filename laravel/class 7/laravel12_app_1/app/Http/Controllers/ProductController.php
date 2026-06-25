@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -14,8 +15,12 @@ class ProductController extends Controller
     {
         $products = Product::all();
         return view('backend.product.index', ['items'=>$products]);
+        /* ------------------------------------------------------------ */
         /* $products = Product::latest()->get();
         return view('backend.product.index', compact('products')); */
+
+        /* ----------------------------------------------------- */
+        
     }
 
     /**
@@ -23,7 +28,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('backend.product.create');
+        $cats = Category::all();
+        return view('backend.product.create', ['items' => $cats]);
     }
 
     /**
@@ -31,37 +37,34 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-
         $request->validate([
-            'name'        => 'required|min:3|max:255',
+            'name' => 'required|min:3|max:255',
             'description' => 'nullable|string',
-            'image'       => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'category'    => 'required',
-            'price'       => 'required|numeric',
-            'status'      => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'category_id' => 'required|exists:categories,id',
+            'price' => 'required|numeric',
+            'status' => 'required|in:0,1',
         ]);
-
 
         $imagePath = null;
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
-            $fileName = strtolower(time() . '_' . $file->getClientOriginalName());
+            $fileName = time() . '_' . $file->getClientOriginalName();
             $imagePath = $file->storeAs('products', $fileName, 'public');
         }
 
-        $product = new Product;
-        $product->name        = $request->name;
-        $product->description = $request->description;
-        $product->image       = $imagePath;
-        $product->category    = $request->category;
-        $product->price       = $request->price;
-        $product->status      = $request->status;
+        Product::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'image' => $imagePath,
+            'category_id' => $request->category_id,
+            'price' => $request->price,
+            'status' => $request->status,
+        ]);
 
-
-        $product->save();
-
-        return redirect()->route('product.index')->with('success', 'Product successfully added!');
+        return redirect()->route('product.index')
+            ->with('success', 'Product successfully added!');
     }
 
     /**
