@@ -9,8 +9,21 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// ডিফল্ট ড্যাশবোর্ড (Customer দের জন্য)
+// ==========================================
+// ডিফল্ট ড্যাশবোর্ড (Smart Redirect সহ)
+// ==========================================
 Route::get('/dashboard', function () {
+
+    $role = auth()->user()->role;
+
+    // অ্যাডমিন বা স্টাফ ভুল করে এই লিংকে আসলে তাদের নিজস্ব ড্যাশবোর্ডে পাঠিয়ে দেবে
+    if ($role === 'admin') {
+        return redirect()->route('admin.dashboard');
+    } elseif ($role === 'staff') {
+        return redirect()->route('staff.dashboard');
+    }
+
+    // শুধুমাত্র কাস্টমার হলে এই পেজটি দেখতে পাবে
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
