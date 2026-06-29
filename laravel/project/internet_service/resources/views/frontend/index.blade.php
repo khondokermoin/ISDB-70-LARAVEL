@@ -1,6 +1,6 @@
 @extends('layouts.frontend_master')
 
-@section('title', 'Amar IT - #1 Broadband Internet Provider')
+@section('title', 'Amar IT - Broadband Internet Provider')
 
 @section('content')
 

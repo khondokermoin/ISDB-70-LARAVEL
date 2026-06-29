@@ -2,41 +2,29 @@
 <html lang="en">
 
 <head>
-
-    <meta charset="utf-8" />
-    <title>Dashboard | Nazox - Admin & Dashboard Template</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-    <meta content="Themesdesign" name="author" />
-    <!-- App favicon -->
-    <link rel="shortcut icon" href="assets/images/favicon.ico">
-
+    <?php
+    $title = "Boxed Width";
+    include('partials/title-meta.php');
+    ?>
 
     <!-- jquery.vectormap css -->
-    <link href="assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet"
-        type="text/css" />
+    <link href="assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
 
     <!-- DataTables -->
     <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 
     <!-- Responsive datatable examples -->
-    <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
+    <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 
-    <!-- Bootstrap Css -->
-    <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
-    <!-- Icons Css -->
-    <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-    <!-- App Css-->
-    <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+    <?php include('partials/head-css.php'); ?>
 </head>
 
-<body data-sidebar="dark">
+<body data-topbar="dark" data-layout="horizontal" data-layout-size="boxed">
 
     <!-- Begin page -->
     <div id="layout-wrapper">
 
-        <?php include 'partials/menu.php'; ?>
+        <?php include('partials/horizontal.php'); ?>
 
         <!-- ============================================================== -->
         <!-- Start right Content here -->
@@ -47,9 +35,9 @@
                 <div class="container-fluid">
 
                     <?php
-                    $pagetitle = 'Nazox';
-                    $title = 'Dashboard';
-                    include 'partials/page-title.php';
+                    $pagetitle = "Layouts";
+                    $title = "Boxed Width";
+                    include('partials/page-title.php');
                     ?>
 
                     <div class="row">
@@ -71,8 +59,7 @@
 
                                         <div class="card-body border-top py-3">
                                             <div class="text-truncate">
-                                                <span class="badge bg-success-subtle text-success  font-size-11"><i
-                                                        class="mdi mdi-menu-up"> </i> 2.4% </span>
+                                                <span class="badge bg-success-subtle text-success  font-size-11"><i class="mdi mdi-menu-up"> </i> 2.4% </span>
                                                 <span class="text-muted ms-2">From previous period</span>
                                             </div>
                                         </div>
@@ -93,8 +80,7 @@
                                         </div>
                                         <div class="card-body border-top py-3">
                                             <div class="text-truncate">
-                                                <span class="badge bg-success-subtle text-success  font-size-11"><i
-                                                        class="mdi mdi-menu-up"> </i> 2.4% </span>
+                                                <span class="badge bg-success-subtle text-success  font-size-11"><i class="mdi mdi-menu-up"> </i> 2.4% </span>
                                                 <span class="text-muted ms-2">From previous period</span>
                                             </div>
                                         </div>
@@ -115,8 +101,7 @@
                                         </div>
                                         <div class="card-body border-top py-3">
                                             <div class="text-truncate">
-                                                <span class="badge bg-success-subtle text-success  font-size-11"><i
-                                                        class="mdi mdi-menu-up"> </i> 2.4% </span>
+                                                <span class="badge bg-success-subtle text-success  font-size-11"><i class="mdi mdi-menu-up"> </i> 2.4% </span>
                                                 <span class="text-muted ms-2">From previous period</span>
                                             </div>
                                         </div>
@@ -154,9 +139,7 @@
 
                                         <div class="col-sm-4">
                                             <div class="mt-4 mt-sm-0">
-                                                <p class="mb-2 text-muted text-truncate"><i
-                                                        class="mdi mdi-circle text-primary font-size-10 me-1"></i> This
-                                                    Year :</p>
+                                                <p class="mb-2 text-muted text-truncate"><i class="mdi mdi-circle text-primary font-size-10 me-1"></i> This Year :</p>
                                                 <div class="d-inline-flex">
                                                     <h5 class="mb-0 me-2">$ 34,254</h5>
                                                     <div class="text-success">
@@ -167,9 +150,7 @@
                                         </div>
                                         <div class="col-sm-4">
                                             <div class="mt-4 mt-sm-0">
-                                                <p class="mb-2 text-muted text-truncate"><i
-                                                        class="mdi mdi-circle text-success font-size-10 me-1"></i>
-                                                    Previous Year :</p>
+                                                <p class="mb-2 text-muted text-truncate"><i class="mdi mdi-circle text-success font-size-10 me-1"></i> Previous Year :</p>
                                                 <div class="d-inline-flex">
                                                     <h5 class="mb-0">$ 32,695</h5>
                                                 </div>
@@ -199,25 +180,19 @@
                                     <div class="row">
                                         <div class="col-4">
                                             <div class="text-center mt-4">
-                                                <p class="mb-2 text-truncate"><i
-                                                        class="mdi mdi-circle text-primary font-size-10 me-1"></i>
-                                                    Product A</p>
+                                                <p class="mb-2 text-truncate"><i class="mdi mdi-circle text-primary font-size-10 me-1"></i> Product A</p>
                                                 <h5>42 %</h5>
                                             </div>
                                         </div>
                                         <div class="col-4">
                                             <div class="text-center mt-4">
-                                                <p class="mb-2 text-truncate"><i
-                                                        class="mdi mdi-circle text-success font-size-10 me-1"></i>
-                                                    Product B</p>
+                                                <p class="mb-2 text-truncate"><i class="mdi mdi-circle text-success font-size-10 me-1"></i> Product B</p>
                                                 <h5>26 %</h5>
                                             </div>
                                         </div>
                                         <div class="col-4">
                                             <div class="text-center mt-4">
-                                                <p class="mb-2 text-truncate"><i
-                                                        class="mdi mdi-circle text-warning font-size-10 me-1"></i>
-                                                    Product C</p>
+                                                <p class="mb-2 text-truncate"><i class="mdi mdi-circle text-warning font-size-10 me-1"></i> Product C</p>
                                                 <h5>42 %</h5>
                                             </div>
                                         </div>
@@ -228,8 +203,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="dropdown float-end">
-                                        <a href="#" class="dropdown-toggle arrow-none card-drop"
-                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="mdi mdi-dots-vertical"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end">
@@ -283,8 +257,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="dropdown float-end">
-                                        <a href="#" class="dropdown-toggle arrow-none card-drop"
-                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="mdi mdi-dots-vertical"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end">
@@ -317,8 +290,7 @@
                                                         <td style="width: 60px;">
                                                             <div class="avatar-xs">
                                                                 <div class="avatar-title rounded-circle bg-light">
-                                                                    <img src="assets/images/companies/img-1.png"
-                                                                        alt="img-1" height="20">
+                                                                    <img src="assets/images/companies/img-1.png" alt="img-1" height="20">
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -337,8 +309,7 @@
                                                         <td>
                                                             <div class="avatar-xs">
                                                                 <div class="avatar-title rounded-circle bg-light">
-                                                                    <img src="assets/images/companies/img-2.png"
-                                                                        alt="img-2" height="20">
+                                                                    <img src="assets/images/companies/img-2.png" alt="img-2" height="20">
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -357,8 +328,7 @@
                                                         <td>
                                                             <div class="avatar-xs">
                                                                 <div class="avatar-title rounded-circle bg-light">
-                                                                    <img src="assets/images/companies/img-3.png"
-                                                                        alt="img-3" height="20">
+                                                                    <img src="assets/images/companies/img-3.png" alt="img-3" height="20">
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -387,8 +357,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="dropdown float-end">
-                                        <a href="#" class="dropdown-toggle arrow-none card-drop"
-                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="mdi mdi-dots-vertical"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end">
@@ -409,134 +378,113 @@
                                         <ul class="list-unstyled activity-wid">
                                             <li class="activity-list">
                                                 <div class="activity-icon avatar-xs">
-                                                    <span
-                                                        class="avatar-title bg-primary-subtle  text-primary rounded-circle">
+                                                    <span class="avatar-title bg-primary-subtle  text-primary rounded-circle">
                                                         <i class="ri-edit-2-fill"></i>
                                                     </span>
                                                 </div>
                                                 <div>
                                                     <div>
-                                                        <h5 class="font-size-13">28 Apr, 2020 <small
-                                                                class="text-muted">12:07 am</small></h5>
+                                                        <h5 class="font-size-13">28 Apr, 2020 <small class="text-muted">12:07 am</small></h5>
                                                     </div>
 
                                                     <div>
-                                                        <p class="text-muted mb-0">Responded to need “Volunteer
-                                                            Activities”</p>
+                                                        <p class="text-muted mb-0">Responded to need “Volunteer Activities”</p>
                                                     </div>
                                                 </div>
                                             </li>
                                             <li class="activity-list">
                                                 <div class="activity-icon avatar-xs">
-                                                    <span
-                                                        class="avatar-title bg-primary-subtle  text-primary rounded-circle">
+                                                    <span class="avatar-title bg-primary-subtle  text-primary rounded-circle">
                                                         <i class="ri-user-2-fill"></i>
                                                     </span>
                                                 </div>
                                                 <div>
                                                     <div>
-                                                        <h5 class="font-size-13">21 Apr, 2020 <small
-                                                                class="text-muted">08:01 pm</small></h5>
+                                                        <h5 class="font-size-13">21 Apr, 2020 <small class="text-muted">08:01 pm</small></h5>
                                                     </div>
 
                                                     <div>
-                                                        <p class="text-muted mb-0">Added an interest “Volunteer
-                                                            Activities”</p>
+                                                        <p class="text-muted mb-0">Added an interest “Volunteer Activities”</p>
                                                     </div>
                                                 </div>
                                             </li>
                                             <li class="activity-list">
                                                 <div class="activity-icon avatar-xs">
-                                                    <span
-                                                        class="avatar-title bg-primary-subtle  text-primary rounded-circle">
+                                                    <span class="avatar-title bg-primary-subtle  text-primary rounded-circle">
                                                         <i class="ri-bar-chart-fill"></i>
                                                     </span>
                                                 </div>
                                                 <div>
                                                     <div>
-                                                        <h5 class="font-size-13">17 Apr, 2020 <small
-                                                                class="text-muted">09:23 am</small></h5>
+                                                        <h5 class="font-size-13">17 Apr, 2020 <small class="text-muted">09:23 am</small></h5>
                                                     </div>
 
                                                     <div>
-                                                        <p class="text-muted mb-0">Joined the group “Boardsmanship
-                                                            Forum”</p>
+                                                        <p class="text-muted mb-0">Joined the group “Boardsmanship Forum”</p>
                                                     </div>
                                                 </div>
                                             </li>
                                             <li class="activity-list">
                                                 <div class="activity-icon avatar-xs">
-                                                    <span
-                                                        class="avatar-title bg-primary-subtle  text-primary rounded-circle">
+                                                    <span class="avatar-title bg-primary-subtle  text-primary rounded-circle">
                                                         <i class="ri-mail-fill"></i>
                                                     </span>
                                                 </div>
                                                 <div>
                                                     <div>
-                                                        <h5 class="font-size-13">11 Apr, 2020 <small
-                                                                class="text-muted">05:10 pm</small></h5>
+                                                        <h5 class="font-size-13">11 Apr, 2020 <small class="text-muted">05:10 pm</small></h5>
                                                     </div>
 
                                                     <div>
-                                                        <p class="text-muted mb-0">Responded to need “In-Kind
-                                                            Opportunity”</p>
+                                                        <p class="text-muted mb-0">Responded to need “In-Kind Opportunity”</p>
                                                     </div>
                                                 </div>
                                             </li>
                                             <li class="activity-list">
                                                 <div class="activity-icon avatar-xs">
-                                                    <span
-                                                        class="avatar-title bg-primary-subtle  text-primary rounded-circle">
+                                                    <span class="avatar-title bg-primary-subtle  text-primary rounded-circle">
                                                         <i class="ri-calendar-2-fill"></i>
                                                     </span>
                                                 </div>
                                                 <div>
                                                     <div>
-                                                        <h5 class="font-size-13">07 Apr, 2020 <small
-                                                                class="text-muted">12:47 pm</small></h5>
+                                                        <h5 class="font-size-13">07 Apr, 2020 <small class="text-muted">12:47 pm</small></h5>
                                                     </div>
 
                                                     <div>
-                                                        <p class="text-muted mb-0">Created need “Volunteer Activities”
-                                                        </p>
+                                                        <p class="text-muted mb-0">Created need “Volunteer Activities”</p>
                                                     </div>
                                                 </div>
                                             </li>
                                             <li class="activity-list">
                                                 <div class="activity-icon avatar-xs">
-                                                    <span
-                                                        class="avatar-title bg-primary-subtle  text-primary rounded-circle">
+                                                    <span class="avatar-title bg-primary-subtle  text-primary rounded-circle">
                                                         <i class="ri-edit-2-fill"></i>
                                                     </span>
                                                 </div>
                                                 <div>
                                                     <div>
-                                                        <h5 class="font-size-13">05 Apr, 2020 <small
-                                                                class="text-muted">03:09 pm</small></h5>
+                                                        <h5 class="font-size-13">05 Apr, 2020 <small class="text-muted">03:09 pm</small></h5>
                                                     </div>
 
                                                     <div>
-                                                        <p class="text-muted mb-0">Attending the event “Some New Event”
-                                                        </p>
+                                                        <p class="text-muted mb-0">Attending the event “Some New Event”</p>
                                                     </div>
                                                 </div>
                                             </li>
                                             <li class="activity-list">
                                                 <div class="activity-icon avatar-xs">
-                                                    <span
-                                                        class="avatar-title bg-primary-subtle  text-primary rounded-circle">
+                                                    <span class="avatar-title bg-primary-subtle  text-primary rounded-circle">
                                                         <i class="ri-user-2-fill"></i>
                                                     </span>
                                                 </div>
                                                 <div>
                                                     <div>
-                                                        <h5 class="font-size-13">02 Apr, 2020 <small
-                                                                class="text-muted">12:07 am</small></h5>
+                                                        <h5 class="font-size-13">02 Apr, 2020 <small class="text-muted">12:07 am</small></h5>
                                                     </div>
 
                                                     <div>
-                                                        <p class="text-muted mb-0">Responded to need “In-Kind
-                                                            Opportunity”</p>
+                                                        <p class="text-muted mb-0">Responded to need “In-Kind Opportunity”</p>
                                                     </div>
                                                 </div>
                                             </li>
@@ -549,8 +497,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="dropdown float-end">
-                                        <a href="#" class="dropdown-toggle arrow-none card-drop"
-                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="mdi mdi-dots-vertical"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end">
@@ -618,27 +565,20 @@
                                         <div class="row">
                                             <div class="col-md-5 col-9">
                                                 <h5 class="font-size-15 mb-1">Frank Vickery</h5>
-                                                <p class="text-muted mb-0"><i
-                                                        class="mdi mdi-circle text-success align-middle me-1"></i>
-                                                    Active now</p>
+                                                <p class="text-muted mb-0"><i class="mdi mdi-circle text-success align-middle me-1"></i> Active now</p>
                                             </div>
                                             <div class="col-md-7 col-3">
                                                 <ul class="list-inline user-chat-nav text-end mb-0">
                                                     <li class="list-inline-item">
                                                         <div class="dropdown">
-                                                            <button class="btn nav-btn dropdown-toggle" type="button"
-                                                                data-bs-toggle="dropdown" aria-haspopup="true"
-                                                                aria-expanded="false">
+                                                            <button class="btn nav-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                 <i class="mdi mdi-magnify"></i>
                                                             </button>
-                                                            <div
-                                                                class="dropdown-menu dropdown-menu-end dropdown-menu-md p-0">
+                                                            <div class="dropdown-menu dropdown-menu-end dropdown-menu-md p-0">
                                                                 <form class="p-2">
                                                                     <div class="search-box">
                                                                         <div class="position-relative">
-                                                                            <input type="text"
-                                                                                class="form-control rounded bg-light border-0"
-                                                                                placeholder="Search...">
+                                                                            <input type="text" class="form-control rounded bg-light border-0" placeholder="Search...">
                                                                             <i class="mdi mdi-magnify search-icon"></i>
                                                                         </div>
                                                                     </div>
@@ -648,14 +588,11 @@
                                                     </li>
                                                     <li class="list-inline-item d-none d-sm-inline-block">
                                                         <div class="dropdown">
-                                                            <button class="btn nav-btn dropdown-toggle" type="button"
-                                                                data-bs-toggle="dropdown" aria-haspopup="true"
-                                                                aria-expanded="false">
+                                                            <button class="btn nav-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                 <i class="mdi mdi-cog"></i>
                                                             </button>
                                                             <div class="dropdown-menu dropdown-menu-end">
-                                                                <a class="dropdown-item" href="#">View
-                                                                    Profile</a>
+                                                                <a class="dropdown-item" href="#">View Profile</a>
                                                                 <a class="dropdown-item" href="#">Clear chat</a>
                                                                 <a class="dropdown-item" href="#">Muted</a>
                                                                 <a class="dropdown-item" href="#">Delete</a>
@@ -665,17 +602,13 @@
 
                                                     <li class="list-inline-item">
                                                         <div class="dropdown">
-                                                            <button class="btn nav-btn dropdown-toggle" type="button"
-                                                                data-bs-toggle="dropdown" aria-haspopup="true"
-                                                                aria-expanded="false">
+                                                            <button class="btn nav-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                 <i class="mdi mdi-dots-horizontal"></i>
                                                             </button>
                                                             <div class="dropdown-menu dropdown-menu-end">
                                                                 <a class="dropdown-item" href="#">Action</a>
-                                                                <a class="dropdown-item" href="#">Another
-                                                                    action</a>
-                                                                <a class="dropdown-item" href="#">Something
-                                                                    else</a>
+                                                                <a class="dropdown-item" href="#">Another action</a>
+                                                                <a class="dropdown-item" href="#">Something else</a>
                                                             </div>
                                                         </div>
                                                     </li>
@@ -692,8 +625,7 @@
                                                 <li>
                                                     <div class="conversation-list">
                                                         <div class="chat-avatar">
-                                                            <img src="assets/images/users/avatar-2.jpg"
-                                                                alt="avatar-2">
+                                                            <img src="assets/images/users/avatar-2.jpg" alt="avatar-2">
                                                         </div>
                                                         <div class="ctext-wrap">
                                                             <div class="conversation-name">Frank Vickery</div>
@@ -702,9 +634,7 @@
                                                                     Hey! I am available
                                                                 </p>
                                                             </div>
-                                                            <p class="chat-time mb-0"><i
-                                                                    class="mdi mdi-clock-outline align-middle me-1"></i>
-                                                                12:09</p>
+                                                            <p class="chat-time mb-0"><i class="mdi mdi-clock-outline align-middle me-1"></i> 12:09</p>
                                                         </div>
 
                                                     </div>
@@ -720,9 +650,7 @@
                                                                 </p>
                                                             </div>
 
-                                                            <p class="chat-time mb-0"><i
-                                                                    class="bx bx-time-five align-middle me-1"></i>
-                                                                10:02</p>
+                                                            <p class="chat-time mb-0"><i class="bx bx-time-five align-middle me-1"></i> 10:02</p>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -735,8 +663,7 @@
                                                 <li>
                                                     <div class="conversation-list">
                                                         <div class="chat-avatar">
-                                                            <img src="assets/images/users/avatar-2.jpg"
-                                                                alt="avatar-2">
+                                                            <img src="assets/images/users/avatar-2.jpg" alt="avatar-2">
                                                         </div>
                                                         <div class="ctext-wrap">
                                                             <div class="conversation-name">Frank Vickery</div>
@@ -745,9 +672,7 @@
                                                                     Hello!
                                                                 </p>
                                                             </div>
-                                                            <p class="chat-time mb-0"><i
-                                                                    class="mdi mdi-clock-outline align-middle me-1"></i>
-                                                                10:00</p>
+                                                            <p class="chat-time mb-0"><i class="mdi mdi-clock-outline align-middle me-1"></i> 10:00</p>
                                                         </div>
 
                                                     </div>
@@ -763,9 +688,7 @@
                                                                 </p>
                                                             </div>
 
-                                                            <p class="chat-time mb-0"><i
-                                                                    class="bx bx-time-five align-middle me-1"></i>
-                                                                10:02</p>
+                                                            <p class="chat-time mb-0"><i class="bx bx-time-five align-middle me-1"></i> 10:02</p>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -773,8 +696,7 @@
                                                 <li>
                                                     <div class="conversation-list">
                                                         <div class="chat-avatar">
-                                                            <img src="assets/images/users/avatar-2.jpg"
-                                                                alt="avatar-2">
+                                                            <img src="assets/images/users/avatar-2.jpg" alt="avatar-2">
                                                         </div>
                                                         <div class="ctext-wrap">
                                                             <div class="conversation-name">Frank Vickery</div>
@@ -784,9 +706,7 @@
                                                                 </p>
                                                             </div>
 
-                                                            <p class="chat-time mb-0"><i
-                                                                    class="bx bx-time-five align-middle me-1"></i>
-                                                                10:06</p>
+                                                            <p class="chat-time mb-0"><i class="bx bx-time-five align-middle me-1"></i> 10:06</p>
                                                         </div>
 
                                                     </div>
@@ -795,17 +715,14 @@
                                                 <li>
                                                     <div class="conversation-list">
                                                         <div class="chat-avatar">
-                                                            <img src="assets/images/users/avatar-2.jpg"
-                                                                alt="avatar-2">
+                                                            <img src="assets/images/users/avatar-2.jpg" alt="avatar-2">
                                                         </div>
                                                         <div class="ctext-wrap">
                                                             <div class="conversation-name">Frank Vickery</div>
                                                             <div class="ctext-wrap-content">
                                                                 <p class="mb-0">& Next meeting tomorrow 10.00AM</p>
                                                             </div>
-                                                            <p class="chat-time mb-0"><i
-                                                                    class="bx bx-time-five align-middle me-1"></i>
-                                                                10:06</p>
+                                                            <p class="chat-time mb-0"><i class="bx bx-time-five align-middle me-1"></i> 10:06</p>
                                                         </div>
 
                                                     </div>
@@ -821,9 +738,7 @@
                                                                 </p>
                                                             </div>
 
-                                                            <p class="chat-time mb-0"><i
-                                                                    class="bx bx-time-five align-middle me-1"></i>
-                                                                10:07</p>
+                                                            <p class="chat-time mb-0"><i class="bx bx-time-five align-middle me-1"></i> 10:07</p>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -837,15 +752,11 @@
                                     <div class="row">
                                         <div class="col">
                                             <div>
-                                                <input type="text" class="form-control rounded chat-input ps-3"
-                                                    placeholder="Enter Message...">
+                                                <input type="text" class="form-control rounded chat-input ps-3" placeholder="Enter Message...">
                                             </div>
                                         </div>
                                         <div class="col-auto">
-                                            <button type="submit"
-                                                class="btn btn-primary chat-send w-md waves-effect waves-light"><span
-                                                    class="d-none d-sm-inline-block me-2">Send</span> <i
-                                                    class="mdi mdi-send"></i></button>
+                                            <button type="submit" class="btn btn-primary chat-send w-md waves-effect waves-light"><span class="d-none d-sm-inline-block me-2">Send</span> <i class="mdi mdi-send"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -855,8 +766,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="dropdown float-end">
-                                        <a href="#" class="dropdown-toggle arrow-none card-drop"
-                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="mdi mdi-dots-vertical"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end">
@@ -874,17 +784,13 @@
                                     <h4 class="card-title mb-4">Latest Transactions</h4>
 
                                     <div class="table-responsive">
-                                        <table class="table table-centered datatable dt-responsive nowrap"
-                                            data-bs-page-length="5"
-                                            style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                        <table class="table table-centered datatable dt-responsive nowrap" data-bs-page-length="5" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                             <thead class="table-light">
                                                 <tr>
                                                     <th style="width: 20px;">
                                                         <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input"
-                                                                id="ordercheck">
-                                                            <label class="form-check-label mb-0"
-                                                                for="ordercheck">&nbsp;</label>
+                                                            <input type="checkbox" class="form-check-input" id="ordercheck">
+                                                            <label class="form-check-label mb-0" for="ordercheck">&nbsp;</label>
                                                         </div>
                                                     </th>
                                                     <th>Order ID</th>
@@ -899,15 +805,12 @@
                                                 <tr>
                                                     <td>
                                                         <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input"
-                                                                id="ordercheck1">
-                                                            <label class="form-check-label mb-0"
-                                                                for="ordercheck1">&nbsp;</label>
+                                                            <input type="checkbox" class="form-check-input" id="ordercheck1">
+                                                            <label class="form-check-label mb-0" for="ordercheck1">&nbsp;</label>
                                                         </div>
                                                     </td>
 
-                                                    <td><a href="javascript: void(0);"
-                                                            class="text-reset fw-bold">#NZ1572</a> </td>
+                                                    <td><a href="javascript: void(0);" class="text-reset fw-bold">#NZ1572</a> </td>
                                                     <td>
                                                         04 Apr, 2020
                                                     </td>
@@ -917,35 +820,22 @@
                                                         $172
                                                     </td>
                                                     <td>
-                                                        <div
-                                                            class="badge bg-success-subtle text-success  font-size-12">
-                                                            Paid</div>
+                                                        <div class="badge bg-success-subtle text-success  font-size-12">Paid</div>
                                                     </td>
                                                     <td id="tooltip-container1">
-                                                        <a href="javascript:void(0);" class="me-3 text-primary"
-                                                            data-bs-container="#tooltip-container1"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            title="Edit"><i
-                                                                class="mdi mdi-pencil font-size-18"></i></a>
-                                                        <a href="javascript:void(0);" class="text-danger"
-                                                            data-bs-container="#tooltip-container1"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            title="Delete"><i
-                                                                class="mdi mdi-trash-can font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="me-3 text-primary" data-bs-container="#tooltip-container1" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="text-danger" data-bs-container="#tooltip-container1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></a>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
                                                         <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input"
-                                                                id="ordercheck2">
-                                                            <label class="form-check-label mb-0"
-                                                                for="ordercheck2">&nbsp;</label>
+                                                            <input type="checkbox" class="form-check-input" id="ordercheck2">
+                                                            <label class="form-check-label mb-0" for="ordercheck2">&nbsp;</label>
                                                         </div>
                                                     </td>
 
-                                                    <td><a href="javascript: void(0);"
-                                                            class="text-reset fw-bold">#NZ1571</a> </td>
+                                                    <td><a href="javascript: void(0);" class="text-reset fw-bold">#NZ1571</a> </td>
                                                     <td>
                                                         03 Apr, 2020
                                                     </td>
@@ -955,36 +845,23 @@
                                                         $165
                                                     </td>
                                                     <td>
-                                                        <div
-                                                            class="badge  bg-warning-subtle text-warning font-size-12">
-                                                            unpaid</div>
+                                                        <div class="badge  bg-warning-subtle text-warning font-size-12">unpaid</div>
                                                     </td>
                                                     <td id="tooltip-container2">
-                                                        <a href="javascript:void(0);" class="me-3 text-primary"
-                                                            data-bs-container="#tooltip-container2"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            title="Edit"><i
-                                                                class="mdi mdi-pencil font-size-18"></i></a>
-                                                        <a href="javascript:void(0);" class="text-danger"
-                                                            data-bs-container="#tooltip-container2"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            title="Delete"><i
-                                                                class="mdi mdi-trash-can font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="me-3 text-primary" data-bs-container="#tooltip-container2" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="text-danger" data-bs-container="#tooltip-container2" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></a>
                                                     </td>
                                                 </tr>
 
                                                 <tr>
                                                     <td>
                                                         <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input"
-                                                                id="ordercheck3">
-                                                            <label class="form-check-label mb-0"
-                                                                for="ordercheck3">&nbsp;</label>
+                                                            <input type="checkbox" class="form-check-input" id="ordercheck3">
+                                                            <label class="form-check-label mb-0" for="ordercheck3">&nbsp;</label>
                                                         </div>
                                                     </td>
 
-                                                    <td><a href="javascript: void(0);"
-                                                            class="text-reset fw-bold">#NZ1570</a> </td>
+                                                    <td><a href="javascript: void(0);" class="text-reset fw-bold">#NZ1570</a> </td>
                                                     <td>
                                                         03 Apr, 2020
                                                     </td>
@@ -994,35 +871,22 @@
                                                         $146
                                                     </td>
                                                     <td>
-                                                        <div
-                                                            class="badge bg-success-subtle text-success  font-size-12">
-                                                            Paid</div>
+                                                        <div class="badge bg-success-subtle text-success  font-size-12">Paid</div>
                                                     </td>
                                                     <td id="tooltip-container3">
-                                                        <a href="javascript:void(0);" class="me-3 text-primary"
-                                                            data-bs-container="#tooltip-container3"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            title="Edit"><i
-                                                                class="mdi mdi-pencil font-size-18"></i></a>
-                                                        <a href="javascript:void(0);" class="text-danger"
-                                                            data-bs-container="#tooltip-container3"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            title="Delete"><i
-                                                                class="mdi mdi-trash-can font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="me-3 text-primary" data-bs-container="#tooltip-container3" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="text-danger" data-bs-container="#tooltip-container3" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></a>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
                                                         <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input"
-                                                                id="ordercheck4">
-                                                            <label class="form-check-label mb-0"
-                                                                for="ordercheck4">&nbsp;</label>
+                                                            <input type="checkbox" class="form-check-input" id="ordercheck4">
+                                                            <label class="form-check-label mb-0" for="ordercheck4">&nbsp;</label>
                                                         </div>
                                                     </td>
 
-                                                    <td><a href="javascript: void(0);"
-                                                            class="text-reset fw-bold">#NZ1569</a> </td>
+                                                    <td><a href="javascript: void(0);" class="text-reset fw-bold">#NZ1569</a> </td>
                                                     <td>
                                                         02 Apr, 2020
                                                     </td>
@@ -1032,35 +896,22 @@
                                                         $183
                                                     </td>
                                                     <td>
-                                                        <div
-                                                            class="badge bg-success-subtle text-success  font-size-12">
-                                                            Paid</div>
+                                                        <div class="badge bg-success-subtle text-success  font-size-12">Paid</div>
                                                     </td>
                                                     <td id="tooltip-container41">
-                                                        <a href="javascript:void(0);" class="me-3 text-primary"
-                                                            data-bs-container="#tooltip-container41"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            title="Edit"><i
-                                                                class="mdi mdi-pencil font-size-18"></i></a>
-                                                        <a href="javascript:void(0);" class="text-danger"
-                                                            data-bs-container="#tooltip-container41"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            title="Delete"><i
-                                                                class="mdi mdi-trash-can font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="me-3 text-primary" data-bs-container="#tooltip-container41" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="text-danger" data-bs-container="#tooltip-container41" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></a>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
                                                         <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input"
-                                                                id="ordercheck5">
-                                                            <label class="form-check-label mb-0"
-                                                                for="ordercheck5">&nbsp;</label>
+                                                            <input type="checkbox" class="form-check-input" id="ordercheck5">
+                                                            <label class="form-check-label mb-0" for="ordercheck5">&nbsp;</label>
                                                         </div>
                                                     </td>
 
-                                                    <td><a href="javascript: void(0);"
-                                                            class="text-reset fw-bold">#NZ1568</a> </td>
+                                                    <td><a href="javascript: void(0);" class="text-reset fw-bold">#NZ1568</a> </td>
                                                     <td>
                                                         01 Apr, 2020
                                                     </td>
@@ -1070,34 +921,22 @@
                                                         $160
                                                     </td>
                                                     <td>
-                                                        <div class="badge bg-danger-subtle text-danger font-size-12">
-                                                            Chargeback</div>
+                                                        <div class="badge bg-danger-subtle text-danger font-size-12">Chargeback</div>
                                                     </td>
                                                     <td id="tooltip-container4">
-                                                        <a href="javascript:void(0);" class="me-3 text-primary"
-                                                            data-bs-container="#tooltip-container4"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            title="Edit"><i
-                                                                class="mdi mdi-pencil font-size-18"></i></a>
-                                                        <a href="javascript:void(0);" class="text-danger"
-                                                            data-bs-container="#tooltip-container4"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            title="Delete"><i
-                                                                class="mdi mdi-trash-can font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="me-3 text-primary" data-bs-container="#tooltip-container4" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="text-danger" data-bs-container="#tooltip-container4" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></a>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
                                                         <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input"
-                                                                id="ordercheck6">
-                                                            <label class="form-check-label mb-0"
-                                                                for="ordercheck6">&nbsp;</label>
+                                                            <input type="checkbox" class="form-check-input" id="ordercheck6">
+                                                            <label class="form-check-label mb-0" for="ordercheck6">&nbsp;</label>
                                                         </div>
                                                     </td>
 
-                                                    <td><a href="javascript: void(0);"
-                                                            class="text-reset fw-bold">#NZ1567</a> </td>
+                                                    <td><a href="javascript: void(0);" class="text-reset fw-bold">#NZ1567</a> </td>
                                                     <td>
                                                         31 Mar, 2020
                                                     </td>
@@ -1107,35 +946,22 @@
                                                         $105
                                                     </td>
                                                     <td>
-                                                        <div
-                                                            class="badge  bg-warning-subtle text-warning font-size-12">
-                                                            unpaid</div>
+                                                        <div class="badge  bg-warning-subtle text-warning font-size-12">unpaid</div>
                                                     </td>
                                                     <td id="tooltip-container5">
-                                                        <a href="javascript:void(0);" class="me-3 text-primary"
-                                                            data-bs-container="#tooltip-container5"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            title="Edit"><i
-                                                                class="mdi mdi-pencil font-size-18"></i></a>
-                                                        <a href="javascript:void(0);" class="text-danger"
-                                                            data-bs-container="#tooltip-container5"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            title="Delete"><i
-                                                                class="mdi mdi-trash-can font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="me-3 text-primary" data-bs-container="#tooltip-container5" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="text-danger" data-bs-container="#tooltip-container5" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></a>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
                                                         <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input"
-                                                                id="ordercheck7">
-                                                            <label class="form-check-label mb-0"
-                                                                for="ordercheck7">&nbsp;</label>
+                                                            <input type="checkbox" class="form-check-input" id="ordercheck7">
+                                                            <label class="form-check-label mb-0" for="ordercheck7">&nbsp;</label>
                                                         </div>
                                                     </td>
 
-                                                    <td><a href="javascript: void(0);"
-                                                            class="text-reset fw-bold">#NZ1566</a> </td>
+                                                    <td><a href="javascript: void(0);" class="text-reset fw-bold">#NZ1566</a> </td>
                                                     <td>
                                                         30 Mar, 2020
                                                     </td>
@@ -1145,35 +971,22 @@
                                                         $112
                                                     </td>
                                                     <td>
-                                                        <div
-                                                            class="badge bg-success-subtle text-success  font-size-12">
-                                                            Paid</div>
+                                                        <div class="badge bg-success-subtle text-success  font-size-12">Paid</div>
                                                     </td>
                                                     <td id="tooltip-container6">
-                                                        <a href="javascript:void(0);" class="me-3 text-primary"
-                                                            data-bs-container="#tooltip-container6"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            title="Edit"><i
-                                                                class="mdi mdi-pencil font-size-18"></i></a>
-                                                        <a href="javascript:void(0);" class="text-danger"
-                                                            data-bs-container="#tooltip-container6"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            title="Delete"><i
-                                                                class="mdi mdi-trash-can font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="me-3 text-primary" data-bs-container="#tooltip-container6" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="text-danger" data-bs-container="#tooltip-container6" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></a>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
                                                         <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input"
-                                                                id="ordercheck8">
-                                                            <label class="form-check-label mb-0"
-                                                                for="ordercheck8">&nbsp;</label>
+                                                            <input type="checkbox" class="form-check-input" id="ordercheck8">
+                                                            <label class="form-check-label mb-0" for="ordercheck8">&nbsp;</label>
                                                         </div>
                                                     </td>
 
-                                                    <td><a href="javascript: void(0);"
-                                                            class="text-reset fw-bold">#NZ1565</a> </td>
+                                                    <td><a href="javascript: void(0);" class="text-reset fw-bold">#NZ1565</a> </td>
                                                     <td>
                                                         29 Mar, 2020
                                                     </td>
@@ -1183,35 +996,22 @@
                                                         $123
                                                     </td>
                                                     <td>
-                                                        <div
-                                                            class="badge bg-success-subtle text-success  font-size-12">
-                                                            Paid</div>
+                                                        <div class="badge bg-success-subtle text-success  font-size-12">Paid</div>
                                                     </td>
                                                     <td id="tooltip-container7">
-                                                        <a href="javascript:void(0);" class="me-3 text-primary"
-                                                            data-bs-container="#tooltip-container7"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            title="Edit"><i
-                                                                class="mdi mdi-pencil font-size-18"></i></a>
-                                                        <a href="javascript:void(0);" class="text-danger"
-                                                            data-bs-container="#tooltip-container7"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            title="Delete"><i
-                                                                class="mdi mdi-trash-can font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="me-3 text-primary" data-bs-container="#tooltip-container7" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="text-danger" data-bs-container="#tooltip-container7" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></a>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
                                                         <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input"
-                                                                id="ordercheck9">
-                                                            <label class="form-check-label mb-0"
-                                                                for="ordercheck9">&nbsp;</label>
+                                                            <input type="checkbox" class="form-check-input" id="ordercheck9">
+                                                            <label class="form-check-label mb-0" for="ordercheck9">&nbsp;</label>
                                                         </div>
                                                     </td>
 
-                                                    <td><a href="javascript: void(0);"
-                                                            class="text-reset fw-bold">#NZ1564</a> </td>
+                                                    <td><a href="javascript: void(0);" class="text-reset fw-bold">#NZ1564</a> </td>
                                                     <td>
                                                         28 Mar, 2020
                                                     </td>
@@ -1221,35 +1021,22 @@
                                                         $141
                                                     </td>
                                                     <td>
-                                                        <div
-                                                            class="badge bg-success-subtle text-success  font-size-12">
-                                                            Paid</div>
+                                                        <div class="badge bg-success-subtle text-success  font-size-12">Paid</div>
                                                     </td>
                                                     <td id="tooltip-container8">
-                                                        <a href="javascript:void(0);" class="me-3 text-primary"
-                                                            data-bs-container="#tooltip-container8"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            title="Edit"><i
-                                                                class="mdi mdi-pencil font-size-18"></i></a>
-                                                        <a href="javascript:void(0);" class="text-danger"
-                                                            data-bs-container="#tooltip-container8"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            title="Delete"><i
-                                                                class="mdi mdi-trash-can font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="me-3 text-primary" data-bs-container="#tooltip-container8" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="text-danger" data-bs-container="#tooltip-container8" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></a>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
                                                         <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input"
-                                                                id="ordercheck10">
-                                                            <label class="form-check-label mb-0"
-                                                                for="ordercheck10">&nbsp;</label>
+                                                            <input type="checkbox" class="form-check-input" id="ordercheck10">
+                                                            <label class="form-check-label mb-0" for="ordercheck10">&nbsp;</label>
                                                         </div>
                                                     </td>
 
-                                                    <td><a href="javascript: void(0);"
-                                                            class="text-reset fw-bold">#NZ1563</a> </td>
+                                                    <td><a href="javascript: void(0);" class="text-reset fw-bold">#NZ1563</a> </td>
                                                     <td>
                                                         28 Mar, 2020
                                                     </td>
@@ -1259,21 +1046,11 @@
                                                         $164
                                                     </td>
                                                     <td>
-                                                        <div
-                                                            class="badge  bg-warning-subtle text-warning font-size-12">
-                                                            unpaid</div>
+                                                        <div class="badge  bg-warning-subtle text-warning font-size-12">unpaid</div>
                                                     </td>
                                                     <td id="tooltip-container9">
-                                                        <a href="javascript:void(0);" class="me-3 text-primary"
-                                                            data-bs-container="#tooltip-container9"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            title="Edit"><i
-                                                                class="mdi mdi-pencil font-size-18"></i></a>
-                                                        <a href="javascript:void(0);" class="text-danger"
-                                                            data-bs-container="#tooltip-container9"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            title="Delete"><i
-                                                                class="mdi mdi-trash-can font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="me-3 text-primary" data-bs-container="#tooltip-container9" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="text-danger" data-bs-container="#tooltip-container9" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></a>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -1289,7 +1066,7 @@
             </div>
             <!-- End Page-content -->
 
-            <?php include 'partials/footer.php'; ?>
+            <?php include('partials/footer.php'); ?>
 
         </div>
         <!-- end main content-->
@@ -1297,64 +1074,9 @@
     </div>
     <!-- END layout-wrapper -->
 
-    <!-- Right Sidebar -->
-<div class="right-bar">
-    <div data-simplebar class="h-100">
-        <div class="rightbar-title d-flex align-items-center px-3 py-4">
-            
-            <h5 class="m-0 me-2">Settings</h5>
+    <?php include('partials/right-sidebar.php'); ?>
 
-            <a href="javascript:void(0);" class="right-bar-toggle ms-auto">
-                <i class="mdi mdi-close noti-icon"></i>
-            </a>
-        </div>
-
-        <!-- Settings -->
-        <hr class="mt-0" />
-        <h6 class="text-center mb-0">Choose Layouts</h6>
-
-        <div class="p-4">
-            <div class="mb-2">
-                <img src="assets/images/layouts/layout-1.jpg" class="img-fluid img-thumbnail" alt="layout-1">
-            </div>
-
-            <div class="form-check form-switch mb-3">
-                <input class="form-check-input theme-choice" type="checkbox" id="light-mode-switch" checked>
-                <label class="form-check-label" for="light-mode-switch">Light Mode</label>
-            </div>
-    
-            <div class="mb-2">
-                <img src="assets/images/layouts/layout-2.jpg" class="img-fluid img-thumbnail" alt="layout-2">
-            </div>
-            <div class="form-check form-switch mb-3">
-                <input class="form-check-input theme-choice" type="checkbox" id="dark-mode-switch" data-bsStyle="assets/css/bootstrap-dark.min.css" data-appStyle="assets/css/app-dark.min.css">
-                <label class="form-check-label" for="dark-mode-switch">Dark Mode</label>
-            </div>
-    
-            <div class="mb-2">
-                <img src="assets/images/layouts/layout-3.jpg" class="img-fluid img-thumbnail" alt="layout-3">
-            </div>
-            <div class="form-check form-switch mb-5">
-                <input class="form-check-input theme-choice" type="checkbox" id="rtl-mode-switch" data-appStyle="assets/css/app-rtl.min.css">
-                <label class="form-check-label" for="rtl-mode-switch">RTL Mode</label>
-            </div>
-
-            
-        </div>
-
-    </div> <!-- end slimscroll-menu-->
-</div>
-<!-- /Right-bar -->
-
-<!-- Right bar overlay-->
-<div class="rightbar-overlay"></div>
-
-    <!-- JAVASCRIPT -->
-<script src="assets/libs/jquery/jquery.min.js"></script>
-<script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="assets/libs/metismenu/metisMenu.min.js"></script>
-<script src="assets/libs/simplebar/simplebar.min.js"></script>
-<script src="assets/libs/node-waves/waves.min.js"></script>
+    <?php include('partials/vendor-scripts.php'); ?>
 
     <!-- apexcharts -->
     <script src="assets/libs/apexcharts/apexcharts.min.js"></script>
@@ -1375,6 +1097,7 @@
 
     <!-- App js -->
     <script src="assets/js/app.js"></script>
+
 </body>
 
 </html>
