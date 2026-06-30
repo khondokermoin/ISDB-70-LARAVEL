@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\Admin\PackageController; // <-- নতুন PackageController ইমপোর্ট করা হয়েছে
 use Illuminate\Support\Facades\Route;
 
 // ==========================================
@@ -50,6 +51,9 @@ Route::middleware(['auth', 'verified', 'role:admin'])
     ->name('admin.')
     ->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+        
+        // <-- প্যাকেজ ম্যানেজমেন্টের জন্য CRUD রাউটস যুক্ত করা হয়েছে -->
+        Route::resource('packages', PackageController::class);
     });
 
 // ==========================================
