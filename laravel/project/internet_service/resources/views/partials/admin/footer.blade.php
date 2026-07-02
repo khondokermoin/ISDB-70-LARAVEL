@@ -6,15 +6,15 @@
             <br class="d-md-none">
             <span>
                 Developed by
-                <a href="https://github.com/HasanMahmudDev" target="_blank" rel="noopener noreferrer"
-                   class="fw-semibold text-decoration-none link-success">Md. Hasan Mahmud</a>
+                <a href="https://github.com/khondokermoin" target="_blank" rel="noopener noreferrer"
+                   class="fw-semibold text-decoration-none link-success">Khondoker Moin Hossain</a>
             </span>
             <span class="d-none d-md-inline">•</span>
             <br class="d-md-none">
             <span>
                 Distributed by
-                <a href="https://themewagon.com" target="_blank" rel="noopener noreferrer"
-                   class="fw-semibold text-decoration-none link-success">ThemeWagon</a>
+                <a href="https://westernwatchbd.com" target="_blank" rel="noopener noreferrer"
+                   class="fw-semibold text-decoration-none link-success">Moin</a>
             </span>
         </div>
         <div class="text-center small text-muted text-md-end">

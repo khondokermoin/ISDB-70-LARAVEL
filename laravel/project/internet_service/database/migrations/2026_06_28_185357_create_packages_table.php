@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('packages', function (Blueprint $table) {
             // আপনার SQL অনুযায়ী কলামগুলো তৈরি করা হচ্ছে
-            $table->integer('package_id')->primary(); // প্রাইমারি কি হিসেবে package_id
+            $table->increments('package_id'); // প্রাইমারি কি হিসেবে package_id
             $table->string('name', 255);
             $table->string('type', 50)->default('home');
             $table->string('features', 255)->nullable();

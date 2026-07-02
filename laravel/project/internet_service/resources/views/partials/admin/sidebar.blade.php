@@ -78,12 +78,12 @@
             <span>All Packages</span>
         </a>
 
-        <a class="nav-link d-flex align-items-center rounded-3 px-3 py-2 mb-1 fw-medium
+        {{-- <a class="nav-link d-flex align-items-center rounded-3 px-3 py-2 mb-1 fw-medium
                   {{ Route::is('admin.packages.create') ? 'bg-danger text-white shadow-sm' : 'text-body' }}"
            href="{{ route('admin.packages.create') }}">
             <i class="bi bi-plus-square-dotted me-2 fs-5"></i>
             <span>Add New Package</span>
-        </a>
+        </a> --}}
     </nav>
 
     <div class="border-top p-2 mt-auto">

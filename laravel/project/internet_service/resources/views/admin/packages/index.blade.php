@@ -76,10 +76,28 @@
         }
 
         /* ========================================
-           2. DISABLE "CARD LIFTS UP ON HOVER" EFFECT
-           (this comes from the global admin theme's
-           .card:hover transform — overridden here so
-           only THIS page's main content card stays put)
+           2. TABLE ROW HOVER - GLOBAL NEUTRALIZATION
+           ======================================== */
+        #packagesTable tbody tr:hover,
+        #packagesTable tbody tr:hover > td,
+        #packagesTable tbody tr:hover > th,
+        #packagesTable.table tbody tr:hover,
+        #packagesTable.table-hover tbody tr:hover {
+            background-color: transparent !important;
+            --bs-table-hover-bg: transparent !important;
+            --bs-table-hover-color: inherit !important;
+            --bs-table-accent-bg: transparent !important;
+            box-shadow: none !important;
+        }
+
+        #packagesTable tbody tr:hover td,
+        #packagesTable tbody tr:hover td *,
+        #packagesTable tbody tr:hover th {
+            color: inherit !important;
+        }
+
+        /* ========================================
+           2a. DISABLE "CARD LIFTS UP ON HOVER" EFFECT
            ======================================== */
         #packagesCard.card,
         #packagesCard.card:hover,
@@ -88,15 +106,11 @@
         }
 
         #packagesCard.card:hover {
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important; /* keep it flat, same as default shadow-sm */
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
         }
-
-        /* Table row td hover is fine/allowed — only the outer card lift was the problem */
 
         /* ========================================
            2b. STOP ICONS / TEXT FROM SCALING UP ON HOVER
-           (global theme applies a hover scale/transform
-           to buttons — cancel it just for our action buttons)
            ======================================== */
         #packagesTable .btn-group .btn,
         #packagesTable .btn-group .btn:hover,
@@ -110,9 +124,6 @@
 
         /* ========================================
            2c. MAKE EDIT + DELETE LOOK LIKE ONE MERGED GROUP
-           (Delete button sits inside a <form>, so it isn't
-           a direct child of .btn-group — that broke Bootstrap's
-           default border-merging. Fixed below.)
            ======================================== */
         #packagesTable .btn-group {
             display: inline-flex;
@@ -146,7 +157,7 @@
         }
 
         /* ========================================
-           2b. TABLE HEADER - BIGGER & BOLD TEXT
+           2d. TABLE HEADER - BIGGER & BOLD TEXT
            ======================================== */
         #packagesTable thead th {
             font-size: 0.85rem !important;
@@ -157,7 +168,6 @@
         /* ========================================
            3. DATATABLES CUSTOM STYLING
            ======================================== */
-        /* Hide default DataTables controls */
         .dataTables_wrapper .dataTables_length,
         .dataTables_wrapper .dataTables_filter,
         .dataTables_wrapper .dataTables_info,
@@ -186,12 +196,12 @@
         }
 
         table.dataTable thead th.sorting::before {
-            content: "\F282"; /* bi-caret-up */
+            content: "\F282";
             bottom: 55%;
         }
 
         table.dataTable thead th.sorting::after {
-            content: "\F229"; /* bi-caret-down */
+            content: "\F229";
             top: 55%;
         }
 
@@ -206,7 +216,6 @@
             opacity: 0.7;
         }
 
-        /* Remove default DataTables background image icons */
         table.dataTable thead th.sorting::before,
         table.dataTable thead th.sorting::after,
         table.dataTable thead th.sorting_asc::before,
@@ -216,7 +225,6 @@
             background-image: none !important;
         }
 
-        /* Cursor pointer on sortable headers */
         table.dataTable thead th.sorting,
         table.dataTable thead th.sorting_asc,
         table.dataTable thead th.sorting_desc {
@@ -226,7 +234,6 @@
         /* ========================================
            4. RESPONSIVE EXTENSION STYLING
            ======================================== */
-        /* Plus icon for expandable rows */
         table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before,
         table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control:before {
             background-color: #0d6efd !important;
@@ -240,7 +247,6 @@
             text-align: center;
         }
 
-        /* Expanded row details styling */
         table.dataTable > tbody > tr.child {
             background-color: var(--bs-body-bg) !important;
             padding: 0.75rem 0;
@@ -292,7 +298,6 @@
                 font-size: 0.875rem;
             }
 
-            /* Better spacing on mobile */
             .card-header {
                 padding: 1rem !important;
             }
@@ -303,35 +308,98 @@
         }
 
         /* ========================================
-           8. ICON VISIBILITY FIXES
+           8. DARK MODE - PERMANENT HOVER FIX
+           (এটা চিরকালের জন্য hover সমস্যা মিটাবে)
            ======================================== */
-        /* Ensure icons are visible in all modes */
-        .btn-outline-secondary i,
-        .btn-outline-danger i {
-            font-size: 0.875rem;
+        
+        /* Dark mode hover background & base text */
+        [data-bs-theme="dark"] #packagesTable tbody tr:hover,
+        [data-bs-theme="dark"] #packagesTable tbody tr:hover > td,
+        [data-bs-theme="dark"] #packagesTable tbody tr:hover > th,
+        [data-bs-theme="dark"] #packagesTable.table tbody tr:hover,
+        [data-bs-theme="dark"] #packagesTable.table-hover tbody tr:hover {
+            background-color: #2b3035 !important;
+            --bs-table-hover-bg: #2b3035 !important;
+            --bs-table-hover-color: #e9ecef !important;
+            --bs-table-accent-bg: #2b3035 !important;
+            color: #e9ecef !important;
+            box-shadow: none !important;
         }
 
-        /* Badge icons */
-        .badge i {
-            font-size: 0.75rem;
+        /* Force ALL text inside hovered rows to be visible */
+        [data-bs-theme="dark"] #packagesTable tbody tr:hover td,
+        [data-bs-theme="dark"] #packagesTable tbody tr:hover td *,
+        [data-bs-theme="dark"] #packagesTable tbody tr:hover th {
+            color: #e9ecef !important;
+            -webkit-text-fill-color: #e9ecef !important;
         }
 
-        /* Status indicator dots */
-        .badge .bi-circle-fill {
-            vertical-align: middle;
+        /* Preserve specific Bootstrap text colors on hover */
+        [data-bs-theme="dark"] #packagesTable tbody tr:hover .text-primary,
+        [data-bs-theme="dark"] #packagesTable tbody tr:hover .text-primary * {
+            color: #6ea8fe !important;
+            -webkit-text-fill-color: #6ea8fe !important;
+        }
+
+        [data-bs-theme="dark"] #packagesTable tbody tr:hover .text-success,
+        [data-bs-theme="dark"] #packagesTable tbody tr:hover .text-success * {
+            color: #75b798 !important;
+            -webkit-text-fill-color: #75b798 !important;
+        }
+
+        [data-bs-theme="dark"] #packagesTable tbody tr:hover .text-danger,
+        [data-bs-theme="dark"] #packagesTable tbody tr:hover .text-danger * {
+            color: #ea868f !important;
+            -webkit-text-fill-color: #ea868f !important;
+        }
+
+        [data-bs-theme="dark"] #packagesTable tbody tr:hover .text-info,
+        [data-bs-theme="dark"] #packagesTable tbody tr:hover .text-info * {
+            color: #6edff6 !important;
+            -webkit-text-fill-color: #6edff6 !important;
+        }
+
+        [data-bs-theme="dark"] #packagesTable tbody tr:hover .text-secondary,
+        [data-bs-theme="dark"] #packagesTable tbody tr:hover .text-body-secondary,
+        [data-bs-theme="dark"] #packagesTable tbody tr:hover .text-body-secondary * {
+            color: #adb5bd !important;
+            -webkit-text-fill-color: #adb5bd !important;
+        }
+
+        [data-bs-theme="dark"] #packagesTable tbody tr:hover .text-body,
+        [data-bs-theme="dark"] #packagesTable tbody tr:hover .text-body * {
+            color: #e9ecef !important;
+            -webkit-text-fill-color: #e9ecef !important;
+        }
+
+        /* Badge colors preserved on hover in dark mode */
+        [data-bs-theme="dark"] #packagesTable tbody tr:hover .badge.bg-info {
+            background-color: rgba(13, 202, 240, 0.2) !important;
+            color: #3dd5f3 !important;
+            border-color: rgba(13, 202, 240, 0.3) !important;
+        }
+
+        [data-bs-theme="dark"] #packagesTable tbody tr:hover .badge.bg-secondary {
+            background-color: rgba(108, 117, 125, 0.3) !important;
+            color: #adb5bd !important;
+            border-color: rgba(108, 117, 125, 0.4) !important;
+        }
+
+        [data-bs-theme="dark"] #packagesTable tbody tr:hover .badge.bg-success {
+            background-color: rgba(25, 135, 84, 0.25) !important;
+            color: #4dd4ac !important;
+            border-color: rgba(25, 135, 84, 0.3) !important;
+        }
+
+        [data-bs-theme="dark"] #packagesTable tbody tr:hover .badge.bg-danger {
+            background-color: rgba(220, 53, 69, 0.25) !important;
+            color: #ea868f !important;
+            border-color: rgba(220, 53, 69, 0.3) !important;
         }
 
         /* ========================================
-           9. DARK MODE FIXES
-           (⚠️ FIXED: previously written as nested SCSS-style
-           rules which plain CSS does NOT support — none of
-           these were actually being applied before. Flattened
-           into valid CSS below, so edit icon, badges,
-           pagination, alerts etc. now correctly adapt in
-           dark mode.)
+           9. OTHER DARK MODE FIXES
            ======================================== */
-
-        /* Edit button visibility fix */
         [data-bs-theme="dark"] .btn-outline-secondary {
             --bs-btn-color: #adb5bd !important;
             --bs-btn-border-color: #6c757d !important;
@@ -343,13 +411,11 @@
             --bs-btn-active-border-color: #343a40 !important;
         }
 
-        /* Make sure the icon itself always inherits the button's color */
         [data-bs-theme="dark"] .btn-outline-secondary i,
         [data-bs-theme="dark"] .btn-outline-secondary {
             color: var(--bs-btn-color, #adb5bd) !important;
         }
 
-        /* Badge visibility improvements */
         [data-bs-theme="dark"] .badge.bg-info.bg-opacity-10 {
             background-color: rgba(13, 202, 240, 0.2) !important;
             color: #3dd5f3 !important;
@@ -374,7 +440,6 @@
             border-color: rgba(220, 53, 69, 0.3) !important;
         }
 
-        /* Better text contrast (strengthened for readability) */
         [data-bs-theme="dark"] .text-body-secondary {
             color: #ced4da !important;
         }
@@ -399,35 +464,29 @@
             color: #ced4da !important;
         }
 
-        /* Empty state icon */
         [data-bs-theme="dark"] .empty-state-icon {
             opacity: 0.6 !important;
             color: #adb5bd !important;
         }
 
-        /* Card header background */
         [data-bs-theme="dark"] .bg-body-tertiary {
             background-color: rgba(33, 37, 41, 0.5) !important;
         }
 
-        /* Table borders */
         [data-bs-theme="dark"] .table {
             --bs-table-border-color: #373b3e !important;
         }
 
-        /* Search counter */
         [data-bs-theme="dark"] .search-counter {
             color: #adb5bd !important;
         }
 
-        /* Alert styling */
         [data-bs-theme="dark"] .alert-success {
             background-color: rgba(25, 135, 84, 0.15) !important;
             border-color: rgba(25, 135, 84, 0.3) !important;
             color: #4dd4ac !important;
         }
 
-        /* Pagination links */
         [data-bs-theme="dark"] .pagination .page-link {
             background-color: #2b3035 !important;
             border-color: #373b3e !important;
@@ -477,9 +536,9 @@
                 </div>
             </div>
             <div class="gap-2 d-flex">
-                <a href="{{ route('admin.packages.create') }}" class="shadow-sm btn btn-primary">
+                <button type="button" class="shadow-sm btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPackageModal">
                     <i class="bi bi-plus-circle me-1"></i> Add New Package
-                </a>
+                </button>
             </div>
         </div>
 
@@ -501,7 +560,7 @@
                             <input type="text"
                                    id="packageSearch"
                                    class="form-control"
-                                   placeholder="Search by ID, name, type, speed, price..."
+                                   placeholder="Search by name, type, speed, price..."
                                    autocomplete="off">
                             <button type="button" id="clearSearch" class="search-clear-btn" title="Clear search">
                                 <i class="bi bi-x-lg"></i>
@@ -513,23 +572,22 @@
 
             <div class="p-0 card-body">
                 <div class="table-responsive">
-                    {{-- ✅ No table-hover class used --}}
                     <table id="packagesTable" class="table mb-0 align-middle dt-responsive nowrap" style="width:100%">
                         <thead class="bg-body-tertiary text-body-secondary text-uppercase fw-bold">
                             <tr>
-                                <th class="py-3 ps-4" style="width: 50px;" data-priority="1">#ID</th>
+                                <th class="py-3 ps-4" style="width: 50px;" data-priority="1">SN</th>
                                 <th class="py-3" data-priority="2">Package Name</th>
                                 <th class="py-3" data-priority="3">Type</th>
                                 <th class="py-3" data-priority="4">Speed</th>
                                 <th class="py-3" data-priority="5">Price (BDT)</th>
                                 <th class="py-3" data-priority="6">Status</th>
-                                <th class="py-3 text-end pe-4" style="width: 150px;" data-priority="7">Actions</th>
+                                <th class="py-3 text-end pe-4" style="width: 120px;" data-priority="7">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="border-top-0">
                             @forelse($packages as $package)
                                 <tr>
-                                    <td class="ps-4 fw-semibold text-body-secondary">{{ $package->package_id }}</td>
+                                    <td class="ps-4 fw-semibold text-body-secondary">{{ $loop->iteration }}</td>
                                     <td>
                                         <span class="fw-bold text-body">{{ $package->name }}</span>
                                         @if(!empty($package->features))
@@ -541,44 +599,44 @@
                                     <td>
                                         @if($package->type == 'home')
                                             <span class="px-3 py-2 border badge bg-info bg-opacity-10 text-info border-info rounded-pill">
-                                                <i class="bi bi-house-door me-1"></i>Home
+                                                Home
                                             </span>
                                         @else
                                             <span class="px-3 py-2 border badge bg-secondary bg-opacity-10 text-secondary border-secondary rounded-pill">
-                                                <i class="bi bi-building me-1"></i>Corporate
+                                                Corporate
                                             </span>
                                         @endif
                                     </td>
                                     <td>
                                         <span class="fw-semibold text-body">
-                                            <i class="bi bi-speedometer2 text-body-secondary me-1"></i>
                                             {{ $package->speed_mbps == 0 ? 'Custom' : $package->speed_mbps . ' Mbps' }}
                                         </span>
                                     </td>
                                     <td>
                                         <span class="fw-bold text-primary">
-                                            <i class="bi bi-currency-exchange text-body-secondary me-1"></i>
                                             {{ $package->price == 0 ? 'Negotiable' : '৳ ' . number_format($package->price) }}
                                         </span>
                                     </td>
                                     <td>
                                         @if($package->status == 'active')
                                             <span class="px-3 py-2 badge bg-success bg-opacity-10 text-success rounded-pill">
-                                                <i class="bi bi-circle-fill small me-1" style="font-size: 7px;"></i> Active
+                                                Active
                                             </span>
                                         @else
                                             <span class="px-3 py-2 badge bg-danger bg-opacity-10 text-danger rounded-pill">
-                                                <i class="bi bi-circle-fill small me-1" style="font-size: 7px;"></i> Inactive
+                                                Inactive
                                             </span>
                                         @endif
                                     </td>
                                     <td class="text-end pe-4">
                                         <div class="btn-group" role="group">
-                                            <a href="{{ route('admin.packages.edit', $package->package_id) }}"
-                                               class="btn btn-sm btn-outline-secondary"
-                                               title="Edit">
-                                                <i class="bi bi-pencil-square"></i>
-                                            </a>
+                                            <button type="button"
+                                                    class="btn btn-sm btn-outline-secondary"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#editPackageModal{{ $package->package_id }}"
+                                                    title="Edit">
+                                                Edit
+                                            </button>
                                             <form action="{{ route('admin.packages.destroy', $package->package_id) }}"
                                                   method="POST"
                                                   class="d-inline"
@@ -586,7 +644,7 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
-                                                    <i class="bi bi-trash"></i>
+                                                    Delete
                                                 </button>
                                             </form>
                                         </div>
@@ -607,34 +665,94 @@
                 @endif
             </div>
         </div>
+
+        {{-- ===== Add New Package Modal ===== --}}
+        <div class="modal fade" id="addPackageModal" tabindex="-1" aria-labelledby="addPackageModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title fw-bold" id="addPackageModalLabel">
+                            <i class="bi bi-plus-circle text-primary me-2"></i>Add New Package
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('admin.packages.store') }}" method="POST" id="createPackageForm">
+                        @csrf
+                        <div class="modal-body">
+                            @include('admin.packages._form', ['package' => null])
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle me-1"></i> Save Package
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {{-- ===== Edit Package Modals (one per row) ===== --}}
+        @foreach($packages as $package)
+            <div class="modal fade" id="editPackageModal{{ $package->package_id }}" tabindex="-1" aria-labelledby="editPackageModalLabel{{ $package->package_id }}" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title fw-bold" id="editPackageModalLabel{{ $package->package_id }}">
+                                <i class="bi bi-pencil-square text-primary me-2"></i>Edit Package — {{ $package->name }}
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="{{ route('admin.packages.update', $package->package_id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="_edit_package_id" value="{{ $package->package_id }}">
+                            <div class="modal-body">
+                                @include('admin.packages._form', ['package' => $package])
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-circle me-1"></i> Update Package
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        @endforeach
     </div>
 @endsection
 
 @push('scripts')
-    {{-- ✅ jQuery (যদি admin_master এ না থাকে) --}}
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
-    {{-- ✅ DataTables Core --}}
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-
-    {{-- ✅ DataTables Responsive Extension --}}
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
 
     <script>
         $(document).ready(function() {
-            // ✅ Initialize DataTable with Sorting + Responsive
-            const table = $('#packagesTable').DataTable({
-                // Sorting Configuration
-                order: [[0, 'asc']], // Default: Sort by ID column ascending
-                columnDefs: [
-                    { orderable: true,  targets: [0, 1, 2, 3, 4, 5] }, // Sortable columns
-                    { orderable: false, targets: [6] },                 // Actions column not sortable
-                    { className: 'dtr-control', orderable: false, targets: [0] } // Responsive control icon
-                ],
+            @if ($errors->any())
+                @if (old('_edit_package_id'))
+                    const editModalEl = document.getElementById('editPackageModal{{ old('_edit_package_id') }}');
+                    if (editModalEl) {
+                        new bootstrap.Modal(editModalEl).show();
+                    }
+                @else
+                    const addPackageModal = new bootstrap.Modal(document.getElementById('addPackageModal'));
+                    addPackageModal.show();
+                @endif
+            @endif
 
-                // Responsive Configuration
+            const table = $('#packagesTable').DataTable({
+                order: [[0, 'asc']],
+                columnDefs: [
+                    { orderable: false, targets: [0] },
+                    { orderable: true,  targets: [1, 2, 3, 4, 5] },
+                    { orderable: false, targets: [6] },
+                    { className: 'dtr-control', orderable: false, targets: [0] }
+                ],
                 responsive: {
                     details: {
                         type: 'inline',
@@ -652,24 +770,20 @@
                         }
                     }
                 },
-
-                // Disable DataTables default pagination & search
                 paging: false,
                 searching: true,
                 info: false,
                 lengthChange: false,
                 autoWidth: false,
-
-                // Language / Empty State
                 language: {
                     zeroRecords: `
                         <div class="py-5 d-flex flex-column align-items-center justify-content-center">
                             <i class="mb-3 bi bi-box-seam empty-state-icon" style="font-size: 3rem;"></i>
                             <h5 class="fw-semibold text-body">No Packages Found</h5>
                             <p class="mb-2 small text-body-secondary">You haven't created any internet packages yet.</p>
-                            <a href="${'{{ route('admin.packages.create') }}'}" class="mt-2 btn btn-sm btn-primary">
+                            <button type="button" class="mt-2 btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addPackageModal">
                                 <i class="bi bi-plus-circle me-1"></i> Add Your First Package
-                            </a>
+                            </button>
                         </div>
                     `,
                     emptyTable: `
@@ -677,30 +791,24 @@
                             <i class="mb-3 bi bi-box-seam empty-state-icon" style="font-size: 3rem;"></i>
                             <h5 class="fw-semibold text-body">No Packages Found</h5>
                             <p class="mb-2 small text-body-secondary">You haven't created any internet packages yet.</p>
-                            <a href="${'{{ route('admin.packages.create') }}'}" class="mt-2 btn btn-sm btn-primary">
+                            <button type="button" class="mt-2 btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addPackageModal">
                                 <i class="bi bi-plus-circle me-1"></i> Add Your First Package
-                            </a>
+                            </button>
                         </div>
                     `
                 }
             });
 
-            // ✅ Custom Search Integration with DataTables API
             const $searchInput = $('#packageSearch');
             const $clearBtn = $('#clearSearch');
             const $counter = $('#searchCounter');
 
             $searchInput.on('keyup', function() {
                 const searchValue = $(this).val();
-
-                // Apply search to DataTable
                 table.search(searchValue).draw();
 
-                // Show/hide clear button
                 if (searchValue.length > 0) {
                     $clearBtn.addClass('show');
-
-                    // Update counter
                     const totalRows = table.rows().count();
                     const visibleRows = table.rows({ search: 'applied' }).count();
                     $counter.text(`(${visibleRows} of ${totalRows} found)`).addClass('show');
@@ -710,26 +818,21 @@
                 }
             });
 
-            // ✅ Clear Search Button
             $clearBtn.on('click', function() {
                 $searchInput.val('').trigger('keyup').focus();
             });
 
-            // ✅ Keyboard Shortcuts
             $(document).on('keydown', function(e) {
-                // Press '/' to focus search
                 if (e.key === '/' && !$(e.target).is('input, textarea')) {
                     e.preventDefault();
                     $searchInput.focus();
                 }
-                // Press 'Escape' to clear search
                 if (e.key === 'Escape' && $searchInput.is(':focus')) {
                     $searchInput.val('').trigger('keyup');
                     $searchInput.blur();
                 }
             });
 
-            // ✅ Rebuild responsive on window resize
             $(window).on('resize', function() {
                 table.responsive.rebuild();
                 table.responsive.recalc();

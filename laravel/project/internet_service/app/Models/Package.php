@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Package extends Model
 {
+    use HasFactory;
+
     protected $primaryKey = 'package_id';
     public    $timestamps = false;           // no created_at / updated_at in schema
 
@@ -17,7 +20,7 @@ class Package extends Model
         'quota_gb',
         'price',
         'duration_days',
-        'status'
+        'status',
     ];
 
     // Fix: proper casts matching actual column types
