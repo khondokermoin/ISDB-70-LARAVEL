@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 
 
 class StudentController extends Controller
@@ -33,6 +32,11 @@ class StudentController extends Controller
         $student->address = $request->address;
 
         $student->save();
-        return redirect('/student');
+        // return redirect('/student');
+
+        return response()->json([
+           'status'=> 'success',
+           'msg'=>'Student added successfully' 
+        ]);
     }
 }

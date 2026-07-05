@@ -45,34 +45,15 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-sm-12">
+               
+                    <div class="meessage"></div>
+                
                 <div class="d-flex justify-content-between">
                     <h2>Studet List</h2>
                     <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#myModal">+
                         Add Students</button>
                 </div>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Address</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($students as $student)
-                            <tr>
-                                <td>{{ $student->id }}</td>
-                                <td>{{ $student->name }}</td>
-                                <td>{{ $student->email }}</td>
-                                <td>{{ $student->phone }}</td>
-                                <td>{{ $student->address }}</td>
-                            </tr>
-                        @endforeach
-
-                    </tbody>
-                </table>
+                @include('table')
             </div>
 
         </div>
@@ -109,7 +90,11 @@
                     contentType: false,
 
                     success: function(response) {
-                        console.log(response);
+                        // console.log(response);
+                        $('#myModal').modal('hide');
+                        // $('#StudentEntry').reset();
+                        $('.meessage').html('<div class="alert alert-success">Inseted</div>');
+
                     },
                     error: function(err) {
                         let errors = err.responseJSON.errors;
