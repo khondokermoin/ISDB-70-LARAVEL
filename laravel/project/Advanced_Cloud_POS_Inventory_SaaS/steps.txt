@@ -1,0 +1,14 @@
+1. composer create-project laravel/laravel cloud-pos-inventory
+2. cd cloud-pos-inventory
+3. code .
+4. .env setup
+5. composer require laravel/breeze --dev
+6. php artisan breeze:install
+7. php artisan migrate
+8. npm install
+9. npm run dev
+10. composer require spatie/laravel-permission
+11. php artisan vendor:publish --provider="Spatie\Permissio\PermissionServiceProvider"
+12. php artisan optimize:clear
+13. php artisan migrate
+14. 
