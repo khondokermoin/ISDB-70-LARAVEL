@@ -1,0 +1,166 @@
+body {
+    background: #222831;
+    font-family: 'Poppins', sans-serif; /* Applying the imported font */
+    color: #EEEEEE;
+}
+
+/* --- Banner Section --- */
+#banner {
+    position: relative;
+    padding-top: 100px; /* Adjust spacing to push everything down */
+}
+
+/* The Arrow Doodle */
+.leftimg {
+    top: 20px;
+    left: -80px; /* Pulls the arrow out to the left of the column */
+    width: 90px;
+    z-index: 0;
+}
+
+/* Heading Typography */
+#banner h1 {
+    color: #EEEEEE;
+    font-size: 80px; /* Adjusted slightly so it fits beautifully on standard screens */
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0px;
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 1;
+}
+
+#banner h1 span {
+    color: #00ADB5;
+}
+
+/* --- Buttons --- */
+.banner-buttons {
+    position: relative;
+    z-index: 1;
+}
+
+.btn-hire, .btn-download {
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 30px; /* Makes it a pill shape */
+    transition: all 0.3s ease;
+}
+
+/* Primary Teal Button */
+.btn-hire {
+    background: #00ADB5;
+    color: #EEEEEE;
+}
+
+.btn-hire:hover {
+    background: #00939b; /* Slight hover effect */
+}
+
+/* Secondary Gray Button */
+.btn-download {
+    background: #393E46; /* Matching the dark gray in the design */
+    color: #EEEEEE;
+}
+
+.btn-download:hover {
+    background: #4a505a;
+}
+
+.btn-download i {
+    margin-left: 8px; /* Adds space between text and FontAwesome icon */
+}
+
+/* Right Illustration */
+.sidimg {
+    padding-top: 40px; 
+}
+
+
+/* --- About Section --- */
+#about {
+    padding: 120px 0; /* Creates breathing room above and below the section */
+    position: relative;
+    border-bottom: 1px solid #333942; /* Subtle divider line at the bottom, matching the mockup */
+}
+
+/* Typography */
+#about h2 {
+    color: #EEEEEE;
+    font-size: 64px;
+    font-weight: 700;
+    margin-bottom: 24px;
+}
+
+#about h2 span {
+    color: #00ADB5; /* Teal accent */
+}
+
+#about p {
+    color: #EEEEEE;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.8;
+    max-width: 480px; /* Restricts the paragraph width to match the line breaks in the design */
+    opacity: 0.9; /* Slight opacity to soften the text block */
+}
+
+/* Read More Link */
+.read-more {
+    font-weight: 700;
+    cursor: pointer;
+    color: #EEEEEE;
+    transition: color 0.3s ease;
+}
+
+.read-more:hover {
+    color: #00ADB5; /* Nice hover effect for the read more text */
+}
+
+/* Illustration styling */
+.about-illustration {
+    max-width: 90%; /* Adjust this if the image feels too large or small in the column */
+}
+
+/* --- Optional: Floating Doodles --- */
+/* If you have the music note, lightbulb, and arrow as separate transparent PNGs, 
+   you can position them like this relative to the container */
+.doodle {
+    position: absolute;
+    z-index: 0;
+    opacity: 0.5; /* Makes them look like faded background elements */
+}
+
+.doodle-music {
+    top: -40px;
+    left: -60px;
+}
+
+.doodle-bulb {
+    top: 20px;
+    left: 280px;
+}
+
+.doodle-arrow {
+    bottom: -60px;
+    left: 40px;
+}
+/* --- About Section Background --- */
+
+/* Remove any padding from the main section tag if you added it previously */
+#about {
+    padding: 0; 
+    border-bottom: 1px solid #333942; /* Keeps the subtle divider line */
+}
+
+/* Apply the background image to your new wrapper */
+.aboutbg {
+    background-image: url('./images/aboutbg.png'); 
+    background-size: cover; 
+    background-position: center center; 
+    background-repeat: no-repeat; 
+    width: 100%;
+    padding: 120px 0; 
+}
