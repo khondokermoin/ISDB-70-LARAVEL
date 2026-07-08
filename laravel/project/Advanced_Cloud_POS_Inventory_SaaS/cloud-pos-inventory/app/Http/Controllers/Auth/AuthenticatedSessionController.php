@@ -26,13 +26,22 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
         $request->session()->regenerate();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
 
-        // রোল চেক করে রিডাইরেক্ট
-        if ($request->user()->hasRole('admin')) {
-            return redirect()->route('admin.dashboard'); // অ্যাডমিন হলে এখানে যাবে
+        // Role-based redirect logic for SaaS Architecture
+        if ($user) {
+            if ($user->hasRole('Super Admin')) {
+                return redirect()->intended(route('superadmin.dashboard', absolute: false));
+            } elseif ($user->hasRole('Company Admin')) {
+                return redirect()->intended(route('company.dashboard', absolute: false));
+            } elseif ($user->hasRole('Branch Manager') || $user->hasRole('Cashier')) {
+                return redirect()->intended(route('branch.dashboard', absolute: false));
+            }
         }
 
-        return redirect()->route('dashboard'); // সাধারণ ইউজার হলে এখানে যাবে
+        // Fallback for normal users without specific roles
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 
     /**
@@ -43,7 +52,6 @@ class AuthenticatedSessionController extends Controller
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect('/');
