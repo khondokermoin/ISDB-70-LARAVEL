@@ -13,6 +13,7 @@
 13. php artisan migrate
 14. composer dump-autoload
 15. php artisan storage:link
+16. php artisan migrate:fresh --seed
 
 php unit and trinker
 https://codecanyon.net/search/pos%20inventory
