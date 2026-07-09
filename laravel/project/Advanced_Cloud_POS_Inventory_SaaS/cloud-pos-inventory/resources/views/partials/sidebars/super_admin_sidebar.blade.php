@@ -1,17 +1,14 @@
 <div class="sidenav-menu">
 
     <!-- Brand Logo -->
-    <a href="index.html" class="logo">
+    <a href="{{ route('superadmin.dashboard') }}" class="logo">
         <span class="logo-light">
-            <span class="logo-lg"><img src="{{ asset('') }}frontend_assets/images/logo.png" alt="logo"></span>
-            <span class="logo-sm"><img src="{{ asset('') }}frontend_assets/images/logo-sm.png" alt="small logo"></span>
+            <span class="logo-lg"><img src="{{ asset('frontend_assets/images/logo.png') }}" alt="logo"></span>
+            <span class="logo-sm"><img src="{{ asset('frontend_assets/images/logo-sm.png') }}" alt="small logo"></span>
         </span>
-
         <span class="logo-dark">
-            <span class="logo-lg"><img src="{{ asset('') }}frontend_assets/images/logo-dark.png"
-                    alt="dark logo"></span>
-            <span class="logo-sm"><img src="{{ asset('') }}frontend_assets/images/logo-sm.png"
-                    alt="small logo"></span>
+            <span class="logo-lg"><img src="{{ asset('frontend_assets/images/logo-dark.png') }}" alt="dark logo"></span>
+            <span class="logo-sm"><img src="{{ asset('frontend_assets/images/logo-sm.png') }}" alt="small logo"></span>
         </span>
     </a>
 
@@ -31,833 +28,375 @@
         <ul class="side-nav">
             <li class="side-nav-title">Navigation</li>
 
+            <!-- Dashboard -->
             <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarDashboard" aria-expanded="false"
-                    aria-controls="sidebarDashboard" class="side-nav-link">
+                <a href="{{ route('superadmin.dashboard') }}" class="side-nav-link">
                     <span class="menu-icon"><i class="ti ti-dashboard"></i></span>
-                    <span class="menu-text"> Dashboards </span>
-                    <span class="badge bg-success rounded-pill">03</span>
+                    <span class="menu-text"> Platform Dashboard </span>
                 </a>
-                <div class="collapse" id="sidebarDashboard">
+            </li>
+
+            <li class="side-nav-title mt-2">SaaS Management</li>
+
+            <!-- Tenants / Stores -->
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarTenants" aria-expanded="false" aria-controls="sidebarTenants"
+                    class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-building-store"></i></span>
+                    <span class="menu-text"> Tenants / Stores </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarTenants">
                     <ul class="sub-menu">
                         <li class="side-nav-item">
-                            <a href="index.html" class="side-nav-link">
-                                <span class="menu-text">Default</span>
+                            <a href="{{ route('superadmin.tenants.index') }}" class="side-nav-link">
+                                <span class="menu-text">All Tenants</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="dashboard-analytics.html" class="side-nav-link">
-                                <span class="menu-text">Analytics</span>
+                            <a href="{{ route('superadmin.tenants.create') }}" class="side-nav-link">
+                                <span class="menu-text">Create Tenant</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="dashboard-real-estate.html" class="side-nav-link">
-                                <span class="menu-text">Real Estate</span>
+                            <a href="{{ route('superadmin.tenants.suspended') }}" class="side-nav-link">
+                                <span class="menu-text">Suspended Tenants</span>
                             </a>
                         </li>
                     </ul>
                 </div>
             </li>
 
+            <!-- Subscriptions & Plans -->
             <li class="side-nav-item">
-                <a href="apps-calendar.html" class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-calendar"></i></span>
-                    <span class="menu-text"> Calendar </span>
-                </a>
-            </li>
-
-            <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarRealEstate" aria-expanded="false"
-                    aria-controls="sidebarRealEstate" class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-buildings"></i></span>
-                    <span class="menu-text"> Real Estate</span>
+                <a data-bs-toggle="collapse" href="#sidebarSubscriptions" aria-expanded="false"
+                    aria-controls="sidebarSubscriptions" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-crown"></i></span>
+                    <span class="menu-text"> Subscriptions & Plans </span>
                     <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse" id="sidebarRealEstate">
+                <div class="collapse" id="sidebarSubscriptions">
                     <ul class="sub-menu">
                         <li class="side-nav-item">
-                            <a href="apps-real-estate-properties.html" class="side-nav-link">
-                                <span class="menu-text">Property List</span>
+                            <a href="{{ route('superadmin.plans.index') }}" class="side-nav-link">
+                                <span class="menu-text">Pricing Plans</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="apps-real-estate-properties-cards.html" class="side-nav-link">
-                                <span class="menu-text">Property Cards </span>
+                            <a href="{{ route('superadmin.subscriptions.index') }}" class="side-nav-link">
+                                <span class="menu-text">Active Subscriptions</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="apps-real-estate-property-details.html" class="side-nav-link">
-                                <span class="menu-text">Property Details</span>
+                            <a href="{{ route('superadmin.transactions.index') }}" class="side-nav-link">
+                                <span class="menu-text">Payment Transactions</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="side-nav-title mt-2">Core Modules (Global)</li>
+
+            <!-- Sales & POS -->
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarSales" aria-expanded="false" aria-controls="sidebarSales"
+                    class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-shopping-cart"></i></span>
+                    <span class="menu-text"> Sales & POS </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarSales">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a href="{{ route('superadmin.pos.index') }}" class="side-nav-link">
+                                <span class="menu-text">Global POS</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="apps-real-estate-add-property.html" class="side-nav-link">
-                                <span class="menu-text">Add/Edit Property</span>
+                            <a href="{{ route('superadmin.invoices.index') }}" class="side-nav-link">
+                                <span class="menu-text">All Invoices</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="apps-real-estate-agents.html" class="side-nav-link">
-                                <span class="menu-text">Agents</span>
+                            <a href="{{ route('superadmin.quotations.index') }}" class="side-nav-link">
+                                <span class="menu-text">Quotations</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="apps-real-estate-agent-details.html" class="side-nav-link">
-                                <span class="menu-text">Agent Details</span>
+                            <a href="{{ route('superadmin.returns.index') }}" class="side-nav-link">
+                                <span class="menu-text">Returns</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- Inventory -->
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarInventory" aria-expanded="false"
+                    aria-controls="sidebarInventory" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-packages"></i></span>
+                    <span class="menu-text"> Inventory </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarInventory">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a href="{{ route('superadmin.products.index') }}" class="side-nav-link">
+                                <span class="menu-text">Products / Items</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="apps-real-estate-customers.html" class="side-nav-link">
+                            <a href="{{ route('superadmin.categories.index') }}" class="side-nav-link">
+                                <span class="menu-text">Categories</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('superadmin.inventory.index') }}" class="side-nav-link">
+                                <span class="menu-text">Stock Management</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('superadmin.barcode.index') }}" class="side-nav-link">
+                                <span class="menu-text">Barcode Printing</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- Purchases -->
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarPurchases" aria-expanded="false"
+                    aria-controls="sidebarPurchases" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-truck-delivery"></i></span>
+                    <span class="menu-text"> Purchases </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarPurchases">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a href="{{ route('superadmin.purchases.index') }}" class="side-nav-link">
+                                <span class="menu-text">Purchase Orders</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('superadmin.suppliers.index') }}" class="side-nav-link">
+                                <span class="menu-text">Suppliers</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- Accounting -->
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarAccounting" aria-expanded="false"
+                    aria-controls="sidebarAccounting" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-calculator"></i></span>
+                    <span class="menu-text"> Accounting </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarAccounting">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a href="{{ route('superadmin.expenses.index') }}" class="side-nav-link">
+                                <span class="menu-text">Expenses</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('superadmin.cashbook.index') }}" class="side-nav-link">
+                                <span class="menu-text">Cash Book</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- People & HR -->
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarPeople" aria-expanded="false"
+                    aria-controls="sidebarPeople" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-users"></i></span>
+                    <span class="menu-text"> People & HR </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarPeople">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a href="{{ route('superadmin.customers.index') }}" class="side-nav-link">
                                 <span class="menu-text">Customers</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="apps-real-estate-transactions.html" class="side-nav-link">
-                                <span class="menu-text">Transactions</span>
+                            <a href="{{ route('superadmin.employees.index') }}" class="side-nav-link">
+                                <span class="menu-text">Employees</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="apps-real-estate-reviews.html" class="side-nav-link">
-                                <span class="menu-text">Reviews</span>
+                            <a href="{{ route('superadmin.payroll.index') }}" class="side-nav-link">
+                                <span class="menu-text">Payroll</span>
                             </a>
                         </li>
                     </ul>
                 </div>
             </li>
 
+            <li class="side-nav-title mt-2">Administration</li>
+
+            <!-- Platform Users -->
             <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarInvoice" aria-expanded="false"
-                    aria-controls="sidebarInvoice" class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-file-invoice"></i></span>
-                    <span class="menu-text"> Invoice</span>
+                <a data-bs-toggle="collapse" href="#sidebarPlatformUsers" aria-expanded="false"
+                    aria-controls="sidebarPlatformUsers" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-user-cog"></i></span>
+                    <span class="menu-text"> Platform Users </span>
                     <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse" id="sidebarInvoice">
+                <div class="collapse" id="sidebarPlatformUsers">
                     <ul class="sub-menu">
                         <li class="side-nav-item">
-                            <a href="apps-invoices.html" class="side-nav-link">
-                                <span class="menu-text">Invoices</span>
+                            <a href="{{ route('superadmin.users.index') }}" class="side-nav-link">
+                                <span class="menu-text">Admin Staff</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="apps-invoice-details.html" class="side-nav-link">
-                                <span class="menu-text">View Invoice</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="apps-invoice-create.html" class="side-nav-link">
-                                <span class="menu-text">Create Invoice</span>
+                            <a href="{{ route('superadmin.roles.index') }}" class="side-nav-link">
+                                <span class="menu-text">Roles & Permissions</span>
                             </a>
                         </li>
                     </ul>
                 </div>
             </li>
 
+            <!-- Global Settings -->
             <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarPages" aria-expanded="false" aria-controls="sidebarPages"
-                    class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-files"></i></span>
-                    <span class="menu-text"> Pages </span>
+                <a data-bs-toggle="collapse" href="#sidebarSettings" aria-expanded="false"
+                    aria-controls="sidebarSettings" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-settings"></i></span>
+                    <span class="menu-text"> Global Settings </span>
                     <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse" id="sidebarPages">
+                <div class="collapse" id="sidebarSettings">
                     <ul class="sub-menu">
                         <li class="side-nav-item">
-                            <a href="pages-starter.html" class="side-nav-link">
-                                <span class="menu-text">Starter Page</span>
+                            <a href="{{ route('superadmin.settings.general') }}" class="side-nav-link">
+                                <span class="menu-text">General Setup</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="pages-profile.html" class="side-nav-link">
-                                <span class="menu-text">Profile</span>
+                            <a href="{{ route('superadmin.settings.payment-gateways') }}" class="side-nav-link">
+                                <span class="menu-text">Payment Gateways</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="pages-about-us.html" class="side-nav-link">
-                                <span class="menu-text">About Us</span>
+                            <a href="{{ route('superadmin.settings.email-sms') }}" class="side-nav-link">
+                                <span class="menu-text">Email & SMS</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="pages-contact-us.html" class="side-nav-link">
-                                <span class="menu-text">Contact Us</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="pages-members.html" class="side-nav-link">
-                                <span class="menu-text">Members</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="pages-search-results.html" class="side-nav-link">
-                                <span class="menu-text">Search Results</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="pages-pricing.html" class="side-nav-link">
-                                <span class="menu-text">Pricing</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="pages-faq.html" class="side-nav-link">
-                                <span class="menu-text">FAQ</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="pages-maintenance.html" class="side-nav-link">
-                                <span class="menu-text">Maintenance</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="pages-timeline.html" class="side-nav-link">
-                                <span class="menu-text">Timeline</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="pages-coming-soon.html" class="side-nav-link">
-                                <span class="menu-text">Coming Soon</span>
+                            <a href="{{ route('superadmin.settings.localization') }}" class="side-nav-link">
+                                <span class="menu-text">Localization</span>
                             </a>
                         </li>
                     </ul>
                 </div>
             </li>
 
+            <!-- System & Security -->
             <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarPagesAuth" aria-expanded="false"
-                    aria-controls="sidebarPagesAuth" class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-lock"></i></span>
-                    <span class="menu-text"> Auth Pages </span>
+                <a data-bs-toggle="collapse" href="#sidebarSystem" aria-expanded="false"
+                    aria-controls="sidebarSystem" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-server"></i></span>
+                    <span class="menu-text"> System & Security </span>
                     <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse" id="sidebarPagesAuth">
+                <div class="collapse" id="sidebarSystem">
                     <ul class="sub-menu">
                         <li class="side-nav-item">
-                            <a href="auth-login.html" class="side-nav-link">
-                                <span class="menu-text">Login</span>
+                            <a href="{{ route('superadmin.logs.index') }}" class="side-nav-link">
+                                <span class="menu-text">Activity Logs</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="auth-register.html" class="side-nav-link">
-                                <span class="menu-text">Register</span>
+                            <a href="{{ route('superadmin.backup.index') }}" class="side-nav-link">
+                                <span class="menu-text">Database Backup</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="auth-logout.html" class="side-nav-link">
-                                <span class="menu-text">Logout</span>
+                            <a href="{{ route('superadmin.system-info') }}" class="side-nav-link">
+                                <span class="menu-text">System Info</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="auth-recoverpw.html" class="side-nav-link">
-                                <span class="menu-text">Recover Password</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="auth-createpw.html" class="side-nav-link">
-                                <span class="menu-text">Create Password</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="auth-lock-screen.html" class="side-nav-link">
-                                <span class="menu-text">Lock Screen</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="auth-confirm-mail.html" class="side-nav-link">
-                                <span class="menu-text">Confirm Mail</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="auth-login-pin.html" class="side-nav-link">
-                                <span class="menu-text">Login with PIN</span>
+                            <a href="{{ route('superadmin.update') }}" class="side-nav-link">
+                                <span class="menu-text">Update Application</span>
                             </a>
                         </li>
                     </ul>
                 </div>
             </li>
 
+            <li class="side-nav-title mt-2">Reports</li>
+
+            <!-- Analytics & Reports -->
             <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarPagesError" aria-expanded="false"
-                    aria-controls="sidebarPagesError" class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-server-2"></i></span>
-                    <span class="menu-text"> Error Pages </span>
+                <a data-bs-toggle="collapse" href="#sidebarReports" aria-expanded="false"
+                    aria-controls="sidebarReports" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-chart-bar"></i></span>
+                    <span class="menu-text"> Analytics & Reports </span>
                     <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse" id="sidebarPagesError">
+                <div class="collapse" id="sidebarReports">
                     <ul class="sub-menu">
                         <li class="side-nav-item">
-                            <a href="error-401.html" class="side-nav-link">
-                                <span class="menu-text">401 Unauthorized</span>
+                            <a href="{{ route('superadmin.reports.revenue') }}" class="side-nav-link">
+                                <span class="menu-text">SaaS Revenue</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="error-400.html" class="side-nav-link">
-                                <span class="menu-text">400 Bad Request</span>
+                            <a href="{{ route('superadmin.reports.tenants') }}" class="side-nav-link">
+                                <span class="menu-text">Tenant Growth</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="error-403.html" class="side-nav-link">
-                                <span class="menu-text">403 Forbidden</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="error-404.html" class="side-nav-link">
-                                <span class="menu-text">404 Not Found</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="error-500.html" class="side-nav-link">
-                                <span class="menu-text">500 Internal Server</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="error-service-unavailable.html" class="side-nav-link">
-                                <span class="menu-text">Service Unavailable</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="error-404-alt.html" class="side-nav-link">
-                                <span class="menu-text">Error 404 Alt</span>
+                            <a href="{{ route('superadmin.reports.global-sales') }}" class="side-nav-link">
+                                <span class="menu-text">Global Sales</span>
                             </a>
                         </li>
                     </ul>
                 </div>
             </li>
 
-            <li class="side-nav-title mt-2">
-                More
-            </li>
+            <li class="side-nav-title mt-2">Account</li>
 
+            <!-- Profile -->
             <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarLayouts" aria-expanded="false"
-                    aria-controls="sidebarLayouts" class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-layout"></i></span>
-                    <span class="menu-text"> Layouts </span>
-                    <span class="menu-arrow"></span>
+                <a href="{{ route('superadmin.profile') }}" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-user"></i></span>
+                    <span class="menu-text"> My Profile </span>
                 </a>
-                <div class="collapse" id="sidebarLayouts">
-                    <ul class="sub-menu">
-                        <li class="side-nav-item">
-                            <a href="layouts-horizontal.html" target="_blank" class="side-nav-link">Horizontal</a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="layouts-detached.html" target="_blank" class="side-nav-link">Detached</a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="layouts-full.html" target="_blank" class="side-nav-link">Full View</a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="layouts-fullscreen.html" target="_blank" class="side-nav-link">Fullscreen
-                                View</a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="layouts-hover.html" target="_blank" class="side-nav-link">Hover Menu</a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="layouts-compact.html" target="_blank" class="side-nav-link">Compact</a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="layouts-icon-view.html" target="_blank" class="side-nav-link">Icon View</a>
-                        </li>
-                    </ul>
-                </div>
             </li>
 
+            <!-- Logout -->
             <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarMultiLevel" aria-expanded="false"
-                    aria-controls="sidebarMultiLevel" class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-box-multiple-3"></i></span>
-                    <span class="menu-text"> Multi Level </span>
-                    <span class="menu-arrow"></span>
+                <a href="{{ route('logout') }}" class="side-nav-link"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <span class="menu-icon"><i class="ti ti-logout"></i></span>
+                    <span class="menu-text"> Logout </span>
                 </a>
-                <div class="collapse" id="sidebarMultiLevel">
-                    <ul class="sub-menu">
-                        <li class="side-nav-item">
-                            <a data-bs-toggle="collapse" href="#sidebarSecondLevel" aria-expanded="false"
-                                aria-controls="sidebarSecondLevel" class="side-nav-link">
-                                <span class="menu-text"> Second Level </span>
-                                <span class="menu-arrow"></span>
-                            </a>
-                            <div class="collapse" id="sidebarSecondLevel">
-                                <ul class="sub-menu">
-                                    <li class="side-nav-item">
-                                        <a href="javascript: void(0);" class="side-nav-link">
-                                            <span class="menu-text">Item 1</span>
-                                        </a>
-                                    </li>
-                                    <li class="side-nav-item">
-                                        <a href="javascript: void(0);" class="side-nav-link">
-                                            <span class="menu-text">Item 2</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="side-nav-item">
-                            <a data-bs-toggle="collapse" href="#sidebarThirdLevel" aria-expanded="false"
-                                aria-controls="sidebarThirdLevel" class="side-nav-link">
-                                <span class="menu-text"> Third Level </span>
-                                <span class="menu-arrow"></span>
-                            </a>
-                            <div class="collapse" id="sidebarThirdLevel">
-                                <ul class="sub-menu">
-                                    <li class="side-nav-item">
-                                        <a href="javascript: void(0);" class="side-nav-link">Item 1</a>
-                                    </li>
-                                    <li class="side-nav-item">
-                                        <a data-bs-toggle="collapse" href="#sidebarFourthLevel" aria-expanded="false"
-                                            aria-controls="sidebarFourthLevel" class="side-nav-link">
-                                            <span class="menu-text"> Item 2 </span>
-                                            <span class="menu-arrow"></span>
-                                        </a>
-                                        <div class="collapse" id="sidebarFourthLevel">
-                                            <ul class="sub-menu">
-                                                <li class="side-nav-item">
-                                                    <a href="javascript: void(0);" class="side-nav-link">
-                                                        <span class="menu-text">Item 2.1</span>
-                                                    </a>
-                                                </li>
-                                                <li class="side-nav-item">
-                                                    <a href="javascript: void(0);" class="side-nav-link">
-                                                        <span class="menu-text">Item 2.2</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
             </li>
 
-            <li class="side-nav-title mt-2">Components</li>
-
-            <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarBaseUI" aria-expanded="false"
-                    aria-controls="sidebarBaseUI" class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-brightness"></i></span>
-                    <span class="menu-text"> Base UI </span>
-                    <span class="menu-arrow"></span>
-                </a>
-                <div class="collapse" id="sidebarBaseUI">
-                    <ul class="sub-menu">
-                        <li class="side-nav-item">
-                            <a href="ui-accordions.html" class="side-nav-link">
-                                <span class="menu-text">Accordions</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-alerts.html" class="side-nav-link">
-                                <span class="menu-text">Alerts</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-avatars.html" class="side-nav-link">
-                                <span class="menu-text">Avatars</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-badges.html" class="side-nav-link">
-                                <span class="menu-text">Badges</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-breadcrumb.html" class="side-nav-link">
-                                <span class="menu-text">Breadcrumb</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-buttons.html" class="side-nav-link">
-                                <span class="menu-text">Buttons</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-cards.html" class="side-nav-link">
-                                <span class="menu-text">Cards</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-carousel.html" class="side-nav-link">
-                                <span class="menu-text">Carousel</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-collapse.html" class="side-nav-link">
-                                <span class="menu-text">Collapse</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-dropdowns.html" class="side-nav-link">
-                                <span class="menu-text">Dropdowns</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-ratios.html" class="side-nav-link">
-                                <span class="menu-text">Ratios</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-grid.html" class="side-nav-link">
-                                <span class="menu-text">Grid</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-links.html" class="side-nav-link">
-                                <span class="menu-text">Links</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-list-group.html" class="side-nav-link">
-                                <span class="menu-text">List Group</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-modals.html" class="side-nav-link">
-                                <span class="menu-text">Modals</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-notifications.html" class="side-nav-link">
-                                <span class="menu-text">Notifications</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-offcanvas.html" class="side-nav-link">
-                                <span class="menu-text">Offcanvas</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-placeholders.html" class="side-nav-link">
-                                <span class="menu-text">Placeholders</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-pagination.html" class="side-nav-link">
-                                <span class="menu-text">Pagination</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-popovers.html" class="side-nav-link">
-                                <span class="menu-text">Popovers</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-progress.html" class="side-nav-link">
-                                <span class="menu-text">Progress</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-scrollspy.html" class="side-nav-link">
-                                <span class="menu-text">Scrollspy</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-spinners.html" class="side-nav-link">
-                                <span class="menu-text">Spinners</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-tabs.html" class="side-nav-link">
-                                <span class="menu-text">Tabs</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-tooltips.html" class="side-nav-link">
-                                <span class="menu-text">Tooltips</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-typography.html" class="side-nav-link">
-                                <span class="menu-text">Typography</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="ui-utilities.html" class="side-nav-link">
-                                <span class="menu-text">Utilities</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-
-            <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarExtendedUI" aria-expanded="false"
-                    aria-controls="sidebarExtendedUI" class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-alien"></i></span>
-                    <span class="menu-text"> Extended UI </span>
-                    <span class="menu-arrow"></span>
-                </a>
-                <div class="collapse" id="sidebarExtendedUI">
-                    <ul class="sub-menu">
-                        <li class="side-nav-item">
-                            <a href="extended-dragula.html" class="side-nav-link">
-                                <span class="menu-text">Dragula</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="extended-sweetalerts.html" class="side-nav-link">
-                                <span class="menu-text">Sweet Alerts</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="extended-ratings.html" class="side-nav-link">
-                                <span class="menu-text">Ratings</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="extended-scrollbar.html" class="side-nav-link">
-                                <span class="menu-text">Scrollbar</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-
-            <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarIcons" aria-expanded="false" aria-controls="sidebarIcons"
-                    class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-leaf"></i></span>
-                    <span class="menu-text"> Icons </span>
-                    <span class="menu-arrow"></span>
-                </a>
-                <div class="collapse" id="sidebarIcons">
-                    <ul class="sub-menu">
-                        <li class="side-nav-item">
-                            <a href="icons-tabler.html" class="side-nav-link">
-                                <span class="menu-text">Tabler</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="icons-lucid.html" class="side-nav-link">
-                                <span class="menu-text">Lucid</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-
-            <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarCharts" aria-expanded="false"
-                    aria-controls="sidebarCharts" class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-chart-arcs"></i></span>
-                    <span class="menu-text"> Charts </span>
-                    <span class="menu-arrow"></span>
-                </a>
-                <div class="collapse" id="sidebarCharts">
-                    <ul class="sub-menu">
-                        <li class="side-nav-item">
-                            <a href="charts-apex-area.html" class="side-nav-link">
-                                <span class="menu-text">Area</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="charts-apex-bar.html" class="side-nav-link">
-                                <span class="menu-text">Bar</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="charts-apex-bubble.html" class="side-nav-link">
-                                <span class="menu-text">Bubble</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="charts-apex-candlestick.html" class="side-nav-link">
-                                <span class="menu-text">Candlestick</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="charts-apex-column.html" class="side-nav-link">
-                                <span class="menu-text">Column</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="charts-apex-heatmap.html" class="side-nav-link">
-                                <span class="menu-text">Heatmap</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="charts-apex-line.html" class="side-nav-link">
-                                <span class="menu-text">Line</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="charts-apex-mixed.html" class="side-nav-link">
-                                <span class="menu-text">Mixed</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="charts-apex-timeline.html" class="side-nav-link">
-                                <span class="menu-text">Timeline</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="charts-apex-boxplot.html" class="side-nav-link">
-                                <span class="menu-text">Boxplot</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="charts-apex-treemap.html" class="side-nav-link">
-                                <span class="menu-text">Treemap</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="charts-apex-pie.html" class="side-nav-link">
-                                <span class="menu-text">Pie</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="charts-apex-radar.html" class="side-nav-link">
-                                <span class="menu-text">Radar</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="charts-apex-radialbar.html" class="side-nav-link">
-                                <span class="menu-text">RadialBar</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="charts-apex-scatter.html" class="side-nav-link">
-                                <span class="menu-text">Scatter</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="charts-apex-polar-area.html" class="side-nav-link">
-                                <span class="menu-text">Polar Area</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="charts-apex-sparklines.html" class="side-nav-link">
-                                <span class="menu-text">Sparklines</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-
-            <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarForms" aria-expanded="false" aria-controls="sidebarForms"
-                    class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-forms"></i></span>
-                    <span class="menu-text"> Forms </span>
-                    <span class="menu-arrow"></span>
-                </a>
-                <div class="collapse" id="sidebarForms">
-                    <ul class="sub-menu">
-                        <li class="side-nav-item">
-                            <a href="form-elements.html" class="side-nav-link">
-                                <span class="menu-text">Basic Elements</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="form-inputmask.html" class="side-nav-link">
-                                <span class="menu-text">Inputmask</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="form-picker.html" class="side-nav-link">
-                                <span class="menu-text">Picker</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="form-select.html" class="side-nav-link">
-                                <span class="menu-text">Select</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="form-range-slider.html" class="side-nav-link">
-                                <span class="menu-text">Range Slider</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="form-validation.html" class="side-nav-link">
-                                <span class="menu-text">Validation</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="form-wizard.html" class="side-nav-link">
-                                <span class="menu-text">Wizard</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="form-fileuploads.html" class="side-nav-link">
-                                <span class="menu-text">File Uploads</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="form-editors.html" class="side-nav-link">
-                                <span class="menu-text">Editors</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="form-layouts.html" class="side-nav-link">
-                                <span class="menu-text">Layouts</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-
-            <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarTables" aria-expanded="false"
-                    aria-controls="sidebarTables" class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-table"></i></span>
-                    <span class="menu-text"> Tables </span>
-                    <span class="menu-arrow"></span>
-                </a>
-                <div class="collapse" id="sidebarTables">
-                    <ul class="sub-menu">
-                        <li class="side-nav-item">
-                            <a href="tables-basic.html" class="side-nav-link">
-                                <span class="menu-text">Basic Tables</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="tables-gridjs.html" class="side-nav-link">
-                                <span class="menu-text">Gridjs Tables</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="tables-datatable.html" class="side-nav-link">
-                                <span class="menu-text">Datatable Tables</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-
-            <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarMaps" aria-expanded="false" aria-controls="sidebarMaps"
-                    class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-map-pin"></i></span>
-                    <span class="menu-text"> Maps </span>
-                    <span class="menu-arrow"></span>
-                </a>
-                <div class="collapse" id="sidebarMaps">
-                    <ul class="sub-menu">
-                        <li class="side-nav-item">
-                            <a href="maps-google.html" class="side-nav-link">
-                                <span class="menu-text">Google Maps</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="maps-vector.html" class="side-nav-link">
-                                <span class="menu-text">Vector Maps</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="maps-leaflet.html" class="side-nav-link">
-                                <span class="menu-text">Leaflet Maps</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
         </ul>
 
         <!-- Help Box -->
         <div class="help-box text-center">
-            <h5 class="fw-semibold fs-16">Unlimited Access</h5>
-            <p class="mb-3 text-muted">Upgrade to plan to get access to unlimited reports</p>
-            <a href="javascript: void(0);" class="btn btn-danger btn-sm">Upgrade</a>
+            <h5 class="fw-semibold fs-16">Super Admin Panel</h5>
+            <p class="mb-3 text-muted">Manage your SaaS platform, tenants, and global settings.</p>
+            <a href="{{ route('superadmin.dashboard') }}" class="btn btn-primary btn-sm">Go to Dashboard</a>
         </div>
 
         <div class="clearfix"></div>

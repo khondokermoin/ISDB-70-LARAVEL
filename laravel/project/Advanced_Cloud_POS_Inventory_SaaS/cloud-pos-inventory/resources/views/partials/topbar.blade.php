@@ -491,10 +491,16 @@
                          </a>
 
                          <!-- item-->
-                         <a href="javascript:void(0);" class="dropdown-item active fw-semibold text-danger">
+                         <!-- Sign Out -->
+                         <a href="{{ route('logout') }}" class="dropdown-item active fw-semibold text-danger"
+                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                              <i class="ti ti-logout me-1 fs-17 align-middle"></i>
                              <span class="align-middle">Sign Out</span>
                          </a>
+
+                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                             @csrf
+                         </form>
                      </div>
                  </div>
              </div>

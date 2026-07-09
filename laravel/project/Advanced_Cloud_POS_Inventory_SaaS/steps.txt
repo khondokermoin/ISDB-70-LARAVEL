@@ -17,3 +17,7 @@
 
 php unit and trinker
 https://codecanyon.net/search/pos%20inventory
+
+https://probhaaurora.com/ (check how to linkdin এর api use করে data আনা কোন 3rd পাটি ব্যবহার না করে নিযের api )
+
+https://hungrycoding.com/ (check how to cms Laravel SmartEnd CMS - Laravel Admin Dashboard with Frontend and Restful API)

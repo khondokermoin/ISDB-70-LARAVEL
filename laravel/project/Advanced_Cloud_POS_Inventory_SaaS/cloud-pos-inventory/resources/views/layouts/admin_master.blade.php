@@ -11,15 +11,7 @@
 
 
         <!-- Sidenav Menu Start -->
-
-        @if (auth()->user()->hasRole('Super Admin'))
-            @include('partials.sidebars.super_admin_sidebar')
-        @elseif(auth()->user()->hasRole('Company Admin'))
-            @include('partials.sidebars.company_sidebar')
-        @elseif(auth()->user()->hasAnyRole(['Manager', 'Salesman']))
-            @include('partials.sidebars.branch_sidebar')
-        @endif
-
+        @include('partials.sidebar')
         <!-- Sidenav Menu End -->
 
 
@@ -34,6 +26,9 @@
         <!-- Start Page Content here -->
         <!-- =============================== -->
         <div class="page-content">
+            {{-- Toastr Messages --}}
+            @include('partials.alerts')
+
             <!-- container Start -->
             @yield('content')
             <!-- container end -->
@@ -54,6 +49,8 @@
 
     {{-- JS Files --}}
     @include('partials.scripts')
+
+
 
 </body>
 

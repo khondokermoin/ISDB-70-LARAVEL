@@ -35,7 +35,7 @@ class AuthenticatedSessionController extends Controller
                 return redirect()->intended(route('superadmin.dashboard', absolute: false));
             } elseif ($user->hasRole('Company Admin')) {
                 return redirect()->intended(route('company.dashboard', absolute: false));
-            } elseif ($user->hasRole('Branch Manager') || $user->hasRole('Cashier')) {
+            } elseif ($user->hasRole('Manager') || $user->hasRole('Salesman')) {
                 return redirect()->intended(route('branch.dashboard', absolute: false));
             }
         }
