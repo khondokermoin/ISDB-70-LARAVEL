@@ -21,3 +21,185 @@ https://codecanyon.net/search/pos%20inventory
 https://probhaaurora.com/ (check how to linkdin এর api use করে data আনা কোন 3rd পাটি ব্যবহার না করে নিযের api )
 
 https://hungrycoding.com/ (check how to cms Laravel SmartEnd CMS - Laravel Admin Dashboard with Frontend and Restful API)
+
+
+
+resources/views/
+├── dashboard.blade.php
+├── welcome.blade.php
+│
+├── auth/
+│   ├── confirm-password.blade.php
+│   ├── forgot-password.blade.php
+│   ├── login.blade.php
+│   ├── register.blade.php
+│   ├── reset-password.blade.php
+│   └── verify-email.blade.php
+│
+├── branch/
+│   ├── dashboard.blade.php
+│   ├── inventory/
+│   │   ├── index.blade.php
+│   │   └── stock_adjust.blade.php
+│   └── pos/
+│       ├── index.blade.php
+│       └── invoice_print.blade.php
+│
+├── company/
+│   ├── dashboard.blade.php
+│   ├── branches/
+│   │   ├── form.blade.php
+│   │   └── index.blade.php
+│   └── users/
+│       ├── assign_role.blade.php
+│       └── index.blade.php
+│
+├── components/
+│   ├── application-logo.blade.php
+│   ├── auth-session-status.blade.php
+│   ├── danger-button.blade.php
+│   ├── datatable.blade.php
+│   ├── dropdown-link.blade.php
+│   ├── dropdown.blade.php
+│   ├── input-error.blade.php
+│   ├── input-label.blade.php
+│   ├── modal.blade.php
+│   ├── nav-link.blade.php
+│   ├── primary-button.blade.php
+│   ├── responsive-nav-link.blade.php
+│   ├── secondary-button.blade.php
+│   ├── text-input.blade.php
+│   └── form/
+│       ├── input.blade.php
+│       └── select.blade.php
+│
+├── layouts/
+│   ├── admin_master.blade.php
+│   ├── app.blade.php
+│   ├── auth_master.blade.php
+│   ├── guest.blade.php
+│   └── navigation.blade.php
+│
+├── partials/
+│   ├── alerts.blade.php
+│   ├── footer.blade.php
+│   ├── head.blade.php
+│   ├── scripts.blade.php
+│   ├── search_modal.blade.php
+│   ├── sidebar.blade.php
+│   ├── theme_settings.blade.php
+│   ├── topbar.blade.php
+│   └── sidebars/
+│       ├── branch_sidebar.blade.php
+│       ├── company_sidebar.blade.php
+│       └── super_admin_sidebar.blade.php
+│
+├── profile/
+│   ├── edit.blade.php
+│   └── partials/
+│       ├── delete-user-form.blade.php
+│       ├── update-password-form.blade.php
+│       └── update-profile-information-form.blade.php
+│
+└── super-admin/
+    ├── dashboard.blade.php
+    ├── companies/
+    │   ├── index.blade.php
+    │   └── show.blade.php
+    └── plans/
+        ├── form.blade.php
+        ├── index.blade.php
+        └── show.blade.php
+
+app/
+├── Http/
+│   ├── Controllers/
+│   │   ├── Auth/
+│   │   │   ├── AuthenticatedSessionController.php
+│   │   │   ├── ConfirmablePasswordController.php
+│   │   │   ├── EmailVerificationNotificationController.php
+│   │   │   ├── EmailVerificationPromptController.php
+│   │   │   ├── NewPasswordController.php
+│   │   │   ├── PasswordController.php
+│   │   │   ├── PasswordResetLinkController.php
+│   │   │   ├── RegisteredUserController.php
+│   │   │   └── VerifyEmailController.php
+│   │   ├── Branch/
+│   │   │   └── DashboardController.php
+│   │   ├── Company/
+│   │   │   └── DashboardController.php
+│   │   ├── SuperAdmin/
+│   │   │   ├── CompanyController.php
+│   │   │   ├── DashboardController.php
+│   │   │   ├── PlanController.php
+│   │   │   ├── RoleController.php
+│   │   │   ├── SettingController.php
+│   │   │   ├── SubscriptionController.php
+│   │   │   ├── SystemController.php
+│   │   │   ├── TransactionController.php
+│   │   │   └── UserController.php
+│   │   ├── Controller.php
+│   │   └── ProfileController.php
+│   │
+│   └── Requests/
+│       ├── Auth/
+│       │   └── LoginRequest.php
+│       └── ProfileUpdateRequest.php
+│
+├── Models/
+│   ├── Branch.php
+│   ├── Company.php
+│   ├── Plan.php
+│   ├── Setting.php
+│   ├── Subscription.php
+│   ├── Transaction.php
+│   └── User.php
+│
+├── Providers/
+│   └── AppServiceProvider.php
+│
+└── View/
+    └── Components/
+        ├── AppLayout.php
+        └── GuestLayout.php
+
+
+database/
+├── .gitignore
+│
+├── factories/
+│   └── UserFactory.php
+│
+├── migrations/
+│   ├── 0001_01_01_000000_create_users_table.php
+│   ├── 0001_01_01_000001_create_cache_table.php
+│   ├── 0001_01_01_000002_create_jobs_table.php
+│   ├── 2026_07_07_041403_create_permission_tables.php
+│   ├── 2026_07_07_070125_create_plans_table.php
+│   ├── 2026_07_07_070130_create_companies_table.php
+│   ├── 2026_07_07_070136_create_branches_table.php
+│   ├── 2026_07_07_070141_add_tenant_columns_to_users_table.php
+│   ├── 2026_07_09_074321_create_subscriptions_table.php
+│   ├── 2026_07_09_074327_create_transactions_table.php
+│   └── 2026_07_09_074331_create_settings_table.php
+│
+└── seeders/
+    ├── BranchSeeder.php
+    ├── CompanySeeder.php
+    ├── DatabaseSeeder.php
+    ├── PlanSeeder.php
+    └── RolePermissionSeeder.php
+
+
+
+
+
+
+
+
+
+
+
+
+
+

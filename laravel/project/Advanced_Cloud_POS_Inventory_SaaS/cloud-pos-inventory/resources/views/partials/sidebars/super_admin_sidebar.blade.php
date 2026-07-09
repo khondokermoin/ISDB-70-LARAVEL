@@ -170,6 +170,171 @@
                 </div>
             </li>
 
+            <!-- নতুন সেকশন: Global Master Data -->
+            <li class="side-nav-title mt-2">Global Master Data</li>
+
+            <!-- Business Types (Industry Setup) -->
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarBusinessTypes" aria-expanded="false"
+                    class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-briefcase"></i></span>
+                    <span class="menu-text"> Business Types </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarBusinessTypes">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a href="{{ route('superadmin.business-types.index') }}" class="side-nav-link">
+                                <span class="menu-text">Industry Types</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('superadmin.business-modules.index') }}" class="side-nav-link">
+                                <span class="menu-text">Module Mapping</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- Global Items & Inventory Setup -->
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarGlobalItems" aria-expanded="false" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-package"></i></span>
+                    <span class="menu-text"> Global Inventory Setup </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarGlobalItems">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a href="{{ route('superadmin.global-categories.index') }}" class="side-nav-link">
+                                <span class="menu-text">Categories</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('superadmin.global-units.index') }}" class="side-nav-link">
+                                <span class="menu-text">Units (UOM)</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('superadmin.global-taxes.index') }}" class="side-nav-link">
+                                <span class="menu-text">Taxes & VAT</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('superadmin.global-attributes.index') }}" class="side-nav-link">
+                                <span class="menu-text">Attributes (Color/Size)</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- নতুন সেকশন: POS & Customization -->
+            <li class="side-nav-title mt-2">POS & Customization</li>
+
+            <!-- Receipt & Print Settings -->
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarPrintSettings" aria-expanded="false"
+                    class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-receipt"></i></span>
+                    <span class="menu-text"> Receipt & Print </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarPrintSettings">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a href="{{ route('superadmin.invoice-templates.index') }}" class="side-nav-link">
+                                <span class="menu-text">Invoice Templates</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('superadmin.barcode-settings.index') }}" class="side-nav-link">
+                                <span class="menu-text">Barcode Settings</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('superadmin.email-templates.index') }}" class="side-nav-link">
+                                <span class="menu-text">Email Templates</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- Add-ons / Feature Toggles -->
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarAddons" aria-expanded="false" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-puzzle"></i></span>
+                    <span class="menu-text"> Add-ons & Modules </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarAddons">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a href="{{ route('superadmin.addons.index') }}" class="side-nav-link">
+                                <span class="menu-text">Installed Add-ons</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('superadmin.addons.marketplace') }}" class="side-nav-link">
+                                <span class="menu-text">Marketplace</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- নতুন সেকশন: Helpdesk & Support -->
+            <li class="side-nav-title mt-2">Helpdesk & Support</li>
+
+            <li class="side-nav-item">
+                <a href="{{ route('superadmin.support-tickets.index') }}" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-lifebuoy"></i></span>
+                    <span class="menu-text"> Support Tickets </span>
+                </a>
+            </li>
+
+            <li class="side-nav-item">
+                <a href="{{ route('superadmin.tenants.index') }}" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-login"></i></span>
+                    <span class="menu-text"> Login As Tenant (Impersonate) </span>
+                </a>
+            </li>
+
+            <li class="side-nav-item">
+                <a href="{{ route('superadmin.announcements.index') }}" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-megaphone"></i></span>
+                    <span class="menu-text"> Announcements </span>
+                </a>
+            </li>
+
+            <!-- নতুন সেকশন: Global Reports -->
+            <li class="side-nav-title mt-2">Global Reports</li>
+
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarGlobalReports" aria-expanded="false"
+                    class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-chart-bar"></i></span>
+                    <span class="menu-text"> Analytics </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarGlobalReports">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a href="{{ route('superadmin.reports.revenue') }}" class="side-nav-link">
+                                <span class="menu-text">SaaS Revenue</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('superadmin.reports.tenant-usage') }}" class="side-nav-link">
+                                <span class="menu-text">Tenant Usage</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
             <li class="side-nav-title mt-2">Account</li>
 
             <!-- Profile -->

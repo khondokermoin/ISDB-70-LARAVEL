@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-sidenav-size="default">
 
 <head>
     @include('partials.head')
@@ -26,9 +26,6 @@
         <!-- Start Page Content here -->
         <!-- =============================== -->
         <div class="page-content">
-            {{-- Toastr Messages --}}
-            @include('partials.alerts')
-
             <!-- container Start -->
             @yield('content')
             <!-- container end -->
