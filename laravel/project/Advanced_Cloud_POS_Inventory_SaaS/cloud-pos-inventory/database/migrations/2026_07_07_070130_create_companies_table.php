@@ -10,15 +10,15 @@ return new class extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->string('name');                    // কোম্পানির নাম
+            $table->string('email')->unique();         // কোম্পানির ইমেইল
             $table->string('phone')->nullable();
-            $table->text('address')->nullable();
-            
-            // কোন প্ল্যান কিনেছে তার রিলেশন
-            $table->foreignId('plan_id')->constrained('plans')->cascadeOnDelete();
-            
-            $table->enum('status', ['active', 'inactive', 'suspended'])->default('active');
+            $table->string('address')->nullable();
+            $table->string('logo')->nullable();
+            $table->string('subdomain')->unique()->nullable(); // future use
+            $table->enum('status', ['active', 'suspended', 'trial'])->default('trial');
+            $table->timestamp('trial_ends_at')->nullable();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Company Admin
             $table->timestamps();
         });
     }

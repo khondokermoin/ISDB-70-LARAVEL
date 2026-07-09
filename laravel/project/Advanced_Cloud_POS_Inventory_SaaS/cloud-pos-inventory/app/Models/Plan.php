@@ -2,14 +2,25 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Plan extends Model
 {
-    protected $guarded = []; // সব কলাম ফিলাবল করা হলো
+    use HasFactory;
 
-    public function companies()
+    protected $fillable = [
+        'name', 'slug', 'price', 'trial_days', 
+        'user_limit', 'branch_limit', 'features', 'is_active'
+    ];
+
+    protected $casts = [
+        'features' => 'array',
+        'is_active' => 'boolean',
+    ];
+
+    public function subscriptions()
     {
-        return $this->hasMany(Company::class);
+        return $this->hasMany(Subscription::class);
     }
 }

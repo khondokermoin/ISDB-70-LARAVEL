@@ -2,24 +2,37 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
 {
-    protected $guarded = [];
+    use HasFactory;
 
-    public function plan()
+    protected $fillable = [
+        'name', 'email', 'phone', 'address', 'logo', 
+        'subdomain', 'status', 'trial_ends_at', 'user_id'
+    ];
+
+    protected $casts = [
+        'trial_ends_at' => 'datetime',
+    ];
+
+    // Company Admin (যে ইউজার এই কোম্পানির মালিক)
+    public function admin()
     {
-        return $this->belongsTo(Plan::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function branches()
+    // কোম্পানির সাবস্ক্রিপশন
+    public function subscription()
     {
-        return $this->hasMany(Branch::class);
+        return $this->hasOne(Subscription::class)->latest();
     }
 
-    public function users()
+    // কোম্পানির সব পেমেন্ট হিস্টরি
+    public function transactions()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(Transaction::class);
     }
 }

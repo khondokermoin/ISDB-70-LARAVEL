@@ -21,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         // Guest Redirect Logic (SaaS Roles)
+        // লগইন করা ইউজার যদি /login পেজে আসে, তাকে তার রোল অনুযায়ী ড্যাশবোর্ডে পাঠানো হবে
         $middleware->redirectUsersTo(function (Request $request) {
             
             $user = $request->user();
@@ -30,7 +31,7 @@ return Application::configure(basePath: dirname(__DIR__))
                     return route('superadmin.dashboard');
                 } elseif ($user->hasRole('Company Admin')) {
                     return route('company.dashboard');
-                } elseif ($user->hasRole('Branch Manager') || $user->hasRole('Cashier')) {
+                } elseif ($user->hasRole('Manager') || $user->hasRole('Salesman')) { // Fixed: Manager & Salesman
                     return route('branch.dashboard');
                 }
             }
