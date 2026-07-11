@@ -398,6 +398,10 @@
     {{-- Cropper.js: লোগো drag/zoom করে ক্রপ করার জন্য --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
     <script>
+        // ✅ Note: this app already loads toastr globally (see partials/scripts.blade.php
+        // + partials/alerts.blade.php, included on every page via admin_master). No need
+        // for a separate toast implementation here - just call toastr directly below.
+
         $(document).ready(function() {
             // ==========================================
             // 0. Draft Auto-Save / Restore (sessionStorage)
@@ -769,20 +773,19 @@
                         // ফর্ম সফলভাবে সাবমিট হয়ে গেছে, তাই সেভ করা ড্রাফট মুছে ফেলো
                         clearFormDraft();
 
-                        // সাক্সেস মেসেজ (SweetAlert2 থাকলে সুন্দর পপআপ দেখাবে)
-                        if (typeof Swal !== 'undefined') {
-                            Swal.fire({
-                                icon: 'success',
-                                title: response.message || 'Success!',
-                                timer: 1500,
-                                showConfirmButton: false
-                            });
-                        } else {
-                            alert(response.message || 'Company saved successfully!');
-                        }
-                        // রিডাইরেক্ট
-                        window.location.href = response.redirect ||
+                        // ✅ toastr দিয়ে টোস্ট দেখাও, তারপর সামান্য দেরি করে রিডাইরেক্ট করো
+                        // যাতে টোস্ট রিডাইরেক্টের কারণে সাথে সাথে হারিয়ে না যায়।
+                        // নোট: কন্ট্রোলারের JSON রেসপন্স-এর ব্রাঞ্চেও যদি session()->flash('success', ...)
+                        // সেট করা থাকে, তাহলে redirect হওয়ার পর index পেজে আবার একই মেসেজ toastr
+                        // দেখাবে (partials/alerts.blade.php থেকে) - ডাবল টোস্ট এড়াতে এই ব্রাঞ্চে
+                        // flash সেট না করাই ভালো, শুধু JSON message পাঠান।
+                        toastr.success(response.message || 'Company saved successfully!',
+                            'Success');
+                        const redirectUrl = response.redirect ||
                             '{{ route('superadmin.companies.index') }}';
+                        setTimeout(function() {
+                            window.location.href = redirectUrl;
+                        }, 1200);
                     },
                     error: function(xhr) {
                         // ভ্যালিডেশন ফেইল হলেও বর্তমান ডেটা ড্রাফটে সেভ থাকুক (রিলোড করলেও যেন না হারায়)
@@ -828,7 +831,8 @@
                                 }, 500);
                             }
                         } else {
-                            alert('An unexpected error occurred. Please try again.');
+                            toastr.error('An unexpected error occurred. Please try again.',
+                                'Error');
                             console.error(xhr.responseText);
                         }
                     },

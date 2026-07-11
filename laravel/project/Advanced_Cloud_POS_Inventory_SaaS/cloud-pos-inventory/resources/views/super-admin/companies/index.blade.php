@@ -9,8 +9,8 @@
 
     <style>
         /* ========================================
-                       1. SEARCH BOX STYLING (v1 Theme Adapted)
-                       ======================================== */
+                                   1. SEARCH BOX STYLING (v1 Theme Adapted)
+                                   ======================================== */
         .company-search-wrapper {
             position: relative;
             max-width: 300px;
@@ -19,8 +19,11 @@
 
         .company-search-wrapper .input-group {
             background-color: var(--bs-body-bg) !important;
-            /* ✅ Updated: Added a visible border for both Light & Dark mode */
-            border: 1px solid rgba(var(--bs-body-color-rgb), 0.15) !important;
+            /* ✅ Fixed: --bs-body-color-rgb may be undefined in this theme, which made
+                           the border invisible in both light & dark mode. Using --bs-border-color
+                           (a guaranteed Bootstrap 5 variable that the theme itself re-themes for
+                           dark mode) with a solid rgba fallback so the border always renders. */
+            border: 1px solid var(--bs-border-color, rgba(148, 163, 184, 0.4)) !important;
             border-radius: 0.5rem !important;
             overflow: hidden;
             transition: all 0.25s ease !important;
@@ -34,7 +37,9 @@
         .company-search-wrapper .input-group-text {
             background-color: transparent !important;
             border: 0 !important;
-            color: var(--bs-secondary-color) !important;
+            /* ✅ Fixed: force icon to follow theme text color instead of being invisible on dark bg */
+            color: var(--bs-body-color) !important;
+            opacity: 0.7;
         }
 
         .company-search-wrapper .form-control {
@@ -66,8 +71,8 @@
         }
 
         /* ========================================
-                       2. SEARCH RESULT COUNTER
-                       ======================================== */
+                                   2. SEARCH RESULT COUNTER
+                                   ======================================== */
         .search-counter {
             font-size: 0.8rem;
             color: var(--bs-secondary-color);
@@ -80,8 +85,8 @@
         }
 
         /* ========================================
-                       3. DATATABLES CUSTOM STYLING
-                       ======================================== */
+                                   3. DATATABLES CUSTOM STYLING
+                                   ======================================== */
         .dataTables_wrapper .dataTables_length,
         .dataTables_wrapper .dataTables_filter,
         .dataTables_wrapper .dataTables_info,
@@ -89,9 +94,67 @@
             display: none !important;
         }
 
+        /* ✅ Fixed: dom:'t' (see script) already stops DataTables from generating the
+                       empty length/filter/info/paginate row wrappers, but this is kept as a safety
+                       net in case that option is ever removed - and it also removes the residual
+                       row/column gutter margins that caused the extra empty space above & below
+                       the table. Targeting the exact #companies-table_wrapper id DataTables
+                       generates, since generic .dataTables_wrapper wasn't catching every case. */
+        #companies-table_wrapper {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        #companies-table_wrapper .row {
+            margin: 0 !important;
+        }
+
+        #companies-table_wrapper .table-responsive {
+            margin: 0 !important;
+        }
+
+        /* Let the table fill the full card width/height with no stray gaps */
+        #companies-table {
+            margin: 0 !important;
+        }
+
+        /* ✅ Fixed: "#" (and other) header text was not rendering with a theme-safe
+                       color - some dark-mode overrides in this admin theme only recolor .table
+                       text, not thead th specifically, leaving header text the same color as its
+                       background (effectively invisible). Force it to always follow the theme. */
+        #companies-table thead th {
+            color: var(--bs-emphasis-color, var(--bs-body-color)) !important;
+            vertical-align: middle;
+        }
+
+        /* ✅ Fixed: previously the SN ("#") column was also marked as the Responsive
+                       extension's control column. DataTables hides dtr-control columns entirely
+                       once every other column fits on screen - so the row number vanished at full
+                       width and only reappeared once the window got narrow enough to trigger
+                       column collapsing. The control duty now lives in its own blank column
+                       (styled below); SN is a normal, always-visible data column. */
+        #companies-table td.dtr-control {
+            text-align: center;
+            cursor: pointer;
+        }
+
+        /* ✅ Fixed: with table-layout:fixed (set by the Responsive extension's own
+                       stylesheet) and no explicit widths, the Company Info column was being
+                       squeezed so narrow that the company name wrapped one word per line. Give
+                       its text block room to breathe and wrap normally instead. */
+        .company-name-block {
+            min-width: 0;
+        }
+
+        .company-name-text {
+            white-space: normal;
+            overflow-wrap: break-word;
+            word-break: normal;
+        }
+
         /* ========================================
-                       4. STATS CARDS STYLING
-                       ======================================== */
+                                   4. STATS CARDS STYLING
+                                   ======================================== */
         .stats-card {
             border: 0;
             border-radius: 0.75rem;
@@ -117,8 +180,8 @@
         }
 
         /* ========================================
-                       5. TRIAL COUNTDOWN STYLING
-                       ======================================== */
+                                   5. TRIAL COUNTDOWN STYLING
+                                   ======================================== */
         .trial-countdown {
             font-size: 0.75rem;
             padding: 0.25rem 0.5rem;
@@ -142,8 +205,8 @@
         }
 
         /* ========================================
-                       6. USAGE BAR STYLING
-                       ======================================== */
+                                   6. USAGE BAR STYLING
+                                   ======================================== */
         .usage-info {
             font-size: 0.75rem;
             margin-bottom: 0.25rem;
@@ -158,8 +221,8 @@
         }
 
         /* ========================================
-                       7. ACTION BUTTONS
-                       ======================================== */
+                                   7. ACTION BUTTONS
+                                   ======================================== */
         .action-btn-group .btn {
             padding: 0.25rem 0.5rem;
             font-size: 0.875rem;
@@ -253,7 +316,12 @@
             <form method="GET" action="{{ route('superadmin.companies.index') }}" class="d-flex align-items-center w-100">
                 <div class="company-search-wrapper flex-grow-1">
                     <div class="input-group">
-                        <span class="input-group-text"><i class="ti ti-search"></i></span>
+                        {{-- ✅ Fixed: was a plain non-interactive span; now an actual
+                             submit trigger so users can click/tap to search, not only
+                             press Enter --}}
+                        <button type="submit" class="input-group-text border-0 bg-transparent" title="Search">
+                            <i class="ti ti-search"></i>
+                        </button>
                         <input type="text" name="search" id="companySearch" class="form-control"
                             value="{{ request('search') }}" placeholder="Search by name, email, status..."
                             autocomplete="off">
@@ -269,10 +337,13 @@
                 </div>
             </form>
 
-            {{-- ✅ Fixed: Using count() instead of total() for Collection --}}
+            {{-- ✅ Fixed: $companies->count() only counts the CURRENT page's rows when
+                 $companies is a paginator - it under-reports the true match total.
+                 Use ->total() when available (paginator), fall back to ->count()
+                 for a plain Collection. --}}
             @if (request('search') && $companies->count() > 0)
                 <span class="search-counter show ms-2">
-                    ({{ $companies->count() }} found)
+                    ({{ method_exists($companies, 'total') ? $companies->total() : $companies->count() }} found)
                 </span>
             @endif
         </div>
@@ -292,7 +363,17 @@
                 <table class="table table-striped table-centered w-100 dt-responsive mb-0" id="companies-table">
                     <thead class="table-light">
                         <tr>
-                            <th>#</th>
+                            {{-- ✅ Fixed: this used to be a single "#" column doing double
+                                 duty as both the row number AND the DataTables Responsive
+                                 "expand" control. DataTables treats dtr-control columns as
+                                 pure UI controls and hides them entirely once every column
+                                 fits on screen - which is why "#" disappeared at full width
+                                 and only reappeared once the window got narrow. Splitting
+                                 it into its own blank control column fixes that; the SN
+                                 column below is now a normal always-visible data column. --}}
+                            <th style="width: 20px;"></th>
+                            <th style="width: 45px;" class="text-center">SN</th>
+                            {{-- <th style="min-width: 200px;">Company Info</th> --}}
                             <th>Company Info</th>
                             <th>Contact</th>
                             <th>Subscription</th>
@@ -305,24 +386,39 @@
                     <tbody>
                         @forelse ($companies as $company)
                             <tr>
-                                {{-- ✅ Fixed: Simple iteration for Collection --}}
-                                <td>{{ $loop->iteration }}</td>
+                                {{-- Blank Responsive control cell - DataTables injects the "+" expand icon here --}}
+                                <td></td>
+
+                                {{-- ✅ Fixed: $loop->iteration alone restarts at 1 on every page;
+                                     offset it by the current page when $companies is paginated --}}
+                                <td class="text-center">
+                                    @if (method_exists($companies, 'currentPage'))
+                                        {{ ($companies->currentPage() - 1) * $companies->perPage() + $loop->iteration }}
+                                    @else
+                                        {{ $loop->iteration }}
+                                    @endif
+                                </td>
 
                                 <!-- Company Info -->
                                 <td>
                                     <div class="d-flex align-items-center">
                                         @if ($company->logo)
-                                            <img src="{{ asset('storage/' . $company->logo) }}" class="me-2 rounded-circle"
-                                                width="40" height="40" alt="{{ $company->name }}">
+                                            <img src="{{ asset('storage/' . $company->logo) }}"
+                                                class="me-2 rounded-circle flex-shrink-0" width="40" height="40"
+                                                alt="{{ $company->name }}">
                                         @else
                                             <img src="https://ui-avatars.com/api/?name={{ urlencode($company->name) }}&background=random&color=fff"
-                                                class="me-2 rounded-circle" width="40" height="40"
+                                                class="me-2 rounded-circle flex-shrink-0" width="40" height="40"
                                                 alt="{{ $company->name }}">
                                         @endif
-                                        <div>
-                                            <span class="fw-semibold d-block">{{ $company->name }}</span>
+                                        {{-- ✅ Fixed: name was wrapping one word per line because
+                                             this div had no width/flex-basis, so a squeezed table
+                                             layout forced it to shrink to almost nothing. --}}
+                                        <div class="min-width-0 company-name-block">
+                                            <span
+                                                class="fw-semibold d-block company-name-text">{{ $company->name }}</span>
                                             @if ($company->subdomain)
-                                                <small class="text-muted">
+                                                <small class="text-muted text-nowrap">
                                                     <i class="ti ti-world"></i> {{ $company->subdomain }}.yourdomain.com
                                                 </small>
                                             @else
@@ -394,7 +490,10 @@
                                 <td>
                                     @if ($company->trial_ends_at)
                                         @php
-                                            $daysLeft = now()->diffInDays($company->trial_ends_at, false);
+                                            // ✅ Fixed: diffInDays() can return a float (e.g. "13.88..."),
+                                            // which was being printed as-is ("13.881247897014 days left").
+                                            // floor() it to a whole number of full days remaining.
+                                            $daysLeft = (int) floor(now()->diffInDays($company->trial_ends_at, false));
                                         @endphp
 
                                         @if ($daysLeft > 7)
@@ -488,7 +587,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center text-muted py-5">
+                                <td colspan="9" class="text-center text-muted py-5">
                                     <i class="ti ti-building-store d-block mb-3"
                                         style="font-size: 3rem; opacity: 0.5;"></i>
                                     <h5 class="fw-semibold text-body">No Companies Found</h5>
@@ -531,6 +630,11 @@
 
     <script>
         $(document).ready(function() {
+            // ✅ Note: session-flash toasts (success/error/warning/info) are already
+            // handled globally for every page by resources/views/partials/alerts.blade.php
+            // (uses toastr, included via admin_master -> partials.scripts). No per-page
+            // toast code is needed here - adding one would just double-fire the same message.
+
             // Initialize Bootstrap Tooltips
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
             var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
@@ -539,21 +643,42 @@
 
             // Initialize DataTables (Only for Sorting & Responsive features)
             const table = $('#companies-table').DataTable({
-                order: [
-                    [0, 'asc']
-                ],
-                columnDefs: [{
+                // ✅ Fixed: was [[0, 'asc']], but column 0 is set orderable:false
+                // just below - sorting by a non-orderable column is a contradiction.
+                // Leave initial order empty so it keeps the order the server sent.
+                order: [],
+                columnDefs: [
+                    // Column 0: dedicated blank Responsive control column
+                    {
                         orderable: false,
                         className: 'dtr-control',
-                        targets: [0]
+                        targets: [0],
+                        width: '20px',
+                        responsivePriority: 10000 // hide this last of all - it IS the control
                     },
-                    {
-                        orderable: true,
-                        targets: [1, 2, 3, 4, 5, 6]
-                    },
+                    // Column 1: SN (row number) - always visible, never auto-hidden
                     {
                         orderable: false,
-                        targets: [7]
+                        targets: [1],
+                        width: '45px',
+                        responsivePriority: 1
+                    },
+                    // Column 2: Company Info - always visible, never auto-hidden
+                    {
+                        orderable: true,
+                        targets: [2],
+                        responsivePriority: 2
+                    },
+                    // Columns 3-7: Contact, Subscription, Usage, Trial Status, Status
+                    {
+                        orderable: true,
+                        targets: [3, 4, 5, 6, 7]
+                    },
+                    // Column 8: Action - always visible, never auto-hidden
+                    {
+                        orderable: false,
+                        targets: [8],
+                        responsivePriority: 3
                     }
                 ],
                 responsive: {
@@ -566,7 +691,12 @@
                 searching: false, // Disabled: Using database search via GET form
                 info: false,
                 lengthChange: false,
-                autoWidth: false
+                autoWidth: false,
+                // ✅ Fixed: without this, DataTables still builds the (empty) Bootstrap
+                // row/col wrappers for length/filter/info/paginate even when those
+                // features are turned off above - those empty wrapper rows were the
+                // extra blank space above/below the table. 't' = render only the table.
+                dom: 't'
             });
 
             const $searchInput = $('#companySearch');

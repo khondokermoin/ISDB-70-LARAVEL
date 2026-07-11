@@ -93,10 +93,10 @@ class CompanyController extends Controller
     // কোম্পানির ডিটেইলস দেখা
     public function show($id)
     {
-        $company = Company::findOrFail($id);
+        $company = Company::withCount(['users', 'branches'])->findOrFail($id);
 
         // শো পেজে রিলেশনশিপ ডাটার জন্য লোড করা
-        $company->load('plan', 'owner', 'branches');
+        $company->load('plan', 'owner');
         return view('super-admin.companies.show', compact('company'));
     }
 
@@ -162,7 +162,7 @@ class CompanyController extends Controller
     }
 
     // কোম্পানি ডিলিট করা (Soft Delete)
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $company = Company::findOrFail($id);
 
