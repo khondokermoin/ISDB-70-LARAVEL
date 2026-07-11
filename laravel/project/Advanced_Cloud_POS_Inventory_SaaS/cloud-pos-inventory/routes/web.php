@@ -51,6 +51,7 @@ Route::middleware(['auth', 'verified', 'role:Super Admin'])
 
         // SaaS Management (Sidebar Links)
         Route::resource('/companies', CompanyController::class);
+        Route::get('/companies/{company}/impersonate', [ImpersonateController::class, 'impersonate'])->name('companies.impersonate');
         Route::resource('/plans', PlanController::class);
         Route::resource('/subscriptions', SubscriptionController::class)->only(['index', 'show']);
         Route::resource('/transactions', TransactionController::class)->only(['index']);

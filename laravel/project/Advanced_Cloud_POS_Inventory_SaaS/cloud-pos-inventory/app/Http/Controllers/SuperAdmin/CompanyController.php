@@ -78,29 +78,42 @@ class CompanyController extends Controller
         // ৪. ডাটাবেসে সেভ করা
         Company::create($validated);
 
+        // ✅ নতুন যুক্ত করা হয়েছে: AJAX/JSON রিকোয়েস্টের জন্য রেসপন্স
+        if ($request->wantsJson()) {
+            return response()->json([
+                'message' => 'Company saved successfully!',
+                'redirect' => route('superadmin.companies.index')
+            ]);
+        }
+
         return redirect()->route('superadmin.companies.index')
             ->with('success', 'Company created successfully!');
     }
 
     // কোম্পানির ডিটেইলস দেখা
-    public function show(Company $company)
+    public function show($id)
     {
+        $company = Company::findOrFail($id);
+
         // শো পেজে রিলেশনশিপ ডাটার জন্য লোড করা
-        $company->load('plan', 'admin', 'branches');
+        $company->load('plan', 'owner', 'branches');
         return view('super-admin.companies.show', compact('company'));
     }
 
     // কোম্পানি এডিট করার ফর্ম দেখানো
-    public function edit(Company $company)
+    public function edit($id)
     {
+        $company = Company::findOrFail($id);
         $plans = Plan::where('status', 'active')->get();
         $users = User::all();
         return view('super-admin.companies.edit', compact('company', 'plans', 'users'));
     }
 
     // কোম্পানি আপডেট করা
-    public function update(Request $request, Company $company)
+    public function update(Request $request, $id)
     {
+        $company = Company::findOrFail($id);
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'slug' => 'nullable|string|unique:companies,slug,' . $company->id,
@@ -137,18 +150,36 @@ class CompanyController extends Controller
 
         $company->update($validated);
 
+        // ✅ নতুন যুক্ত করা হয়েছে: AJAX/JSON রিকোয়েস্টের জন্য রেসপন্স
+        if ($request->wantsJson()) {
+            return response()->json([
+                'message' => 'Company updated successfully!',
+                'redirect' => route('superadmin.companies.index')
+            ]);
+        }
+
         return redirect()->route('superadmin.companies.index')->with('success', 'Company updated successfully!');
     }
 
     // কোম্পানি ডিলিট করা (Soft Delete)
-    public function destroy(Company $company)
+    public function destroy($id)
     {
+        $company = Company::findOrFail($id);
+
         // ডিলিটের আগে লোগো ফাইলটি সার্ভার থেকে মুছে ফেলা
         if ($company->logo && Storage::disk('public')->exists($company->logo)) {
             Storage::disk('public')->delete($company->logo);
         }
 
         $company->delete(); // SoftDeletes ব্যবহারের কারণে এটি শুধু deleted_at ফিল্ড আপডেট করবে
+
+        // ✅ নতুন যুক্ত করা হয়েছে: AJAX/JSON রিকোয়েস্টের জন্য রেসপন্স
+        if ($request->wantsJson()) {
+            return response()->json([
+                'message' => 'Company deleted successfully!',
+                'redirect' => route('superadmin.companies.index')
+            ]);
+        }
 
         return redirect()->route('superadmin.companies.index')->with('success', 'Company deleted successfully!');
     }

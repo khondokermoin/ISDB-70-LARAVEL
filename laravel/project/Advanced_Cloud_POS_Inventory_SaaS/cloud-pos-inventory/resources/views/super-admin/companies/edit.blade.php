@@ -1,27 +1,28 @@
 @extends('layouts.admin_master')
 
-@section('title', 'Add Company')
+@section('title', 'Edit Company')
 
 @section('content')
     <!-- Page Title & Breadcrumb -->
     <div class="mb-2 row">
         <div class="col-sm-6">
-            <h4 class="page-title">Add New Company</h4>
+            <h4 class="page-title">Edit Company</h4>
         </div>
         <div class="col-sm-6 text-sm-end">
             <nav aria-label="breadcrumb">
                 <ol class="mb-0 breadcrumb justify-content-end">
                     <li class="breadcrumb-item"><a href="{{ route('superadmin.dashboard') }}">Dashboard</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('superadmin.companies.index') }}">Companies</a></li>
-                    <li class="breadcrumb-item active">Add Company</li>
+                    <li class="breadcrumb-item active">Edit Company</li>
                 </ol>
             </nav>
         </div>
     </div>
 
-    {{-- ✅ শুধু ফর্মে id="company-form" যোগ করা হয়েছে --}}
-    <form id="company-form" action="{{ route('superadmin.companies.store') }}" method="POST" enctype="multipart/form-data">
+    {{-- ✅ id="company-form" এবং @method('PUT') যোগ করা হয়েছে --}}
+    <form id="company-form" action="{{ route('superadmin.companies.update', $company->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
+        @method('PUT')
 
         <div class="row">
             <div class="col-12">
@@ -36,7 +37,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="name" class="form-label">Company Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                    id="name" name="name" value="{{ old('name') }}"
+                                    id="name" name="name" value="{{ old('name', $company->name) }}"
                                     placeholder="Enter company name" required>
                                 @error('name')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -46,7 +47,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="slug" class="form-label">Slug / URL Identifier</label>
                                 <input type="text" class="form-control @error('slug') is-invalid @enderror"
-                                    id="slug" name="slug" value="{{ old('slug') }}"
+                                    id="slug" name="slug" value="{{ old('slug', $company->slug) }}"
                                     placeholder="auto-generated-from-name">
                                 <small class="text-muted">Leave empty to auto-generate from company name.</small>
                                 @error('slug')
@@ -57,7 +58,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="email" class="form-label">Company Email <span class="text-danger">*</span></label>
                                 <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                    id="email" name="email" value="{{ old('email') }}"
+                                    id="email" name="email" value="{{ old('email', $company->email) }}"
                                     placeholder="Enter company email" required>
                                 @error('email')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -67,7 +68,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="contact_person" class="form-label">Contact Person Name</label>
                                 <input type="text" class="form-control @error('contact_person') is-invalid @enderror"
-                                    id="contact_person" name="contact_person" value="{{ old('contact_person') }}"
+                                    id="contact_person" name="contact_person" value="{{ old('contact_person', $company->contact_person) }}"
                                     placeholder="Enter contact person name">
                                 @error('contact_person')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -77,7 +78,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="phone" class="form-label">Phone Number</label>
                                 <input type="tel" class="form-control @error('phone') is-invalid @enderror"
-                                    id="phone" name="phone" value="{{ old('phone') }}"
+                                    id="phone" name="phone" value="{{ old('phone', $company->phone) }}"
                                     placeholder="Enter phone number">
                                 @error('phone')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -87,7 +88,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="website" class="form-label">Website</label>
                                 <input type="url" class="form-control @error('website') is-invalid @enderror"
-                                    id="website" name="website" value="{{ old('website') }}"
+                                    id="website" name="website" value="{{ old('website', $company->website) }}"
                                     placeholder="https://example.com">
                                 @error('website')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -102,7 +103,7 @@
                                     <option value="">Select Admin User</option>
                                     @foreach ($users ?? [] as $user)
                                         <option value="{{ $user->id }}"
-                                            {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                                            {{ old('user_id', $company->user_id) == $user->id ? 'selected' : '' }}>
                                             {{ $user->name }} ({{ $user->email }})
                                         </option>
                                     @endforeach
@@ -133,7 +134,7 @@
                                             data-trial="{{ $plan->trial_days }}"
                                             data-users="{{ $plan->user_limit }}"
                                             data-branches="{{ $plan->branch_limit }}"
-                                            {{ old('plan_id') == $plan->id ? 'selected' : '' }}>
+                                            {{ old('plan_id', $company->plan_id) == $plan->id ? 'selected' : '' }}>
                                             {{ $plan->name }} - ${{ number_format($plan->price, 2) }}/month
                                         </option>
                                     @empty
@@ -155,10 +156,10 @@
                                 <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
                                 <select class="form-select @error('status') is-invalid @enderror" id="status"
                                     name="status" required>
-                                    <option value="trial" {{ old('status') == 'trial' ? 'selected' : '' }}>Trial</option>
-                                    <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Active</option>
-                                    <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
-                                    <option value="suspended" {{ old('status') == 'suspended' ? 'selected' : '' }}>Suspended</option>
+                                    <option value="trial" {{ old('status', $company->status) == 'trial' ? 'selected' : '' }}>Trial</option>
+                                    <option value="active" {{ old('status', $company->status) == 'active' ? 'selected' : '' }}>Active</option>
+                                    <option value="inactive" {{ old('status', $company->status) == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                    <option value="suspended" {{ old('status', $company->status) == 'suspended' ? 'selected' : '' }}>Suspended</option>
                                 </select>
                                 @error('status')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -169,10 +170,10 @@
                                 <label for="currency" class="form-label">Default Currency</label>
                                 <select class="form-select @error('currency') is-invalid @enderror" id="currency"
                                     name="currency">
-                                    <option value="BDT" {{ old('currency') == 'BDT' ? 'selected' : '' }}>BDT - Bangladeshi Taka</option>
-                                    <option value="USD" {{ old('currency') == 'USD' ? 'selected' : '' }}>USD - US Dollar</option>
-                                    <option value="INR" {{ old('currency') == 'INR' ? 'selected' : '' }}>INR - Indian Rupee</option>
-                                    <option value="EUR" {{ old('currency') == 'EUR' ? 'selected' : '' }}>EUR - Euro</option>
+                                    <option value="BDT" {{ old('currency', $company->currency) == 'BDT' ? 'selected' : '' }}>BDT - Bangladeshi Taka</option>
+                                    <option value="USD" {{ old('currency', $company->currency) == 'USD' ? 'selected' : '' }}>USD - US Dollar</option>
+                                    <option value="INR" {{ old('currency', $company->currency) == 'INR' ? 'selected' : '' }}>INR - Indian Rupee</option>
+                                    <option value="EUR" {{ old('currency', $company->currency) == 'EUR' ? 'selected' : '' }}>EUR - Euro</option>
                                 </select>
                                 @error('currency')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -183,10 +184,10 @@
                                 <label for="timezone" class="form-label">Timezone</label>
                                 <select class="form-select @error('timezone') is-invalid @enderror" id="timezone"
                                     name="timezone">
-                                    <option value="Asia/Dhaka" {{ old('timezone') == 'Asia/Dhaka' ? 'selected' : '' }}>Asia/Dhaka (GMT+6)</option>
-                                    <option value="Asia/Kolkata" {{ old('timezone') == 'Asia/Kolkata' ? 'selected' : '' }}>Asia/Kolkata (GMT+5:30)</option>
-                                    <option value="UTC" {{ old('timezone') == 'UTC' ? 'selected' : '' }}>UTC</option>
-                                    <option value="America/New_York" {{ old('timezone') == 'America/New_York' ? 'selected' : '' }}>America/New_York (EST)</option>
+                                    <option value="Asia/Dhaka" {{ old('timezone', $company->timezone) == 'Asia/Dhaka' ? 'selected' : '' }}>Asia/Dhaka (GMT+6)</option>
+                                    <option value="Asia/Kolkata" {{ old('timezone', $company->timezone) == 'Asia/Kolkata' ? 'selected' : '' }}>Asia/Kolkata (GMT+5:30)</option>
+                                    <option value="UTC" {{ old('timezone', $company->timezone) == 'UTC' ? 'selected' : '' }}>UTC</option>
+                                    <option value="America/New_York" {{ old('timezone', $company->timezone) == 'America/New_York' ? 'selected' : '' }}>America/New_York (EST)</option>
                                 </select>
                                 @error('timezone')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -197,7 +198,7 @@
                                 <label for="subdomain" class="form-label">Subdomain</label>
                                 <div class="input-group">
                                     <input type="text" class="form-control @error('subdomain') is-invalid @enderror"
-                                        id="subdomain" name="subdomain" value="{{ old('subdomain') }}"
+                                        id="subdomain" name="subdomain" value="{{ old('subdomain', $company->subdomain) }}"
                                         placeholder="company-name">
                                     <span class="input-group-text">.yourdomain.com</span>
                                 </div>
@@ -209,7 +210,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="custom_domain" class="form-label">Custom Domain (White-label)</label>
                                 <input type="text" class="form-control @error('custom_domain') is-invalid @enderror"
-                                    id="custom_domain" name="custom_domain" value="{{ old('custom_domain') }}"
+                                    id="custom_domain" name="custom_domain" value="{{ old('custom_domain', $company->custom_domain) }}"
                                     placeholder="pos.company.com">
                                 @error('custom_domain')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -229,7 +230,7 @@
                             <div class="mb-3 col-12">
                                 <label for="address" class="form-label">Full Address</label>
                                 <textarea class="form-control @error('address') is-invalid @enderror" id="address" name="address" rows="3"
-                                    placeholder="Enter full address">{{ old('address') }}</textarea>
+                                    placeholder="Enter full address">{{ old('address', $company->address) }}</textarea>
                                 @error('address')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -238,7 +239,7 @@
                             <div class="mb-3 col-md-4">
                                 <label for="city" class="form-label">City</label>
                                 <input type="text" class="form-control @error('city') is-invalid @enderror"
-                                    id="city" name="city" value="{{ old('city') }}" placeholder="Enter city">
+                                    id="city" name="city" value="{{ old('city', $company->city) }}" placeholder="Enter city">
                                 @error('city')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -247,7 +248,7 @@
                             <div class="mb-3 col-md-4">
                                 <label for="country" class="form-label">Country</label>
                                 <input type="text" class="form-control @error('country') is-invalid @enderror"
-                                    id="country" name="country" value="{{ old('country', 'Bangladesh') }}"
+                                    id="country" name="country" value="{{ old('country', $company->country) }}"
                                     placeholder="Enter country">
                                 @error('country')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -257,7 +258,7 @@
                             <div class="mb-3 col-md-4">
                                 <label for="zip_code" class="form-label">Zip / Postal Code</label>
                                 <input type="text" class="form-control @error('zip_code') is-invalid @enderror"
-                                    id="zip_code" name="zip_code" value="{{ old('zip_code') }}"
+                                    id="zip_code" name="zip_code" value="{{ old('zip_code', $company->zip_code) }}"
                                     placeholder="Enter zip code">
                                 @error('zip_code')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -275,10 +276,10 @@
                         <h4 class="mb-3 header-title">Company Logo</h4>
                         <div class="row">
                             <div class="mb-3 col-md-6">
-                                <label for="logo" class="form-label">Upload Logo</label>
+                                <label for="logo" class="form-label">Upload New Logo</label>
                                 <input type="file" class="form-control @error('logo') is-invalid @enderror"
                                     id="logo" name="logo" accept="image/*">
-                                <small class="text-muted">Recommended size: 200x200px (PNG, JPG, SVG). Max 2MB.</small>
+                                <small class="text-muted">Recommended size: 200x200px (PNG, JPG, SVG). Max 2MB. Leave empty to keep current logo.</small>
                                 @error('logo')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -286,8 +287,12 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Logo Preview</label>
                                 <div id="logo-preview" class="p-2 text-center border rounded" style="min-height: 100px; background: #f8f9fa;">
-                                    <i class="ti ti-photo text-muted" style="font-size: 2rem;"></i>
-                                    <p class="mb-0 text-muted small">No logo selected</p>
+                                    @if($company->logo)
+                                        <img src="{{ asset($company->logo) }}" alt="Company Logo" style="max-width: 150px; max-height: 150px;" class="img-fluid">
+                                    @else
+                                        <i class="ti ti-photo text-muted" style="font-size: 2rem;"></i>
+                                        <p class="mb-0 text-muted small">No logo selected</p>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -302,9 +307,9 @@
                         <a href="{{ route('superadmin.companies.index') }}" class="btn btn-secondary me-2">
                             <i class="ti ti-x me-1"></i> Cancel
                         </a>
-                        {{-- ✅ শুধু বাটনে id="submit-btn" যোগ করা হয়েছে --}}
+                        {{-- ✅ id="submit-btn" যোগ করা হয়েছে --}}
                         <button type="submit" id="submit-btn" class="btn btn-primary">
-                            <i class="ti ti-device-floppy me-1"></i> Save Company
+                            <i class="ti ti-device-floppy me-1"></i> Update Company
                         </button>
                     </div>
                 </div>
@@ -322,6 +327,7 @@
             // ==========================================
             $('#name').on('input', function() {
                 let slugInput = $('#slug');
+                // Only auto-generate if slug is empty or hasn't been manually changed
                 if (!slugInput.data('manual')) {
                     slugInput.val($(this).val().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''));
                 }
@@ -330,6 +336,11 @@
             $('#slug').on('input', function() {
                 $(this).data('manual', true);
             });
+
+            // ✅ Edit page-এ পুরনো slug থাকলে সেটা overwrite করবে না
+            if ($('#slug').val()) {
+                $('#slug').data('manual', true);
+            }
 
             // ==========================================
             // 2. Logo Preview
@@ -345,7 +356,9 @@
                     };
                     reader.readAsDataURL(file);
                 } else {
-                    preview.html(`<i class="ti ti-photo text-muted" style="font-size: 2rem;"></i><p class="mb-0 text-muted small">No logo selected</p>`);
+                    // ✅ ফাইল ক্যান্সেল করলে আগের লোগো ফিরিয়ে আনো
+                    let originalHtml = `@if($company->logo)<img src="{{ asset($company->logo) }}" alt="Company Logo" style="max-width: 150px; max-height: 150px;" class="img-fluid">@else<i class="ti ti-photo text-muted" style="font-size: 2rem;"></i><p class="mb-0 text-muted small">No logo selected</p>@endif`;
+                    preview.html(originalHtml);
                 }
             });
 
@@ -437,11 +450,12 @@
                 let form = $(this);
                 let formData = new FormData(this);
                 let url = form.attr('action');
+                let method = form.find('input[name="_method"]').val() || 'POST'; // PUT বা POST ডাইনামিকভাবে নাও
                 let submitBtn = $('#submit-btn');
                 let originalBtnHtml = submitBtn.html();
 
                 // বাটন ডিজেবল করে লোডিং দেখাও
-                submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span> Saving...');
+                submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span> Updating...');
 
                 // সাবমিটের আগে সব পুরনো এরর ক্লিয়ার করে দাও
                 form.find('.is-invalid').removeClass('is-invalid');
@@ -450,7 +464,7 @@
 
                 $.ajax({
                     url: url,
-                    type: 'POST',
+                    type: method, // POST বা PUT
                     data: formData,
                     processData: false,
                     contentType: false,
@@ -468,7 +482,7 @@
                                 showConfirmButton: false
                             });
                         } else {
-                            alert(response.message || 'Company saved successfully!');
+                            alert(response.message || 'Company updated successfully!');
                         }
                         // রিডাইরেক্ট
                         window.location.href = response.redirect || '{{ route("superadmin.companies.index") }}';
