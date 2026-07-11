@@ -9,8 +9,8 @@
 
     <style>
         /* ========================================
-               1. SEARCH BOX STYLING (v1 Theme Adapted)
-               ======================================== */
+                       1. SEARCH BOX STYLING (v1 Theme Adapted)
+                       ======================================== */
         .company-search-wrapper {
             position: relative;
             max-width: 300px;
@@ -19,7 +19,8 @@
 
         .company-search-wrapper .input-group {
             background-color: var(--bs-body-bg) !important;
-            border: 1px solid var(--bs-border-color) !important;
+            /* ✅ Updated: Added a visible border for both Light & Dark mode */
+            border: 1px solid rgba(var(--bs-body-color-rgb), 0.15) !important;
             border-radius: 0.5rem !important;
             overflow: hidden;
             transition: all 0.25s ease !important;
@@ -65,8 +66,8 @@
         }
 
         /* ========================================
-               2. SEARCH RESULT COUNTER
-               ======================================== */
+                       2. SEARCH RESULT COUNTER
+                       ======================================== */
         .search-counter {
             font-size: 0.8rem;
             color: var(--bs-secondary-color);
@@ -79,8 +80,8 @@
         }
 
         /* ========================================
-               3. DATATABLES CUSTOM STYLING
-               ======================================== */
+                       3. DATATABLES CUSTOM STYLING
+                       ======================================== */
         .dataTables_wrapper .dataTables_length,
         .dataTables_wrapper .dataTables_filter,
         .dataTables_wrapper .dataTables_info,
@@ -89,8 +90,8 @@
         }
 
         /* ========================================
-               4. STATS CARDS STYLING
-               ======================================== */
+                       4. STATS CARDS STYLING
+                       ======================================== */
         .stats-card {
             border: 0;
             border-radius: 0.75rem;
@@ -116,8 +117,8 @@
         }
 
         /* ========================================
-               5. TRIAL COUNTDOWN STYLING
-               ======================================== */
+                       5. TRIAL COUNTDOWN STYLING
+                       ======================================== */
         .trial-countdown {
             font-size: 0.75rem;
             padding: 0.25rem 0.5rem;
@@ -141,8 +142,8 @@
         }
 
         /* ========================================
-               6. USAGE BAR STYLING
-               ======================================== */
+                       6. USAGE BAR STYLING
+                       ======================================== */
         .usage-info {
             font-size: 0.75rem;
             margin-bottom: 0.25rem;
@@ -157,8 +158,8 @@
         }
 
         /* ========================================
-               7. ACTION BUTTONS
-               ======================================== */
+                       7. ACTION BUTTONS
+                       ======================================== */
         .action-btn-group .btn {
             padding: 0.25rem 0.5rem;
             font-size: 0.875rem;
@@ -167,8 +168,8 @@
 @endpush
 
 @section('content')
-    <!-- Page Title & Breadcrumb -->
-    <div class="row mb-2">
+    <!-- ✅ Updated: Added mt-3 for top spacing from navbar -->
+    <div class="row mb-2 mt-3">
         <div class="col-sm-6">
             <h4 class="page-title">All Companies / Tenants</h4>
         </div>
@@ -254,20 +255,22 @@
                     <div class="input-group">
                         <span class="input-group-text"><i class="ti ti-search"></i></span>
                         <input type="text" name="search" id="companySearch" class="form-control"
-                            value="{{ request('search') }}"
-                            placeholder="Search by name, email, status..." autocomplete="off">
-                        
-                        @if(request('search'))
-                            <a href="{{ route('superadmin.companies.index') }}" class="search-clear-btn show d-flex align-items-center justify-content-center text-decoration-none" title="Clear search">
+                            value="{{ request('search') }}" placeholder="Search by name, email, status..."
+                            autocomplete="off">
+
+                        @if (request('search'))
+                            <a href="{{ route('superadmin.companies.index') }}"
+                                class="search-clear-btn show d-flex align-items-center justify-content-center text-decoration-none"
+                                title="Clear search">
                                 <i class="ti ti-x"></i>
                             </a>
                         @endif
                     </div>
                 </div>
             </form>
-            
+
             {{-- ✅ Fixed: Using count() instead of total() for Collection --}}
-            @if(request('search') && $companies->count() > 0)
+            @if (request('search') && $companies->count() > 0)
                 <span class="search-counter show ms-2">
                     ({{ $companies->count() }} found)
                 </span>
@@ -282,9 +285,11 @@
 
     <!-- Companies Table -->
     <div class="card">
-        <div class="card-body">
+        {{-- ✅ Updated: Added p-0 to remove card-body padding --}}
+        <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-striped table-centered w-100 dt-responsive" id="companies-table">
+                {{-- Added mb-0 to remove table bottom margin --}}
+                <table class="table table-striped table-centered w-100 dt-responsive mb-0" id="companies-table">
                     <thead class="table-light">
                         <tr>
                             <th>#</th>
@@ -307,9 +312,12 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         @if ($company->logo)
-                                            <img src="{{ asset('storage/' . $company->logo) }}" class="me-2 rounded-circle" width="40" height="40" alt="{{ $company->name }}">
+                                            <img src="{{ asset('storage/' . $company->logo) }}" class="me-2 rounded-circle"
+                                                width="40" height="40" alt="{{ $company->name }}">
                                         @else
-                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($company->name) }}&background=random&color=fff" class="me-2 rounded-circle" width="40" height="40" alt="{{ $company->name }}">
+                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($company->name) }}&background=random&color=fff"
+                                                class="me-2 rounded-circle" width="40" height="40"
+                                                alt="{{ $company->name }}">
                                         @endif
                                         <div>
                                             <span class="fw-semibold d-block">{{ $company->name }}</span>
@@ -324,21 +332,21 @@
                                     </div>
                                 </td>
 
-                                <!-- Contact Info -->
+                                <!-- ✅ Updated: Contact Info aligned side-by-side -->
                                 <td>
-                                    <div>
-                                        <i class="ti ti-mail text-muted"></i>
-                                        <span class="d-block">{{ $company->email }}</span>
+                                    <div class="d-flex align-items-center">
+                                        <i class="ti ti-mail text-muted me-2"></i>
+                                        <span>{{ $company->email }}</span>
                                     </div>
                                     @if ($company->phone)
-                                        <div class="mt-1">
-                                            <i class="ti ti-phone text-muted"></i>
+                                        <div class="mt-1 d-flex align-items-center">
+                                            <i class="ti ti-phone text-muted me-2"></i>
                                             <small>{{ $company->phone }}</small>
                                         </div>
                                     @endif
                                     @if ($company->contact_person)
-                                        <div class="mt-1">
-                                            <i class="ti ti-user text-muted"></i>
+                                        <div class="mt-1 d-flex align-items-center">
+                                            <i class="ti ti-user text-muted me-2"></i>
                                             <small>{{ $company->contact_person }}</small>
                                         </div>
                                     @endif
@@ -444,27 +452,34 @@
                                 <td class="text-center">
                                     <div class="btn-group action-btn-group" role="group">
                                         <!-- View -->
-                                        <a href="{{ route('superadmin.companies.show', $company->id) }}" class="btn btn-sm btn-primary" title="View Details" data-bs-toggle="tooltip">
+                                        <a href="{{ route('superadmin.companies.show', $company->id) }}"
+                                            class="btn btn-sm btn-primary" title="View Details" data-bs-toggle="tooltip">
                                             <i class="ti ti-eye"></i>
                                         </a>
 
                                         <!-- Edit -->
-                                        <a href="{{ route('superadmin.companies.edit', $company->id) }}" class="btn btn-sm btn-warning" title="Edit" data-bs-toggle="tooltip">
+                                        <a href="{{ route('superadmin.companies.edit', $company->id) }}"
+                                            class="btn btn-sm btn-warning" title="Edit" data-bs-toggle="tooltip">
                                             <i class="ti ti-edit"></i>
                                         </a>
 
                                         <!-- Impersonate -->
                                         @if ($company->owner)
-                                            <a href="{{ route('superadmin.companies.impersonate', $company->id) }}" class="btn btn-sm btn-info" title="Login as {{ $company->name }}" data-bs-toggle="tooltip">
+                                            <a href="{{ route('superadmin.companies.impersonate', $company->id) }}"
+                                                class="btn btn-sm btn-info" title="Login as {{ $company->name }}"
+                                                data-bs-toggle="tooltip">
                                                 <i class="ti ti-login"></i>
                                             </a>
                                         @endif
 
                                         <!-- Delete -->
-                                        <form action="{{ route('superadmin.companies.destroy', $company->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this company? All data will be lost!');">
+                                        <form action="{{ route('superadmin.companies.destroy', $company->id) }}"
+                                            method="POST" class="d-inline"
+                                            onsubmit="return confirm('Are you sure you want to delete this company? All data will be lost!');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" title="Delete" data-bs-toggle="tooltip">
+                                            <button type="submit" class="btn btn-sm btn-danger" title="Delete"
+                                                data-bs-toggle="tooltip">
                                                 <i class="ti ti-trash"></i>
                                             </button>
                                         </form>
@@ -474,17 +489,19 @@
                         @empty
                             <tr>
                                 <td colspan="8" class="text-center text-muted py-5">
-                                    <i class="ti ti-building-store d-block mb-3" style="font-size: 3rem; opacity: 0.5;"></i>
+                                    <i class="ti ti-building-store d-block mb-3"
+                                        style="font-size: 3rem; opacity: 0.5;"></i>
                                     <h5 class="fw-semibold text-body">No Companies Found</h5>
                                     <p class="mb-2 small text-body-secondary">
-                                        @if(request('search'))
+                                        @if (request('search'))
                                             No companies found matching "<strong>{{ request('search') }}</strong>".
                                         @else
                                             You haven't created any companies yet.
                                         @endif
                                     </p>
-                                    @if(!request('search'))
-                                        <a href="{{ route('superadmin.companies.create') }}" class="btn btn-sm btn-success mt-2">
+                                    @if (!request('search'))
+                                        <a href="{{ route('superadmin.companies.create') }}"
+                                            class="btn btn-sm btn-success mt-2">
                                             <i class="ti ti-plus me-1"></i> Add Your First Company
                                         </a>
                                     @endif
@@ -496,7 +513,7 @@
             </div>
 
             {{-- ✅ Fixed: Safe check for pagination links --}}
-            @if(method_exists($companies, 'hasPages') && $companies->hasPages())
+            @if (method_exists($companies, 'hasPages') && $companies->hasPages())
                 <div class="mt-3 d-flex justify-content-center">
                     {{ $companies->appends(request()->query())->links('pagination::bootstrap-5') }}
                 </div>
@@ -522,11 +539,22 @@
 
             // Initialize DataTables (Only for Sorting & Responsive features)
             const table = $('#companies-table').DataTable({
-                order: [[0, 'asc']],
-                columnDefs: [
-                    { orderable: false, className: 'dtr-control', targets: [0] },
-                    { orderable: true,  targets: [1, 2, 3, 4, 5, 6] },
-                    { orderable: false, targets: [7] }
+                order: [
+                    [0, 'asc']
+                ],
+                columnDefs: [{
+                        orderable: false,
+                        className: 'dtr-control',
+                        targets: [0]
+                    },
+                    {
+                        orderable: true,
+                        targets: [1, 2, 3, 4, 5, 6]
+                    },
+                    {
+                        orderable: false,
+                        targets: [7]
+                    }
                 ],
                 responsive: {
                     details: {
@@ -534,8 +562,8 @@
                         target: 'td.dtr-control'
                     }
                 },
-                paging: false,       // Disabled: Using database data
-                searching: false,    // Disabled: Using database search via GET form
+                paging: false, // Disabled: Using database data
+                searching: false, // Disabled: Using database search via GET form
                 info: false,
                 lengthChange: false,
                 autoWidth: false

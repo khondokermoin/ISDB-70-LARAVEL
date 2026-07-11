@@ -77,7 +77,7 @@
 
     /* সাব-মেনুর (Sub-menu) লেখাগুলো সামঞ্জস্যপূর্ণ রাখার জন্য */
     .sub-menu .side-nav-link .menu-text {
-        font-size: 10px !important;
+        font-size: 12px !important;
         color: #98a6ad !important;
     }
 
