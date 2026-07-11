@@ -266,9 +266,10 @@
                 </div>
             </form>
             
-            @if(request('search') && $companies->total() > 0)
+            {{-- ✅ Fixed: Using count() instead of total() for Collection --}}
+            @if(request('search') && $companies->count() > 0)
                 <span class="search-counter show ms-2">
-                    ({{ $companies->total() }} found)
+                    ({{ $companies->count() }} found)
                 </span>
             @endif
         </div>
@@ -299,18 +300,16 @@
                     <tbody>
                         @forelse ($companies as $company)
                             <tr>
-                                <td>{{ $loop->iteration + ($companies->currentPage() - 1) * $companies->perPage() }}</td>
+                                {{-- ✅ Fixed: Simple iteration for Collection --}}
+                                <td>{{ $loop->iteration }}</td>
 
                                 <!-- Company Info -->
                                 <td>
                                     <div class="d-flex align-items-center">
                                         @if ($company->logo)
-                                            <img src="{{ asset('storage/' . $company->logo) }}" class="me-2 rounded-circle"
-                                                width="40" height="40" alt="{{ $company->name }}">
+                                            <img src="{{ asset('storage/' . $company->logo) }}" class="me-2 rounded-circle" width="40" height="40" alt="{{ $company->name }}">
                                         @else
-                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($company->name) }}&background=random&color=fff"
-                                                class="me-2 rounded-circle" width="40" height="40"
-                                                alt="{{ $company->name }}">
+                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($company->name) }}&background=random&color=fff" class="me-2 rounded-circle" width="40" height="40" alt="{{ $company->name }}">
                                         @endif
                                         <div>
                                             <span class="fw-semibold d-block">{{ $company->name }}</span>
@@ -445,34 +444,27 @@
                                 <td class="text-center">
                                     <div class="btn-group action-btn-group" role="group">
                                         <!-- View -->
-                                        <a href="{{ route('superadmin.companies.show', $company->id) }}"
-                                            class="btn btn-sm btn-primary" title="View Details" data-bs-toggle="tooltip">
+                                        <a href="{{ route('superadmin.companies.show', $company->id) }}" class="btn btn-sm btn-primary" title="View Details" data-bs-toggle="tooltip">
                                             <i class="ti ti-eye"></i>
                                         </a>
 
                                         <!-- Edit -->
-                                        <a href="{{ route('superadmin.companies.edit', $company->id) }}"
-                                            class="btn btn-sm btn-warning" title="Edit" data-bs-toggle="tooltip">
+                                        <a href="{{ route('superadmin.companies.edit', $company->id) }}" class="btn btn-sm btn-warning" title="Edit" data-bs-toggle="tooltip">
                                             <i class="ti ti-edit"></i>
                                         </a>
 
                                         <!-- Impersonate -->
                                         @if ($company->owner)
-                                            <a href="{{ route('superadmin.companies.impersonate', $company->id) }}"
-                                                class="btn btn-sm btn-info" title="Login as {{ $company->name }}"
-                                                data-bs-toggle="tooltip">
+                                            <a href="{{ route('superadmin.companies.impersonate', $company->id) }}" class="btn btn-sm btn-info" title="Login as {{ $company->name }}" data-bs-toggle="tooltip">
                                                 <i class="ti ti-login"></i>
                                             </a>
                                         @endif
 
                                         <!-- Delete -->
-                                        <form action="{{ route('superadmin.companies.destroy', $company->id) }}"
-                                            method="POST" class="d-inline"
-                                            onsubmit="return confirm('Are you sure you want to delete this company? All data will be lost!');">
+                                        <form action="{{ route('superadmin.companies.destroy', $company->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this company? All data will be lost!');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" title="Delete"
-                                                data-bs-toggle="tooltip">
+                                            <button type="submit" class="btn btn-sm btn-danger" title="Delete" data-bs-toggle="tooltip">
                                                 <i class="ti ti-trash"></i>
                                             </button>
                                         </form>
@@ -503,8 +495,8 @@
                 </table>
             </div>
 
-            {{-- ✅ Database Pagination Links --}}
-            @if($companies->hasPages())
+            {{-- ✅ Fixed: Safe check for pagination links --}}
+            @if(method_exists($companies, 'hasPages') && $companies->hasPages())
                 <div class="mt-3 d-flex justify-content-center">
                     {{ $companies->appends(request()->query())->links('pagination::bootstrap-5') }}
                 </div>
@@ -542,7 +534,7 @@
                         target: 'td.dtr-control'
                     }
                 },
-                paging: false,       // Disabled: Using Laravel database pagination
+                paging: false,       // Disabled: Using database data
                 searching: false,    // Disabled: Using database search via GET form
                 info: false,
                 lengthChange: false,
@@ -553,16 +545,14 @@
 
             // Keyboard shortcuts for search
             $(document).on('keydown', function(e) {
-                // Press '/' to focus search
                 if (e.key === '/' && !$(e.target).is('input, textarea')) {
                     e.preventDefault();
                     $searchInput.focus();
                 }
-                // Press 'Esc' to clear search or blur
                 if (e.key === 'Escape' && $searchInput.is(':focus')) {
                     if ($searchInput.val() !== '') {
                         $searchInput.val('');
-                        $searchInput.closest('form').submit(); // Submit empty form to clear DB search
+                        $searchInput.closest('form').submit();
                     } else {
                         $searchInput.blur();
                     }
