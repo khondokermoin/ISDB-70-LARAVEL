@@ -43,28 +43,24 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
     integrity="sha512-vKM3..." crossorigin="anonymous" referrerpolicy="no-referrer">
 <style>
-    /* সাইডবার মেনুর লেখার সাইজ বড় করার জন্য এবং লম্বা লেখা ভেঙে পরের লাইনে দেওয়ার জন্য */
+    /* সাইডবার মেনুর লেখার সাইজ বড় করার জন্য এবং লম্বা লেখা ভেঙে পরের লাইনে দেওয়ার জন্য */
     .side-nav-link .menu-text {
-        font-size: 14.5px !important;
-        /* ফন্টের সাইজ বাড়ানো হয়েছে, আপনার প্রয়োজন অনুযায়ী পরিবর্তন করতে পারেন */
+        font-size: 12.5px !important;
         white-space: normal !important;
-        /* লেখা লম্বা হলে যেন কেটে না যায়, বরং পরের লাইনে চলে আসে */
         line-height: 1.5 !important;
-        /* দুটি লাইনের মাঝে স্পেস ঠিক রাখার জন্য */
         display: inline-block;
         vertical-align: middle;
     }
 
-    /* সাব-মেনুর (Sub-menu) লেখার সাইজ সামঞ্জস্যপূর্ণ রাখার জন্য */
-    .sub-menu .side-nav-link .menu-text {
-        font-size: 13.5px !important;
-    }
-
-    /* সাইডবারের সেকশন টাইটেল (যেমন: SAAS MANAGEMENT, PLATFORM ADMINISTRATION) স্পষ্ট করার জন্য */
+    /* সাইডবারের সেকশন টাইটেল স্পষ্ট করার জন্য */
     .side-nav-title {
         color: #aab8c5 !important;
-        font-weight: 600;
-        letter-spacing: 0.5px;
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.8px !important;
+        text-transform: uppercase !important;
+        padding-top: 15px !important;
+        padding-bottom: 5px !important;
     }
 
     /* মেইন মেনুর টেক্সট এবং আইকনের রং উজ্জ্বল করার জন্য */
@@ -73,14 +69,15 @@
         color: #cedce4 !important;
     }
 
-    /* মেনুর উপর মাউস নিলে (Hover) যেন সাদা হয়ে যায় */
+    /* মেনুর উপর মাউস নিলে (Hover) যেন সাদা হয়ে যায় */
     .side-nav-link:hover .menu-text,
     .side-nav-link:hover .menu-icon {
         color: #ffffff !important;
     }
 
-    /* সাব-মেনুর (Sub-menu) লেখাগুলো সামান্য আলাদা কিন্তু স্পষ্ট রাখার জন্য */
+    /* সাব-মেনুর (Sub-menu) লেখাগুলো সামঞ্জস্যপূর্ণ রাখার জন্য */
     .sub-menu .side-nav-link .menu-text {
+        font-size: 10px !important;
         color: #98a6ad !important;
     }
 
@@ -89,25 +86,10 @@
         color: #ffffff !important;
     }
 
-    /* অ্যাকটিভ মেনুর (যে পেজে ইউজার আছেন) কালার হাইলাইট করার জন্য */
+    /* অ্যাকটিভ মেনুর কালার হাইলাইট করার জন্য */
     .side-nav-item.active>.side-nav-link .menu-text,
     .side-nav-item.active>.side-nav-link .menu-icon {
         color: #ffffff !important;
-    }
-
-    /* সাইডবারের সেকশন টাইটেলগুলোর সাইজ এবং দৃশ্যমানতা বাড়ানোর জন্য */
-    .side-nav-title {
-        font-size: 12px !important;
-        /* ফন্টের সাইজ একটু বড় করা হয়েছে (আপনার পছন্দমতো বাড়াতে/কমাতে পারেন) */
-        font-weight: 700 !important;
-        /* লেখাটি আরও বোল্ড বা মোটা করার জন্য */
-        letter-spacing: 0.8px !important;
-        /* অক্ষরগুলোর মাঝে সামান্য ফাঁকা জায়গা দেওয়ার জন্য, এতে পড়তে সুবিধা হয় */
-        text-transform: uppercase !important;
-        /* লেখাগুলো সব বড় হাতের (Capital) রাখার জন্য */
-        padding-top: 15px !important;
-        /* ওপরের দিক থেকে একটু ফাঁকা রাখার জন্য */
-        padding-bottom: 5px !important;
     }
 </style>
 
