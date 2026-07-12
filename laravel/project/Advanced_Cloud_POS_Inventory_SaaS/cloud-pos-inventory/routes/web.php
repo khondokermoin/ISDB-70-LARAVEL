@@ -10,12 +10,12 @@ use App\Http\Controllers\SuperAdmin\CompanyController;
 use App\Http\Controllers\SuperAdmin\PlanController;
 use App\Http\Controllers\SuperAdmin\SubscriptionController;
 use App\Http\Controllers\SuperAdmin\TransactionController;
-use App\Http\Controllers\SuperAdmin\UserController;
+use App\Http\Controllers\SuperAdmin\UserController as SuperAdminUserController;
 use App\Http\Controllers\SuperAdmin\RoleController;
 use App\Http\Controllers\SuperAdmin\SettingController;
 use App\Http\Controllers\SuperAdmin\SystemController;
 
-// Super Admin Controllers (newly added modules)
+// Super Admin Controllers (master data / modules)
 use App\Http\Controllers\SuperAdmin\BusinessTypeController;
 use App\Http\Controllers\SuperAdmin\BusinessModuleController;
 use App\Http\Controllers\SuperAdmin\GlobalCategoryController;
@@ -30,11 +30,26 @@ use App\Http\Controllers\SuperAdmin\AddonMarketplaceController;
 use App\Http\Controllers\SuperAdmin\SupportTicketController;
 use App\Http\Controllers\SuperAdmin\AnnouncementController;
 use App\Http\Controllers\SuperAdmin\ImpersonateController;
-use App\Http\Controllers\SuperAdmin\ReportController;
+use App\Http\Controllers\SuperAdmin\ReportController as SuperAdminReportController;
 
-// Company & Branch Controllers
+// Company Controllers
 use App\Http\Controllers\Company\DashboardController as CompanyDashboard;
+use App\Http\Controllers\Company\BranchController;
+use App\Http\Controllers\Company\UserController as CompanyUserController;
+use App\Http\Controllers\Company\ProductController;
+use App\Http\Controllers\Company\CategoryController;
+use App\Http\Controllers\Company\PurchaseController;
+use App\Http\Controllers\Company\CustomerController;
+use App\Http\Controllers\Company\SupplierController;
+use App\Http\Controllers\Company\ExpenseController;
+use App\Http\Controllers\Company\ReportController as CompanyReportController;
+
+// Branch Controllers
 use App\Http\Controllers\Branch\DashboardController as BranchDashboard;
+use App\Http\Controllers\Branch\InventoryController;
+use App\Http\Controllers\Branch\PosController;
+use App\Http\Controllers\Branch\SaleController;
+use App\Http\Controllers\Branch\StockAdjustmentController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -49,16 +64,16 @@ Route::middleware(['auth', 'verified', 'role:Super Admin'])
     ->group(function () {
         Route::get('/dashboard', [SuperAdminDashboard::class, 'index'])->name('dashboard');
 
-        // SaaS Management (Sidebar Links)
+        // SaaS Management
         Route::resource('/companies', CompanyController::class);
         Route::get('/companies/{company}/impersonate', [ImpersonateController::class, 'impersonate'])->name('companies.impersonate');
         Route::resource('/plans', PlanController::class);
-        Route::resource('/subscriptions', SubscriptionController::class)->only(['index', 'show']);
+        Route::resource('/subscriptions', SubscriptionController::class)->only(['index']);
         Route::resource('/transactions', TransactionController::class)->only(['index']);
 
         // Platform Administration
-        Route::resource('/users', UserController::class);
-        Route::resource('/roles', RoleController::class);
+        Route::resource('/users', SuperAdminUserController::class)->except(['create', 'edit', 'show']);
+        Route::resource('/roles', RoleController::class)->except(['create', 'edit', 'show']);
 
         // Global Settings
         Route::prefix('settings')->name('settings.')->group(function () {
@@ -74,40 +89,32 @@ Route::middleware(['auth', 'verified', 'role:Super Admin'])
             Route::get('/info', [SystemController::class, 'info'])->name('info');
         });
 
-        // ------------------------------------------
-        // Global Master Data
-        // ------------------------------------------
-        Route::resource('/business-types', BusinessTypeController::class);
-        Route::resource('/business-modules', BusinessModuleController::class);
-        Route::resource('/global-categories', GlobalCategoryController::class);
-        Route::resource('/global-units', GlobalUnitController::class);
-        Route::resource('/global-taxes', GlobalTaxController::class);
-        Route::resource('/global-attributes', GlobalAttributeController::class);
+        // Global Master Data (modal-based CRUD -> no create/edit views needed)
+        Route::resource('/business-types', BusinessTypeController::class)->except(['create', 'edit', 'show']);
+        Route::resource('/business-modules', BusinessModuleController::class)->except(['create', 'edit', 'show']);
+        Route::resource('/global-categories', GlobalCategoryController::class)->except(['create', 'edit', 'show']);
+        Route::resource('/global-units', GlobalUnitController::class)->except(['create', 'edit', 'show']);
+        Route::resource('/global-taxes', GlobalTaxController::class)->except(['create', 'edit', 'show']);
+        Route::resource('/global-attributes', GlobalAttributeController::class)->except(['create', 'edit', 'show']);
 
-        // ------------------------------------------
         // POS & Customization
-        // ------------------------------------------
-        Route::resource('/invoice-templates', InvoiceTemplateController::class);
-        Route::resource('/barcode-settings', BarcodeSettingController::class);
-        Route::resource('/email-templates', EmailTemplateController::class);
+        Route::resource('/invoice-templates', InvoiceTemplateController::class)->except(['create', 'edit', 'show']);
+        Route::resource('/barcode-settings', BarcodeSettingController::class)->except(['create', 'edit', 'show']);
+        Route::resource('/email-templates', EmailTemplateController::class)->except(['create', 'edit', 'show']);
 
-        // NOTE: marketplace route MUST be declared before the addons resource route,
-        // otherwise "marketplace" gets swallowed by the {addon} wildcard.
+        // Addons (marketplace route MUST come before the {addon} wildcard)
         Route::get('/addons/marketplace', [AddonMarketplaceController::class, 'index'])->name('addons.marketplace');
-        Route::resource('/addons', AddonController::class);
+        Route::resource('/addons', AddonController::class)->except(['create', 'edit', 'show']);
 
-        // ------------------------------------------
         // Helpdesk & Support
-        // ------------------------------------------
-        Route::resource('/support-tickets', SupportTicketController::class);
-        Route::resource('/announcements', AnnouncementController::class);
+        Route::resource('/support-tickets', SupportTicketController::class)->except(['create', 'edit']);
+        Route::resource('/announcements', AnnouncementController::class)->except(['create', 'edit', 'show']);
         Route::get('/tenants', [ImpersonateController::class, 'index'])->name('tenants.index');
 
-        // ------------------------------------------
         // Global Reports
-        // ------------------------------------------
-        Route::get('/reports/revenue', [ReportController::class, 'revenue'])->name('reports.revenue');
-        Route::get('/reports/tenant-usage', [ReportController::class, 'tenantUsage'])->name('reports.tenant-usage');
+        /* Route::get('/reports/revenue', [SuperAdminReportController::class, 'revenue'])->name('reports.revenue');
+        Route::get('/reports/tenant-usage', [SuperAdminReportController::class, 'tenantUsage'])->name('reports.tenant-usage'); */
+        Route::get('/reports', [SuperAdminReportController::class, 'index'])->name('reports.index');
     });
 
 // ==========================================
@@ -118,7 +125,27 @@ Route::middleware(['auth', 'verified', 'role:Company Admin'])
     ->name('company.')
     ->group(function () {
         Route::get('/dashboard', [CompanyDashboard::class, 'index'])->name('dashboard');
-        // পরবর্তীতে এখানে Company Admin এর Inventory, POS, Sales এর রুটগুলো যুক্ত করবেন
+
+        // Branch & Staff Management
+        Route::resource('/branches', BranchController::class);
+        Route::resource('/users', CompanyUserController::class)->except(['show']);
+        Route::patch('/users/{user}/assign-role', [CompanyUserController::class, 'assignRole'])->name('users.assign-role');
+
+        // Inventory Master Data
+        Route::resource('/products', ProductController::class);
+        Route::resource('/categories', CategoryController::class)->except(['create', 'edit', 'show']);
+
+        // Purchasing & Suppliers
+        Route::resource('/purchases', PurchaseController::class);
+        Route::resource('/suppliers', SupplierController::class)->except(['create', 'edit', 'show']);
+
+        // Customers & Expenses
+        Route::resource('/customers', CustomerController::class)->except(['create', 'edit', 'show']);
+        Route::resource('/expenses', ExpenseController::class)->except(['create', 'edit', 'show']);
+
+        // Company-level Reports
+        Route::get('/reports/sales', [CompanyReportController::class, 'sales'])->name('reports.sales');
+        Route::get('/reports/stock', [CompanyReportController::class, 'stock'])->name('reports.stock');
     });
 
 // ==========================================
@@ -129,7 +156,18 @@ Route::middleware(['auth', 'verified', 'role:Manager|Salesman'])
     ->name('branch.')
     ->group(function () {
         Route::get('/dashboard', [BranchDashboard::class, 'index'])->name('dashboard');
-        // পরবর্তীতে এখানে Branch এর POS, Sales এর রুটগুলো যুক্ত করবেন
+
+        // Inventory
+        Route::resource('/inventory', InventoryController::class)->except(['create', 'edit', 'show']);
+        Route::post('/inventory/{item}/stock-adjust', [StockAdjustmentController::class, 'adjust'])->name('inventory.stock-adjust');
+
+        // POS Terminal
+        Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
+        Route::post('/pos/checkout', [PosController::class, 'checkout'])->name('pos.checkout');
+        Route::get('/pos/invoice/{sale}/print', [PosController::class, 'printInvoice'])->name('pos.invoice-print');
+
+        // Sales History
+        Route::resource('/sales', SaleController::class)->only(['index', 'show']);
     });
 
 // ==========================================
@@ -148,12 +186,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function (Request $request) {
         $user = $request->user();
 
-        // ইউজার যদি ভুল করে /dashboard এ চলে আসে, তাকে তার সঠিক ড্যাশবোর্ডে পাঠিয়ে দাও
         if ($user->hasRole('Super Admin')) return redirect()->route('superadmin.dashboard');
         if ($user->hasRole('Company Admin')) return redirect()->route('company.dashboard');
         if ($user->hasRole('Manager') || $user->hasRole('Salesman')) return redirect()->route('branch.dashboard');
 
-        // যদি কারো কোনো রোলই না থাকে, তাকে 403 Error দেখাও
         abort(403, 'You are logged in, but you don\'t have any specific SaaS role assigned yet! Please contact the Super Admin.');
     })->name('dashboard');
 });

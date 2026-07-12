@@ -14,6 +14,8 @@
 14. composer dump-autoload
 15. php artisan storage:link
 16. php artisan migrate:fresh --seed
+17. & "$env:LOCALAPPDATA\Programs\Ollama\ollama.exe" run qwen2.5-coder:7b
+18. cmd - ("%LOCALAPPDATA%\Programs\Ollama\ollama.exe" run qwen2.5-coder:7b)
 
 php unit and trinker
 https://codecanyon.net/search/pos%20inventory

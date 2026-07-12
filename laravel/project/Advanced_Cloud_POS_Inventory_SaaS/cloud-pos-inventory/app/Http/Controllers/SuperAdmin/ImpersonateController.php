@@ -3,61 +3,48 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Company; // আপনার Company মডেলের সঠিক পাথ/নেম বসাবেন
-use Illuminate\Http\Request;
+use App\Models\Company;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class ImpersonateController extends Controller
 {
-    /**
-     * কোনো কোম্পানির ওনার হিসেবে লগইন (Impersonate) শুরু করা
-     */
-    public function impersonate($companyId)
+    // Tenants (companies) লিস্ট দেখায় — কোনটাতে impersonate করবেন বেছে নেওয়ার জন্য
+    public function index()
     {
-        // ১. কোম্পানিটি খুঁজে বের করা
-        $company = Company::findOrFail($companyId);
+        $companies = Company::latest()->paginate(20);
 
-        // ২. কোম্পানির ওনার বা অ্যাডমিনকে খুঁজে বের করা
-        // (নোট: আপনার ডাটাবেসে রিলেশনশিপের নাম 'owner' না হয়ে 'user' বা অন্য কিছু হতে পারে)
-        $owner = $company->owner;
-
-        if (!$owner) {
-            return back()->with('error', 'এই কোম্পানির কোনো ওনার পাওয়া যায়নি!');
-        }
-
-        // ✅ নতুন যুক্ত করা হয়েছে:
-        // ওনারের যদি 'Company Admin' রোল না থাকে, তবে তাকে অ্যাসাইন করে দিন
-        // (ধরে নেওয়া হচ্ছে আপনি Spatie Permission প্যাকেজ ব্যবহার করছেন)
-        if (method_exists($owner, 'hasRole') && !$owner->hasRole('Company Admin')) {
-            $owner->assignRole('Company Admin');
-        }
-
-        // ৩. বর্তমান সুপার অ্যাডমিনের আইডি সেশনে সেভ করা (পরে ফিরে আসার জন্য)
-        session()->put('impersonator_id', Auth::id());
-        session()->put('is_impersonating', true);
-
-        // ৪. ওনার হিসেবে লগইন করা
-        Auth::login($owner);
-
-        // ৫. কোম্পানির ড্যাশবোর্ডে রিডাইরেক্ট করা
-        return redirect()->route('company.dashboard')->with('success', 'আপনি এখন ' . $owner->name . ' হিসেবে লগইন করেছেন।');
+        return view('super-admin.tenants.index', compact('companies'));
     }
 
-    /**
-     * Impersonate বন্ধ করে আবার সুপার অ্যাডমিনে ফিরে আসা
-     */
-    public function stopImpersonate()
+    // নির্দিষ্ট company এর admin ইউজার হিসেবে লগইন করে দেখায়
+    public function impersonate(Company $company)
     {
-        $impersonatorId = session('impersonator_id');
+        $tenantAdmin = User::where('company_id', $company->id)
+            ->role('Company Admin') // Spatie permission ব্যবহার করলে এই স্কোপ কাজ করবে
+            ->first();
+
+        if (! $tenantAdmin) {
+            return back()->with('error', 'This company has no admin user to impersonate.');
+        }
+
+        // আসল Super Admin কে মনে রাখা হচ্ছে, যাতে পরে ফিরে আসা যায়
+        Session::put('impersonator_id', Auth::id());
+
+        Auth::login($tenantAdmin);
+
+        return redirect()->route('company.dashboard')
+            ->with('success', 'You are now viewing as ' . $tenantAdmin->name);
+    }
+
+    // impersonation থেকে বেরিয়ে আসল super admin এ ফিরে যাওয়ার মেথড
+    public function leave()
+    {
+        $impersonatorId = Session::pull('impersonator_id');
 
         if ($impersonatorId) {
-            // আসল সুপার অ্যাডমিন হিসেবে আবার লগইন করা
             Auth::loginUsingId($impersonatorId);
-
-            // সেশন থেকে ডাটা মুছে ফেলা
-            session()->forget(['impersonator_id', 'is_impersonating']);
-
-            return redirect()->route('superadmin.companies.index')->with('success', 'আপনি সফলভাবে সুপার অ্যাডমিনে ফিরে এসেছেন।');
         }
 
         return redirect()->route('superadmin.dashboard');

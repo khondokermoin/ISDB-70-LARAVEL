@@ -170,7 +170,7 @@
                 </div>
             </li>
 
-            <!-- নতুন সেকশন: Global Master Data -->
+            <!-- Global Master Data -->
             <li class="side-nav-title mt-2">Global Master Data</li>
 
             <!-- Business Types (Industry Setup) -->
@@ -230,7 +230,7 @@
                 </div>
             </li>
 
-            <!-- নতুন সেকশন: POS & Customization -->
+            <!-- POS & Customization -->
             <li class="side-nav-title mt-2">POS & Customization</li>
 
             <!-- Receipt & Print Settings -->
@@ -285,7 +285,7 @@
                 </div>
             </li>
 
-            <!-- নতুন সেকশন: Helpdesk & Support -->
+            <!-- Helpdesk & Support -->
             <li class="side-nav-title mt-2">Helpdesk & Support</li>
 
             <li class="side-nav-item">
@@ -309,30 +309,28 @@
                 </a>
             </li>
 
-            <!-- নতুন সেকশন: Global Reports -->
+            <!-- Global Reports -->
             <li class="side-nav-title mt-2">Global Reports</li>
 
+            {{--
+                NOTE: resources/views/super-admin/reports/ ফোল্ডারে শুধু একটাই index.blade.php আছে।
+                তাই এখানে দুইটা আলাদা রুটের বদলে একটা রুটে নিয়ে আসা হলো:
+                superadmin.reports.index  ->  ReportController@index
+                Controller-এর ভেতরে ?type=revenue / ?type=tenant-usage দিয়ে ডেটা আলাদা করবেন,
+                অথবা একই পেজে ট্যাব (tabs) দিয়ে দুটো রিপোর্ট দেখাবেন।
+                (routes/web.php এও এই পরিবর্তন করতে হবে — নিচের নোট দেখুন)
+            --}}
             <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarGlobalReports" aria-expanded="false"
-                    class="side-nav-link">
+                <a href="{{ route('superadmin.reports.index', ['type' => 'revenue']) }}" class="side-nav-link">
                     <span class="menu-icon"><i class="ti ti-chart-bar"></i></span>
-                    <span class="menu-text"> Analytics </span>
-                    <span class="menu-arrow"></span>
+                    <span class="menu-text"> SaaS Revenue </span>
                 </a>
-                <div class="collapse" id="sidebarGlobalReports">
-                    <ul class="sub-menu">
-                        <li class="side-nav-item">
-                            <a href="{{ route('superadmin.reports.revenue') }}" class="side-nav-link">
-                                <span class="menu-text">SaaS Revenue</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="{{ route('superadmin.reports.tenant-usage') }}" class="side-nav-link">
-                                <span class="menu-text">Tenant Usage</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+            </li>
+            <li class="side-nav-item">
+                <a href="{{ route('superadmin.reports.index', ['type' => 'tenant-usage']) }}" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-chart-pie"></i></span>
+                    <span class="menu-text"> Tenant Usage </span>
+                </a>
             </li>
 
             <li class="side-nav-title mt-2">Account</li>
