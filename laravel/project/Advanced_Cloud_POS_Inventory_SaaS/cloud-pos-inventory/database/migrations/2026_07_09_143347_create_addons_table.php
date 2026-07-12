@@ -8,16 +8,27 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('addons', function (Blueprint $table) {
+        Schema::create('addons', function (Blueprint $table) {
+            $table->id();
+
+            $table->string('name');
+            $table->string('slug')->unique();
+            $table->text('description')->nullable();
+            $table->string('icon')->nullable();
+
+            $table->decimal('price', 10, 2)->default(0);
+
+            $table->string('version')->nullable();
+
             $table->boolean('is_installed')->default(false);
             $table->boolean('is_active')->default(true);
+
+            $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::table('addons', function (Blueprint $table) {
-            $table->dropColumn(['is_installed', 'is_active']);
-        });
+        Schema::dropIfExists('addons');
     }
 };
