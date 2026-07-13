@@ -118,6 +118,16 @@ Route::middleware(['auth', 'verified', 'role:Super Admin'])
     });
 
 // ==========================================
+// 1b. Impersonation Exit (must sit OUTSIDE the Super Admin
+//     middleware group — once impersonate() runs, the logged-in
+//     user is the Company Admin, not Super Admin anymore, so a
+//     'role:Super Admin' gate here would lock the admin out)
+// ==========================================
+Route::middleware(['auth'])->group(function () {
+    Route::get('/impersonate/leave', [ImpersonateController::class, 'leave'])->name('impersonate.leave');
+});
+
+// ==========================================
 // 2. Company Admin Routes (Shop Owner)
 // ==========================================
 Route::middleware(['auth', 'verified', 'role:Company Admin'])

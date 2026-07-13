@@ -41,7 +41,7 @@
 
 <!-- Toastr Notifications -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
-    integrity="sha512-vKM3..." crossorigin="anonymous" referrerpolicy="no-referrer">
+     crossorigin="anonymous" referrerpolicy="no-referrer">
 <style>
     /* সাইডবার মেনুর লেখার সাইজ বড় করার জন্য এবং লম্বা লেখা ভেঙে পরের লাইনে দেওয়ার জন্য */
     .side-nav-link .menu-text {
