@@ -843,4 +843,41 @@
             });
         });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const planSelect = document.getElementById('plan_id');
+            const planDetailsDiv = document.getElementById('plan-details');
+            const planInfoDiv = document.getElementById('plan-info');
+
+            if (planSelect) {
+                planSelect.addEventListener('change', function() {
+                    const selectedOption = this.options[this.selectedIndex];
+
+                    if (this.value !== "") {
+                        const price = selectedOption.getAttribute('data-price');
+                        const trial = selectedOption.getAttribute('data-trial');
+                        const users = selectedOption.getAttribute('data-users');
+                        const branches = selectedOption.getAttribute('data-branches');
+
+                        planInfoDiv.innerHTML = `
+                    <ul class="mb-0 mt-1">
+                        <li><strong>Price:</strong> $${parseFloat(price).toFixed(2)} / month</li>
+                        <li><strong>Trial Period:</strong> ${trial} Days</li>
+                        <li><strong>Max Users:</strong> ${users}</li>
+                        <li><strong>Max Branches:</strong> ${branches}</li>
+                    </ul>
+                `;
+                        planDetailsDiv.style.display = 'block';
+                    } else {
+                        planDetailsDiv.style.display = 'none';
+                    }
+                });
+
+                // Trigger change event on page load if a value is already selected (e.g., during validation error)
+                if (planSelect.value !== "") {
+                    planSelect.dispatchEvent(new Event('change'));
+                }
+            }
+        });
+    </script>
 @endpush

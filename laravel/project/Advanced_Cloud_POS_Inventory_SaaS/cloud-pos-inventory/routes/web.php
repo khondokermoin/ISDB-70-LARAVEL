@@ -68,12 +68,18 @@ Route::middleware(['auth', 'verified', 'role:Super Admin'])
         Route::resource('/companies', CompanyController::class);
         Route::get('/companies/{company}/impersonate', [ImpersonateController::class, 'impersonate'])->name('companies.impersonate');
         Route::resource('/plans', PlanController::class);
-        Route::resource('/subscriptions', SubscriptionController::class)->only(['index']);
         Route::resource('/transactions', TransactionController::class)->only(['index']);
+    
+        // Subscription Routes
+        Route::resource('subscriptions', SubscriptionController::class)->only(['index', 'show']);
+        Route::post('subscriptions/{subscription}/cancel', [SubscriptionController::class, 'cancel'])->name('subscriptions.cancel');
+        Route::post('subscriptions/{subscription}/suspend', [SubscriptionController::class, 'suspend'])->name('subscriptions.suspend');
+        Route::post('subscriptions/{subscription}/reactivate', [SubscriptionController::class, 'reactivate'])->name('subscriptions.reactivate');
+        Route::post('subscriptions/{subscription}/extend', [SubscriptionController::class, 'extend'])->name('subscriptions.extend');
 
         // Platform Administration
-        Route::resource('/users', SuperAdminUserController::class)->except(['create', 'edit', 'show']);
-        Route::resource('/roles', RoleController::class)->except(['create', 'edit', 'show']);
+        Route::resource('users', SuperAdminUserController::class)->except(['show']); 
+        Route::resource('roles', RoleController::class)->except(['show']);
 
         // Global Settings
         Route::prefix('settings')->name('settings.')->group(function () {

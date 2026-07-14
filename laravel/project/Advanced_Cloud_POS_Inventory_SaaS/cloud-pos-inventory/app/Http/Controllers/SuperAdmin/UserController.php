@@ -3,63 +3,91 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\SuperAdmin\StoreUserRequest;
+use App\Http\Requests\SuperAdmin\UpdateUserRequest;
+use App\Models\User;
+use App\Models\Company;
+use App\Models\Branch;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $users = User::with(['roles', 'company', 'branch'])
+            ->latest()
+            ->paginate(15);
+            
+        return view('super-admin.users.index', compact('users'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $roles = Role::all();
+        $companies = Company::all();
+        $branches = Branch::all();
+        
+        return view('super-admin.users.create', compact('roles', 'companies', 'branches'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        //
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'company_id' => $request->company_id,
+            'branch_id' => $request->branch_id,
+        ]);
+
+        // Assign Roles
+        $user->syncRoles($request->roles);
+
+        return redirect()->route('superadmin.users.index')
+            ->with('success', 'User created successfully and roles assigned.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(User $user)
     {
-        //
+        $roles = Role::all();
+        $userRoles = $user->roles->pluck('name')->toArray();
+        $companies = Company::all();
+        $branches = Branch::all();
+        
+        return view('super-admin.users.edit', compact('user', 'roles', 'userRoles', 'companies', 'branches'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        //
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'company_id' => $request->company_id,
+            'branch_id' => $request->branch_id,
+        ];
+
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
+        }
+
+        $user->update($data);
+        $user->syncRoles($request->roles);
+
+        return redirect()->route('superadmin.users.index')
+            ->with('success', 'User updated successfully.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(User $user)
     {
-        //
-    }
+        // Prevent deleting yourself
+        if ($user->id === auth()->id()) {
+            return redirect()->route('superadmin.users.index')
+                ->with('error', 'You cannot delete your own account.');
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $user->delete();
+        return redirect()->route('superadmin.users.index')
+            ->with('success', 'User deleted successfully.');
     }
 }
