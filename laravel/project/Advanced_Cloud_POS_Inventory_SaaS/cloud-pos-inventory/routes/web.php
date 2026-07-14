@@ -69,7 +69,7 @@ Route::middleware(['auth', 'verified', 'role:Super Admin'])
         Route::get('/companies/{company}/impersonate', [ImpersonateController::class, 'impersonate'])->name('companies.impersonate');
         Route::resource('/plans', PlanController::class);
         Route::resource('/transactions', TransactionController::class)->only(['index']);
-    
+
         // Subscription Routes
         Route::resource('subscriptions', SubscriptionController::class)->only(['index', 'show']);
         Route::post('subscriptions/{subscription}/cancel', [SubscriptionController::class, 'cancel'])->name('subscriptions.cancel');
@@ -78,14 +78,22 @@ Route::middleware(['auth', 'verified', 'role:Super Admin'])
         Route::post('subscriptions/{subscription}/extend', [SubscriptionController::class, 'extend'])->name('subscriptions.extend');
 
         // Platform Administration
-        Route::resource('users', SuperAdminUserController::class)->except(['show']); 
+        Route::resource('users', SuperAdminUserController::class)->except(['show']);
         Route::resource('roles', RoleController::class)->except(['show']);
 
-        // Global Settings
+       // Global Settings
         Route::prefix('settings')->name('settings.')->group(function () {
+            // General
             Route::get('/general', [SettingController::class, 'general'])->name('general');
+            Route::post('/general', [SettingController::class, 'update'])->name('general.update'); 
+
+            // Payment
             Route::get('/payment', [SettingController::class, 'payment'])->name('payment');
+            Route::post('/payment', [SettingController::class, 'update'])->name('payment.update');
+
+            // Email
             Route::get('/email', [SettingController::class, 'email'])->name('email');
+            Route::post('/email', [SettingController::class, 'update'])->name('email.update');
         });
 
         // System & Security
