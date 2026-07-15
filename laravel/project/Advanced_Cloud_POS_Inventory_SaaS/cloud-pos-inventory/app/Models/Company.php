@@ -11,10 +11,27 @@ class Company extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'name', 'slug', 'email', 'phone', 'contact_person', 'website', 
-        'address', 'city', 'country', 'zip_code', 'logo', 'subdomain', 
-        'custom_domain', 'currency', 'timezone', 'settings', 'status', 
-        'trial_ends_at', 'plan_id', 'user_id',
+        'name',
+        'slug',
+        'email',
+        'phone',
+        'contact_person',
+        'website',
+        'address',
+        'city',
+        'country',
+        'zip_code',
+        'logo',
+        'subdomain',
+        'custom_domain',
+        'currency',
+        'timezone',
+        'settings',
+        'status',
+        'trial_ends_at',
+        'plan_id',
+        'user_id',
+        'business_type_id'
     ];
 
     protected $casts = [
@@ -41,7 +58,7 @@ class Company extends Model
     // ৩. কোম্পানির অধীনে থাকা সব ইউজার (users relationship)
     public function users()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(User::class, 'company_id');
     }
 
     // ৪. কোম্পানির বর্তমান সাবস্ক্রিপশন প্ল্যান
@@ -66,5 +83,9 @@ class Company extends Model
     public function branches()
     {
         return $this->hasMany(Branch::class);
+    }
+    public function businessType()
+    {
+        return $this->belongsTo(BusinessType::class);
     }
 }

@@ -26,54 +26,101 @@
 
         <!--- Sidenav Menu -->
         <ul class="side-nav">
+
             <li class="side-nav-title">Branch Panel</li>
 
             <!-- Dashboard -->
             <li class="side-nav-item">
-                <a href="{{ route('branch.dashboard') }}" class="side-nav-link {{ request()->routeIs('branch.dashboard') ? 'active' : '' }}">
+                <a href="{{ route('branch.dashboard') }}"
+                    class="side-nav-link {{ request()->routeIs('branch.dashboard') ? 'active' : '' }}">
                     <span class="menu-icon"><i class="ti ti-dashboard"></i></span>
                     <span class="menu-text"> Dashboard </span>
                 </a>
             </li>
 
-            <!-- POS Terminal: this is the primary daily-use screen for Manager/Salesman,
-                 so it sits as a flat top-level item (no collapse) for one-click access -->
+            <li class="side-nav-title mt-3">Sales & POS</li>
+
+            <!-- POS Terminal: Primary daily-use screen -->
             <li class="side-nav-item">
-                <a href="{{ route('branch.pos.index') }}" class="side-nav-link {{ request()->routeIs('branch.pos.*') ? 'active' : '' }}">
+                <a href="{{ route('branch.pos.index') }}"
+                    class="side-nav-link {{ request()->routeIs('branch.pos.*') ? 'active' : '' }}">
                     <span class="menu-icon"><i class="ti ti-cash-register"></i></span>
                     <span class="menu-text"> POS Terminal </span>
                 </a>
             </li>
 
-            <li class="side-nav-title mt-2">Stock</li>
-
-            <!-- Inventory -->
-            <li class="side-nav-item">
-                <a href="{{ route('branch.inventory.index') }}" class="side-nav-link {{ request()->routeIs('branch.inventory.*') ? 'active' : '' }}">
-                    <span class="menu-icon"><i class="ti ti-package"></i></span>
-                    <span class="menu-text"> Inventory </span>
-                </a>
-            </li>
-
-            <li class="side-nav-title mt-2">Sales</li>
-
             <!-- Sales History -->
             <li class="side-nav-item">
-                <a href="{{ route('branch.sales.index') }}" class="side-nav-link {{ request()->routeIs('branch.sales.*') ? 'active' : '' }}">
+                <a href="{{ route('branch.sales.index') }}"
+                    class="side-nav-link {{ request()->routeIs('branch.sales.*') ? 'active' : '' }}">
                     <span class="menu-icon"><i class="ti ti-receipt"></i></span>
                     <span class="menu-text"> Sales History </span>
                 </a>
             </li>
 
-            <li class="side-nav-title mt-2">Account</li>
+            <li class="side-nav-title mt-3">Inventory & Stock</li>
+
+            <!-- Inventory & Stock Management (Collapsible Menu) -->
+            @php
+                $isBranchInventoryActive =
+                    request()->routeIs('branch.inventory.*') || request()->routeIs('branch.purchases.*');
+            @endphp
+            <li class="side-nav-item {{ $isBranchInventoryActive ? 'menu-open' : '' }}">
+                <a data-bs-toggle="collapse" href="#sidebarBranchInventory"
+                    aria-expanded="{{ $isBranchInventoryActive ? 'true' : 'false' }}"
+                    class="side-nav-link {{ $isBranchInventoryActive ? 'active' : '' }}">
+                    <span class="menu-icon"><i class="ti ti-package"></i></span>
+                    <span class="menu-text"> Inventory & Stock </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse {{ $isBranchInventoryActive ? 'show' : '' }}" id="sidebarBranchInventory">
+                    <ul class="sub-menu">
+                        <!-- Current Stock of this specific branch -->
+                        <li class="side-nav-item">
+                            <a href="{{ route('branch.inventory.index') }}"
+                                class="side-nav-link {{ request()->routeIs('branch.inventory.index') ? 'active' : '' }}">
+                                <span class="menu-text"> Current Stock </span>
+                            </a>
+                        </li>
+
+                        <!-- Adjust stock for damage/loss/audit -->
+                        <li class="side-nav-item">
+                            <a href="{{ route('branch.inventory.adjust') }}"
+                                class="side-nav-link {{ request()->routeIs('branch.inventory.adjust') ? 'active' : '' }}">
+                                <span class="menu-text"> Stock Adjustment </span>
+                            </a>
+                        </li>
+
+                        <!-- Receive goods (Local purchase or Transfer from Head Office) -->
+                        <li class="side-nav-item">
+                            <a href="{{ route('branch.purchases.create') }}"
+                                class="side-nav-link {{ request()->routeIs('branch.purchases.create') ? 'active' : '' }}">
+                                <span class="menu-text"> New Purchase / Receive </span>
+                            </a>
+                        </li>
+
+                        <!-- History of stock-in for this branch -->
+                        <li class="side-nav-item">
+                            <a href="{{ route('branch.purchases.index') }}"
+                                class="side-nav-link {{ request()->routeIs('branch.purchases.index') ? 'active' : '' }}">
+                                <span class="menu-text"> Purchase History </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="side-nav-title mt-3">Account</li>
 
             <!-- Profile -->
             <li class="side-nav-item">
-                <a href="{{ route('profile.edit') }}" class="side-nav-link {{ request()->routeIs('profile.edit') ? 'active' : '' }}">
+                <a href="{{ route('profile.edit') }}"
+                    class="side-nav-link {{ request()->routeIs('profile.edit') ? 'active' : '' }}">
                     <span class="menu-icon"><i class="ti ti-user"></i></span>
                     <span class="menu-text"> My Profile </span>
                 </a>
             </li>
+
         </ul>
 
     </div>

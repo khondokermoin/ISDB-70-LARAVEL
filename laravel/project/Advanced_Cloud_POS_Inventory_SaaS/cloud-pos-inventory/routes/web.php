@@ -54,6 +54,7 @@ use App\Http\Controllers\Company\InventoryController as CompanyInventoryControll
 use App\Http\Controllers\Company\CompanySettingController;
 use App\Http\Controllers\Company\SubscriptionController as CompanySubscriptionController;
 use App\Http\Controllers\Company\AnnouncementController as CompanyAnnouncementController;
+use App\Http\Controllers\Company\TransferController; // <-- NEW: For Stock Transfers
 
 // ==========================================
 // Branch Controllers
@@ -63,6 +64,7 @@ use App\Http\Controllers\Branch\InventoryController;
 use App\Http\Controllers\Branch\PosController;
 use App\Http\Controllers\Branch\SaleController;
 use App\Http\Controllers\Branch\StockAdjustmentController;
+use App\Http\Controllers\Branch\PurchaseController as BranchPurchaseController; // <-- NEW: For Branch-level Purchasing
 
 Route::get('/', function () {
     return view('welcome');
@@ -97,7 +99,7 @@ Route::middleware(['auth', 'verified', 'role:Super Admin'])
         // Global Settings
         Route::prefix('settings')->name('settings.')->group(function () {
             Route::get('/general', [SettingController::class, 'general'])->name('general');
-            Route::post('/general', [SettingController::class, 'update'])->name('general.update'); 
+            Route::post('/general', [SettingController::class, 'update'])->name('general.update');
 
             Route::get('/payment', [SettingController::class, 'payment'])->name('payment');
             Route::post('/payment', [SettingController::class, 'update'])->name('payment.update');
@@ -114,7 +116,7 @@ Route::middleware(['auth', 'verified', 'role:Super Admin'])
         });
 
         // Global Master Data
-        Route::resource('/business-types', BusinessTypeController::class)->except(['create', 'edit', 'show']);
+        Route::resource('/business-types', \App\Http\Controllers\SuperAdmin\BusinessTypeController::class)->only(['index', 'create', 'store', 'destroy']);
         Route::resource('/business-modules', BusinessModuleController::class)->except(['create', 'edit', 'show']);
         Route::resource('/global-categories', GlobalCategoryController::class)->except(['create', 'edit', 'show']);
         Route::resource('/global-units', GlobalUnitController::class)->except(['create', 'edit', 'show']);
@@ -155,9 +157,8 @@ Route::middleware(['auth', 'verified', 'role:Company Admin'])
     ->group(function () {
         Route::get('/dashboard', [CompanyDashboard::class, 'index'])->name('dashboard');
 
-        //  Sales & Invoices (Company Level Overview)
+        // Sales & Invoices (Company Level Overview)
         Route::get('/sales', [CompanySaleController::class, 'index'])->name('sales.index');
-        // Route::get('/sales/{sale}', [CompanySaleController::class, 'show'])->name('sales.show'); // Uncomment if needed
 
         // Branch & Staff Management
         Route::resource('/branches', BranchController::class);
@@ -166,13 +167,14 @@ Route::middleware(['auth', 'verified', 'role:Company Admin'])
 
         // Inventory Master Data
         Route::resource('/products', ProductController::class);
-        // Inventory Master Data
-        Route::resource('/products', ProductController::class);
-        Route::resource('/categories', CategoryController::class); 
+        Route::resource('/categories', CategoryController::class);
 
-        //  Inventory Operations (Low Stock & Stock Adjustment)
+        // Inventory Operations (Low Stock & Stock Adjustment)
         Route::get('/inventory/low-stock', [CompanyInventoryController::class, 'lowStock'])->name('inventory.low-stock');
         Route::get('/inventory/stock-adjust', [CompanyInventoryController::class, 'stockAdjust'])->name('inventory.stock-adjust');
+
+        // Stock Transfers (Branch to Branch) <-- NEW
+        Route::resource('/transfers', TransferController::class)->only(['index', 'create', 'store']);
 
         // Purchasing & Suppliers
         Route::resource('/purchases', PurchaseController::class);
@@ -186,13 +188,13 @@ Route::middleware(['auth', 'verified', 'role:Company Admin'])
         Route::get('/reports/sales', [CompanyReportController::class, 'sales'])->name('reports.sales');
         Route::get('/reports/stock', [CompanyReportController::class, 'stock'])->name('reports.stock');
 
-        //  Settings & Account
+        // Settings & Account
         Route::prefix('settings')->name('settings.')->group(function () {
             Route::get('/profile', [CompanySettingController::class, 'profile'])->name('profile');
             Route::get('/invoice', [CompanySettingController::class, 'invoice'])->name('invoice');
         });
 
-        //  Subscription & Announcements
+        // Subscription & Announcements
         Route::get('/subscription', [CompanySubscriptionController::class, 'index'])->name('subscription.index');
         Route::get('/announcements', [CompanyAnnouncementController::class, 'index'])->name('announcements.index');
     });
@@ -208,12 +210,19 @@ Route::middleware(['auth', 'verified', 'role:Manager|Salesman'])
 
         // Inventory
         Route::resource('/inventory', InventoryController::class)->except(['create', 'edit', 'show']);
-        Route::post('/inventory/{item}/stock-adjust', [StockAdjustmentController::class, 'adjust'])->name('inventory.stock-adjust');
+
+        // Branch Stock Adjustment (Page + Action) <-- UPDATED
+        Route::get('/inventory/adjust', [InventoryController::class, 'adjust'])->name('inventory.adjust');
+        Route::post('/inventory/adjust', [InventoryController::class, 'storeAdjustment'])->name('inventory.adjust.store');
+
+        // Branch Purchases (Receive Stock from Supplier or Head Office) <-- NEW
+        Route::resource('/purchases', BranchPurchaseController::class)->only(['index', 'create', 'store']);
 
         // POS Terminal
         Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
         Route::post('/pos/checkout', [PosController::class, 'checkout'])->name('pos.checkout');
         Route::get('/pos/invoice/{sale}/print', [PosController::class, 'printInvoice'])->name('pos.invoice-print');
+        Route::get('/pos/search', [PosController::class, 'search'])->name('pos.search');
 
         // Sales History
         Route::resource('/sales', SaleController::class)->only(['index', 'show']);

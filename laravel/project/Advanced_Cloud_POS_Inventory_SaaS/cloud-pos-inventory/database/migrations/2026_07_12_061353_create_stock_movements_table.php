@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('stock_movements', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('company_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('branch_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('variant_id')->nullable()->constrained('product_variants')->nullOnDelete();
+            $table->enum('type', ['purchase_in', 'sale_out', 'adjustment', 'transfer_in', 'transfer_out']);
+            $table->integer('quantity'); // পজিটিভ বা নেগেটিভ
+            $table->nullableMorphs('reference'); // reference_type, reference_id
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });
     }

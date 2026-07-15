@@ -3,65 +3,43 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
-
 use App\Models\BusinessType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class BusinessTypeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $businessTypes = BusinessType::latest()->paginate(15);
+        return view('super-admin.business-types.index', compact('businessTypes'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('super-admin.business-types.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255|unique:business_types,name',
+            'slug' => 'nullable|string|max:255|unique:business_types,slug',
+        ]);
+
+        BusinessType::create([
+            'name' => $request->name,
+            'slug' => $request->slug ?: Str::slug($request->name),
+            'is_active' => $request->has('is_active'),
+        ]);
+
+        return redirect()->route('superadmin.business-types.index')
+            ->with('success', 'Business Type created successfully!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(BusinessType $businessType)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(BusinessType $businessType)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, BusinessType $businessType)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(BusinessType $businessType)
     {
-        //
+        $businessType->delete();
+        return back()->with('success', 'Business Type deleted successfully!');
     }
 }
