@@ -26,7 +26,7 @@
 
         <!--- Sidenav Menu -->
         <ul class="side-nav">
-            <li class="side-nav-title">Company Panel</li>
+            <li class="side-nav-title">Main</li>
 
             <!-- Dashboard -->
             <li class="side-nav-item">
@@ -36,40 +36,33 @@
                 </a>
             </li>
 
-            <li class="side-nav-title mt-2">Branch & Staff</li>
+            <li class="side-nav-title mt-3">Sales & POS</li>
 
-            <!-- Branches -->
+            <!-- Sales / Invoices (Company Level Overview) -->
             <li class="side-nav-item">
-                <a href="{{ route('company.branches.index') }}" class="side-nav-link {{ request()->routeIs('company.branches.*') ? 'active' : '' }}">
-                    <span class="menu-icon"><i class="ti ti-building-store"></i></span>
-                    <span class="menu-text"> Branches </span>
+                <a href="{{ route('company.sales.index') }}" class="side-nav-link {{ request()->routeIs('company.sales.*') ? 'active' : '' }}">
+                    <span class="menu-icon"><i class="ti ti-receipt"></i></span>
+                    <span class="menu-text"> All Sales </span>
+                    <span class="badge bg-primary-lt text-primary ms-auto">New</span>
                 </a>
             </li>
 
-            <!-- Staff / Users -->
-            <li class="side-nav-item">
-                <a href="{{ route('company.users.index') }}" class="side-nav-link {{ request()->routeIs('company.users.*') ? 'active' : '' }}">
-                    <span class="menu-icon"><i class="ti ti-users"></i></span>
-                    <span class="menu-text"> Staff & Roles </span>
-                </a>
-            </li>
-
-            <li class="side-nav-title mt-2">Inventory</li>
+            <li class="side-nav-title mt-3">Inventory Management</li>
 
             <!-- Products & Categories -->
             @php
-                $isInventoryActive = request()->routeIs('company.products.*') || request()->routeIs('company.categories.*');
+                $isInventoryActive = request()->routeIs('company.products.*') || request()->routeIs('company.categories.*') || request()->routeIs('company.inventory.*');
             @endphp
             <li class="side-nav-item {{ $isInventoryActive ? 'menu-open' : '' }}">
                 <a data-bs-toggle="collapse" href="#sidebarProducts" aria-expanded="{{ $isInventoryActive ? 'true' : 'false' }}" class="side-nav-link {{ $isInventoryActive ? 'active' : '' }}">
                     <span class="menu-icon"><i class="ti ti-package"></i></span>
-                    <span class="menu-text"> Products </span>
+                    <span class="menu-text"> Products & Stock </span>
                     <span class="menu-arrow"></span>
                 </a>
                 <div class="collapse {{ $isInventoryActive ? 'show' : '' }}" id="sidebarProducts">
                     <ul class="sub-menu">
                         <li class="side-nav-item">
-                            <a href="{{ route('company.products.index') }}" class="side-nav-link {{ request()->routeIs('company.products.*') ? 'active' : '' }}">
+                            <a href="{{ route('company.products.index') }}" class="side-nav-link {{ request()->routeIs('company.products.index') ? 'active' : '' }}">
                                 <span class="menu-text">All Products</span>
                             </a>
                         </li>
@@ -83,11 +76,22 @@
                                 <span class="menu-text">Categories</span>
                             </a>
                         </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('company.inventory.low-stock') }}" class="side-nav-link {{ request()->routeIs('company.inventory.low-stock') ? 'active' : '' }}">
+                                <span class="menu-text">Low Stock Alerts</span>
+                                <span class="badge bg-danger-lt text-danger ms-auto">!</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('company.inventory.stock-adjust') }}" class="side-nav-link {{ request()->routeIs('company.inventory.stock-adjust') ? 'active' : '' }}">
+                                <span class="menu-text">Stock Adjustment</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </li>
 
-            <li class="side-nav-title mt-2">Purchasing</li>
+            <li class="side-nav-title mt-3">Purchasing</li>
 
             <!-- Purchases & Suppliers -->
             @php
@@ -120,7 +124,7 @@
                 </div>
             </li>
 
-            <li class="side-nav-title mt-2">CRM & Finance</li>
+            <li class="side-nav-title mt-3">CRM & Finance</li>
 
             <!-- Customers -->
             <li class="side-nav-item">
@@ -138,7 +142,25 @@
                 </a>
             </li>
 
-            <li class="side-nav-title mt-2">Reports</li>
+            <li class="side-nav-title mt-3">Branch & Operations</li>
+
+            <!-- Branches -->
+            <li class="side-nav-item">
+                <a href="{{ route('company.branches.index') }}" class="side-nav-link {{ request()->routeIs('company.branches.*') ? 'active' : '' }}">
+                    <span class="menu-icon"><i class="ti ti-building-store"></i></span>
+                    <span class="menu-text"> Branches </span>
+                </a>
+            </li>
+
+            <!-- Staff / Users -->
+            <li class="side-nav-item">
+                <a href="{{ route('company.users.index') }}" class="side-nav-link {{ request()->routeIs('company.users.*') ? 'active' : '' }}">
+                    <span class="menu-icon"><i class="ti ti-users"></i></span>
+                    <span class="menu-text"> Staff & Roles </span>
+                </a>
+            </li>
+
+            <li class="side-nav-title mt-3">Reports</li>
 
             <!-- Company Reports -->
             <li class="side-nav-item">
@@ -154,15 +176,53 @@
                 </a>
             </li>
 
-            <li class="side-nav-title mt-2">Account</li>
+            <li class="side-nav-title mt-3">Settings & Account</li>
 
-            <!-- Profile -->
+            <!-- Settings & Subscription (New Addition) -->
+            @php
+                $isSettingsActive = request()->routeIs('company.settings.*') || request()->routeIs('company.subscription.*') || request()->routeIs('company.announcements.*');
+            @endphp
+            <li class="side-nav-item {{ $isSettingsActive ? 'menu-open' : '' }}">
+                <a data-bs-toggle="collapse" href="#sidebarSettings" aria-expanded="{{ $isSettingsActive ? 'true' : 'false' }}" class="side-nav-link {{ $isSettingsActive ? 'active' : '' }}">
+                    <span class="menu-icon"><i class="ti ti-settings"></i></span>
+                    <span class="menu-text"> Settings </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse {{ $isSettingsActive ? 'show' : '' }}" id="sidebarSettings">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a href="{{ route('company.settings.profile') }}" class="side-nav-link {{ request()->routeIs('company.settings.profile') ? 'active' : '' }}">
+                                <span class="menu-text">Company Profile</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('company.settings.invoice') }}" class="side-nav-link {{ request()->routeIs('company.settings.invoice') ? 'active' : '' }}">
+                                <span class="menu-text">Invoice Settings</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('company.subscription.index') }}" class="side-nav-link {{ request()->routeIs('company.subscription.*') ? 'active' : '' }}">
+                                <span class="menu-text">Subscription & Plan</span>
+                                <span class="badge bg-warning-lt text-warning ms-auto">Pro</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('company.announcements.index') }}" class="side-nav-link {{ request()->routeIs('company.announcements.*') ? 'active' : '' }}">
+                                <span class="menu-text">Announcements</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- My Profile -->
             <li class="side-nav-item">
                 <a href="{{ route('profile.edit') }}" class="side-nav-link {{ request()->routeIs('profile.edit') ? 'active' : '' }}">
-                    <span class="menu-icon"><i class="ti ti-user"></i></span>
+                    <span class="menu-icon"><i class="ti ti-user-circle"></i></span>
                     <span class="menu-text"> My Profile </span>
                 </a>
             </li>
+
         </ul>
 
     </div>

@@ -6,22 +6,21 @@ use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Plan;
 use App\Models\User;
+use App\Models\BusinessType; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class CompanyController extends Controller
 {
-    // সব কোম্পানির লিস্ট দেখানো
     public function index()
     {
-        // ১. সব কোম্পানি আনা (DataTables client-side এর জন্য)
         $companies = Company::with(['plan', 'owner'])
             ->withCount(['users', 'branches'])
             ->latest()
             ->get();
 
-        // ২. Stats Cards এর জন্য count আলাদা করা
         $stats = [
             'total' => $companies->count(),
             'active' => $companies->where('status', 'active')->count(),
@@ -32,18 +31,17 @@ class CompanyController extends Controller
         return view('super-admin.companies.index', compact('companies', 'stats'));
     }
 
-    // কোম্পানি তৈরির ফর্ম দেখানো
     public function create()
     {
-        $plans = Plan::where('status', 'active')->get();
-        $users = User::all(); // কোম্পানির অ্যাডমিন অ্যাসাইন করার জন্য
-        return view('super-admin.companies.create', compact('plans', 'users'));
+        $plans = Plan::where('status', 'active')->get(); 
+        $users = User::all(); 
+        $business_types = BusinessType::where('is_active', true)->get(); 
+
+        return view('super-admin.companies.create', compact('plans', 'users', 'business_types'));
     }
 
-    // নতুন কোম্পানি সেভ করা
     public function store(Request $request)
     {
-        // ১. কমপ্লিট ভ্যালিডেশন
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'slug' => 'nullable|string|unique:companies,slug',
@@ -61,55 +59,81 @@ class CompanyController extends Controller
             'timezone' => 'nullable|string|max:50',
             'status' => 'required|in:active,inactive,suspended,trial',
             'plan_id' => 'required|exists:plans,id',
-            'user_id' => 'required|exists:users,id', // কোম্পানির অ্যাডমিন ইউজার
+            'user_id' => 'required|exists:users,id',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
+            'business_type_id' => 'required|exists:business_types,id',
+            'settings' => 'nullable|array', 
         ]);
 
-        // ২. লোগো আপলোড হ্যান্ডলিং
         if ($request->hasFile('logo')) {
             $validated['logo'] = $request->file('logo')->store('companies/logos', 'public');
         }
 
-        // ৩. Slug অটো-জেনারেট (যদি ফর্মে খালি থাকে)
         if (empty($validated['slug'])) {
             $validated['slug'] = Str::slug($validated['name']) . '-' . Str::random(5);
         }
 
-        // ৪. ডাটাবেসে সেভ করা
-        Company::create($validated);
-
-        // ✅ নতুন যুক্ত করা হয়েছে: AJAX/JSON রিকোয়েস্টের জন্য রেসপন্স
-        if ($request->wantsJson()) {
-            return response()->json([
-                'message' => 'Company saved successfully!',
-                'redirect' => route('superadmin.companies.index')
+        DB::beginTransaction();
+        try {
+            Company::create([
+                'name' => $validated['name'],
+                'slug' => $validated['slug'],
+                'email' => $validated['email'],
+                'contact_person' => $validated['contact_person'] ?? null,
+                'phone' => $validated['phone'] ?? null,
+                'website' => $validated['website'] ?? null,
+                'address' => $validated['address'] ?? null,
+                'city' => $validated['city'] ?? null,
+                'country' => $validated['country'] ?? null,
+                'zip_code' => $validated['zip_code'] ?? null,
+                'subdomain' => $validated['subdomain'] ?? null,
+                'custom_domain' => $validated['custom_domain'] ?? null,
+                'currency' => $validated['currency'] ?? 'BDT',
+                'timezone' => $validated['timezone'] ?? 'Asia/Dhaka',
+                'status' => $validated['status'],
+                'plan_id' => $validated['plan_id'],
+                'owner_id' => $validated['user_id'], 
+                'business_type_id' => $validated['business_type_id'], 
+                'settings' => $validated['settings'] ?? [], 
             ]);
-        }
 
-        return redirect()->route('superadmin.companies.index')
-            ->with('success', 'Company created successfully!');
+            DB::commit();
+
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'message' => 'Company saved successfully!',
+                    'redirect' => route('superadmin.companies.index')
+                ]);
+            }
+
+            return redirect()->route('superadmin.companies.index')->with('success', 'Company created successfully!');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            if ($request->wantsJson()) {
+                return response()->json(['message' => 'Error: ' . $e->getMessage()], 500);
+            }
+            return back()->withInput()->with('error', 'Something went wrong: ' . $e->getMessage());
+        }
     }
 
-    // কোম্পানির ডিটেইলস দেখা
     public function show($id)
     {
         $company = Company::withCount(['users', 'branches'])->findOrFail($id);
-
-        // শো পেজে রিলেশনশিপ ডাটার জন্য লোড করা
         $company->load('plan', 'owner');
         return view('super-admin.companies.show', compact('company'));
     }
 
-    // কোম্পানি এডিট করার ফর্ম দেখানো
     public function edit($id)
     {
         $company = Company::findOrFail($id);
         $plans = Plan::where('status', 'active')->get();
         $users = User::all();
-        return view('super-admin.companies.edit', compact('company', 'plans', 'users'));
+        $business_types = BusinessType::where('is_active', true)->get(); // ✅ এডিটের জন্যও লাগবে
+        
+        return view('super-admin.companies.edit', compact('company', 'plans', 'users', 'business_types'));
     }
 
-    // কোম্পানি আপডেট করা
     public function update(Request $request, $id)
     {
         $company = Company::findOrFail($id);
@@ -133,9 +157,10 @@ class CompanyController extends Controller
             'plan_id' => 'required|exists:plans,id',
             'user_id' => 'required|exists:users,id',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
+            'business_type_id' => 'required|exists:business_types,id',
+            'settings' => 'nullable|array',
         ]);
 
-        // নতুন লোগো আপলোড হলে পুরনোটি ডিলিট করা
         if ($request->hasFile('logo')) {
             if ($company->logo && Storage::disk('public')->exists($company->logo)) {
                 Storage::disk('public')->delete($company->logo);
@@ -143,14 +168,32 @@ class CompanyController extends Controller
             $validated['logo'] = $request->file('logo')->store('companies/logos', 'public');
         }
 
-        // Slug অটো-জেনারেট
         if (empty($validated['slug'])) {
             $validated['slug'] = Str::slug($validated['name']) . '-' . Str::random(5);
         }
 
-        $company->update($validated);
+        $company->update([
+            'name' => $validated['name'],
+            'slug' => $validated['slug'],
+            'email' => $validated['email'],
+            'contact_person' => $validated['contact_person'] ?? null,
+            'phone' => $validated['phone'] ?? null,
+            'website' => $validated['website'] ?? null,
+            'address' => $validated['address'] ?? null,
+            'city' => $validated['city'] ?? null,
+            'country' => $validated['country'] ?? null,
+            'zip_code' => $validated['zip_code'] ?? null,
+            'subdomain' => $validated['subdomain'] ?? null,
+            'custom_domain' => $validated['custom_domain'] ?? null,
+            'currency' => $validated['currency'] ?? 'BDT',
+            'timezone' => $validated['timezone'] ?? 'Asia/Dhaka',
+            'status' => $validated['status'],
+            'plan_id' => $validated['plan_id'],
+            'owner_id' => $validated['user_id'],
+            'business_type_id' => $validated['business_type_id'],
+            'settings' => $validated['settings'] ?? $company->settings,
+        ]);
 
-        // ✅ নতুন যুক্ত করা হয়েছে: AJAX/JSON রিকোয়েস্টের জন্য রেসপন্স
         if ($request->wantsJson()) {
             return response()->json([
                 'message' => 'Company updated successfully!',
@@ -161,19 +204,16 @@ class CompanyController extends Controller
         return redirect()->route('superadmin.companies.index')->with('success', 'Company updated successfully!');
     }
 
-    // কোম্পানি ডিলিট করা (Soft Delete)
     public function destroy(Request $request, $id)
     {
         $company = Company::findOrFail($id);
 
-        // ডিলিটের আগে লোগো ফাইলটি সার্ভার থেকে মুছে ফেলা
         if ($company->logo && Storage::disk('public')->exists($company->logo)) {
             Storage::disk('public')->delete($company->logo);
         }
 
-        $company->delete(); // SoftDeletes ব্যবহারের কারণে এটি শুধু deleted_at ফিল্ড আপডেট করবে
+        $company->delete();
 
-        // ✅ নতুন যুক্ত করা হয়েছে: AJAX/JSON রিকোয়েস্টের জন্য রেসপন্স
         if ($request->wantsJson()) {
             return response()->json([
                 'message' => 'Company deleted successfully!',

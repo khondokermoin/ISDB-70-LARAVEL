@@ -3,7 +3,6 @@
 @section('title', 'Add Company')
 
 @section('content')
-    <!-- Page Title & Breadcrumb -->
     <div class="mb-2 row">
         <div class="col-sm-6">
             <h4 class="page-title">Add New Company</h4>
@@ -19,7 +18,6 @@
         </div>
     </div>
 
-    {{-- ✅ শুধু ফর্মে id="company-form" যোগ করা হয়েছে --}}
     <form id="company-form" action="{{ route('superadmin.companies.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
@@ -40,6 +38,26 @@
                                     id="name" name="name" value="{{ old('name') }}"
                                     placeholder="Enter company name" required>
                                 @error('name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            {{-- ✅ V1 Feature: Business Type (Dynamic Fields Trigger) --}}
+                            <div class="mb-3 col-md-6">
+                                <label for="business_type_id" class="form-label">Business Type <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select @error('business_type_id') is-invalid @enderror"
+                                    id="business_type_id" name="business_type_id" required>
+                                    <option value="">Select Business Type</option>
+                                    @foreach ($business_types as $type)
+                                        <option value="{{ $type->id }}" data-slug="{{ $type->slug }}"
+                                            {{ old('business_type_id') == $type->id ? 'selected' : '' }}>
+                                            {{ $type->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <small class="text-muted"></small>
+                                @error('business_type_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -96,7 +114,6 @@
                                 @enderror
                             </div>
 
-                            <!-- Assign Company Admin -->
                             <div class="mb-3 col-md-6">
                                 <label for="user_id" class="form-label">Assign Company Admin <span
                                         class="text-danger">*</span></label>
@@ -147,7 +164,6 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
 
-                                {{-- Plan Details Display --}}
                                 <div id="plan-details" class="p-2 mt-2 rounded bg-light small" style="display: none;">
                                     <strong>Plan Details:</strong>
                                     <div id="plan-info"></div>
@@ -182,6 +198,7 @@
                                         Dollar</option>
                                     <option value="INR" {{ old('currency') == 'INR' ? 'selected' : '' }}>INR - Indian
                                         Rupee</option>
+                                    {{-- ✅ V2 Addition: EUR --}}
                                     <option value="EUR" {{ old('currency') == 'EUR' ? 'selected' : '' }}>EUR - Euro
                                     </option>
                                 </select>
@@ -200,6 +217,7 @@
                                         {{ old('timezone') == 'Asia/Kolkata' ? 'selected' : '' }}>Asia/Kolkata (GMT+5:30)
                                     </option>
                                     <option value="UTC" {{ old('timezone') == 'UTC' ? 'selected' : '' }}>UTC</option>
+                                    {{-- ✅ V2 Addition: America/New_York --}}
                                     <option value="America/New_York"
                                         {{ old('timezone') == 'America/New_York' ? 'selected' : '' }}>America/New_York
                                         (EST)</option>
@@ -250,7 +268,6 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-
                             <div class="mb-3 col-md-4">
                                 <label for="city" class="form-label">City</label>
                                 <input type="text" class="form-control @error('city') is-invalid @enderror"
@@ -259,7 +276,6 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-
                             <div class="mb-3 col-md-4">
                                 <label for="country" class="form-label">Country</label>
                                 <input type="text" class="form-control @error('country') is-invalid @enderror"
@@ -269,7 +285,6 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-
                             <div class="mb-3 col-md-4">
                                 <label for="zip_code" class="form-label">Zip / Postal Code</label>
                                 <input type="text" class="form-control @error('zip_code') is-invalid @enderror"
@@ -284,7 +299,87 @@
                 </div>
 
                 {{-- ==========================================
-                    4. Media & Logo
+                    4. Industry-Specific Settings (Dynamic) - ✅ V1 Core Feature
+                ========================================== --}}
+                <div class="mt-3 card dynamic-business-section" data-applicable-to="grocery,pharmacy,food"
+                    style="display: none;">
+                    <div class="card-body">
+                        <h4 class="mb-3 header-title text-primary"><i class="ti ti-clock me-2"></i>Expiry & Batch Tracking
+                        </h4>
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label">Track Expiry Dates?</label>
+                                <select class="form-select" name="settings[track_expiry]">
+                                    <option value="1">Yes, Mandatory</option>
+                                    <option value="0">No, Not required</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label">Track Batch/Lot Numbers?</label>
+                                <select class="form-select" name="settings[track_batch]">
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-3 card dynamic-business-section" data-applicable-to="clothing,fashion,footwear"
+                    style="display: none;">
+                    <div class="card-body">
+                        <h4 class="mb-3 header-title text-primary"><i class="ti ti-color-swatch me-2"></i>Variant &
+                            Attribute Settings</h4>
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label">Default Variant Attributes to Enable</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="settings[enable_size]"
+                                        value="1" checked>
+                                    <label class="form-check-label">Size (S, M, L, XL)</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="settings[enable_color]"
+                                        value="1" checked>
+                                    <label class="form-check-label">Color</label>
+                                </div>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label">Default Unit for Items</label>
+                                <select class="form-select" name="settings[default_unit]">
+                                    <option value="pieces">Pieces (pcs)</option>
+                                    <option value="pairs">Pairs (for footwear)</option>
+                                    <option value="meters">Meters (for fabrics)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-3 card dynamic-business-section" data-applicable-to="electronics,gadgets"
+                    style="display: none;">
+                    <div class="card-body">
+                        <h4 class="mb-3 header-title text-primary"><i class="ti ti-shield-check me-2"></i>Warranty &
+                            Serial Tracking</h4>
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label">Track IMEI / Serial Numbers?</label>
+                                <select class="form-select" name="settings[track_imei]">
+                                    <option value="1">Yes, Mandatory</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label">Default Warranty Period (Months)</label>
+                                <input type="number" class="form-control" name="settings[default_warranty_months]"
+                                    value="12" min="0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- ==========================================
+                    5. Media & Logo
                 ========================================== --}}
                 <div class="mt-3 card">
                     <div class="card-body">
@@ -295,8 +390,9 @@
                                 <input type="file" class="form-control @error('logo') is-invalid @enderror"
                                     id="logo" name="logo"
                                     accept="image/png, image/jpeg, image/jpg, image/svg+xml">
-                                <small class="text-muted">Recommended size: 200x200px (PNG, JPG). Max 2MB. আপলোডের পর টেনে
-                                    (drag) ও জুম করে ছবির সঠিক অংশ সিলেক্ট করতে পারবেন।</small>
+                                {{-- ✅ V2 Addition: Better Bengali Instructions --}}
+                                <small class="text-muted">Recommended size: 200x200px. Max 2MB. আপলোডের পর টেনে (drag) ও
+                                    জুম করে ছবির সঠিক অংশ সিলেক্ট করতে পারবেন।</small>
                                 @error('logo')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -324,8 +420,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <small class="text-muted">নিরাপত্তার কারণে ব্রাউজার ফাইল ইনপুট রিস্টোর করতে পারে না —
-                                    validation error হলে বা পেজ রিলোড দিলে লোগো আবার সিলেক্ট করতে হবে।</small>
+                                {{-- ✅ V2 Addition: Browser limitation warning --}}
+                                <small class="text-muted d-block mt-1">নিরাপত্তার কারণে ব্রাউজার ফাইল ইনপুট রিস্টোর করতে
+                                    পারে না — validation error হলে বা পেজ রিলোড দিলে লোগো আবার সিলেক্ট করতে হবে।</small>
                             </div>
                         </div>
                     </div>
@@ -340,7 +437,6 @@
                             class="btn btn-secondary me-2">
                             <i class="ti ti-x me-1"></i> Cancel
                         </a>
-                        {{-- ✅ শুধু বাটনে id="submit-btn" যোগ করা হয়েছে --}}
                         <button type="submit" id="submit-btn" class="btn btn-primary">
                             <i class="ti ti-device-floppy me-1"></i> Save Company
                         </button>
@@ -351,21 +447,20 @@
         </div>
     </form>
 
-    {{-- ==========================================
-        Logo Crop Modal (Cropper.js)
-    ========================================== --}}
+    {{-- Logo Crop Modal --}}
     <div class="modal fade" id="cropModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static"
         data-bs-keyboard="false">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">লোগো ক্রপ করুন</h5>
+                    <h5 class="modal-title">লোগো ক্রপ করুন</h5> {{-- ✅ V2: Bengali Title --}}
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div style="max-height: 400px; overflow: hidden; background: #222;">
                         <img id="crop-image" src="" alt="Crop preview" style="max-width: 100%; display: block;">
                     </div>
+                    {{-- ✅ V2 Addition: Bengali Instructions --}}
                     <p class="text-muted small mt-2 mb-0">ছবির উপর মাউস/আঙুল দিয়ে টেনে (drag) পজিশন ঠিক করুন, নিচের বাটন
                         দিয়ে জুম বা ঘোরান।</p>
                 </div>
@@ -382,8 +477,9 @@
                             class="ti ti-refresh"></i></button>
                     <div class="w-100"></div>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">বাতিল</button>
+                    {{-- ✅ V2: Bengali --}}
                     <button type="button" class="btn btn-primary" id="crop-save-btn"><i class="ti ti-check me-1"></i>
-                        সেভ করুন</button>
+                        সেভ করুন</button> {{-- ✅ V2: Bengali --}}
                 </div>
             </div>
         </div>
@@ -395,58 +491,67 @@
 @endpush
 
 @push('scripts')
-    {{-- Cropper.js: লোগো drag/zoom করে ক্রপ করার জন্য --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
     <script>
-        // ✅ Note: this app already loads toastr globally (see partials/scripts.blade.php
-        // + partials/alerts.blade.php, included on every page via admin_master). No need
-        // for a separate toast implementation here - just call toastr directly below.
-
         $(document).ready(function() {
             // ==========================================
-            // 0. Draft Auto-Save / Restore (sessionStorage)
+            // 0. Dynamic Business Type Field Toggling (✅ V1 Core)
             // ==========================================
-            // পেজ রিলোড / ভুলে ট্যাব বন্ধ হলেও টাইপ করা ডেটা যেন হারিয়ে না যায়
+            function toggleBusinessFields() {
+                const selectedOption = $('#business_type_id option:selected');
+                const businessSlug = selectedOption.data('slug');
+                $('.dynamic-business-section').hide();
+
+                if (businessSlug) {
+                    $('.dynamic-business-section').each(function() {
+                        const applicableTo = $(this).data('applicable-to').split(',');
+                        if (applicableTo.includes(businessSlug)) {
+                            $(this).fadeIn(300);
+                        }
+                    });
+                }
+            }
+            toggleBusinessFields();
+            $('#business_type_id').on('change', toggleBusinessFields);
+
+            // ==========================================
+            // 1. Draft Auto-Save / Restore (✅ V1 Robust Logic with Checkbox support)
+            // ==========================================
             const DRAFT_KEY = 'company_create_form_draft';
 
             function saveFormDraft() {
                 let data = {};
-                $('#company-form').find('input, select, textarea')
-                    .not('[type=file]')
-                    .not('[name="_token"]')
-                    .each(function() {
+                $('#company-form').find('input, select, textarea').not('[type=file]').not('[name="_token"]').each(
+                    function() {
                         let name = $(this).attr('name');
                         if (!name) return;
-                        data[name] = $(this).val();
+                        if ($(this).is(':checkbox')) {
+                            data[name] = $(this).is(':checked') ? '1' : '0';
+                        } else {
+                            data[name] = $(this).val();
+                        }
                     });
                 try {
                     sessionStorage.setItem(DRAFT_KEY, JSON.stringify(data));
-                } catch (e) {
-                    console.error('Draft save failed:', e);
-                }
+                } catch (e) {}
             }
 
             function restoreFormDraft() {
-                let raw;
                 try {
-                    raw = sessionStorage.getItem(DRAFT_KEY);
-                } catch (e) {
-                    return;
-                }
-                if (!raw) return;
-
-                try {
+                    let raw = sessionStorage.getItem(DRAFT_KEY);
+                    if (!raw) return;
                     let data = JSON.parse(raw);
                     Object.keys(data).forEach(function(name) {
                         let field = $('#company-form').find('[name="' + name + '"]');
-                        // সার্ভার থেকে old() এর মাধ্যমে আগে থেকে ভ্যালু থাকলে সেটাকে override করবে না
                         if (field.length && !field.val() && data[name]) {
-                            field.val(data[name]);
+                            if (field.is(':checkbox')) {
+                                field.prop('checked', data[name] === '1');
+                            } else {
+                                field.val(data[name]);
+                            }
                         }
                     });
-                } catch (e) {
-                    console.error('Draft restore failed:', e);
-                }
+                } catch (e) {}
             }
 
             function clearFormDraft() {
@@ -454,42 +559,34 @@
                     sessionStorage.removeItem(DRAFT_KEY);
                 } catch (e) {}
             }
-
-            // পেজ লোড হওয়ার সাথে সাথেই আগের ড্রাফট থাকলে ফিরিয়ে আনো
             restoreFormDraft();
 
             // ==========================================
-            // 1. Auto-generate slug from company name
+            // 2. Auto-generate slug
             // ==========================================
-            // যদি রিস্টোর করা ড্রাফটে slug আগে থেকেই থাকে, ধরে নাও ইউজার নিজে বসিয়েছিল
-            if ($('#slug').val()) {
-                $('#slug').data('manual', true);
-            }
-
+            if ($('#slug').val()) $('#slug').data('manual', true);
             $('#name').on('input', function() {
-                let slugInput = $('#slug');
-                if (!slugInput.data('manual')) {
-                    slugInput.val($(this).val().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(
+                if (!$('#slug').data('manual')) {
+                    $('#slug').val($(this).val().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(
                         /^-+|-+$/g, ''));
                 }
             });
-
             $('#slug').on('input', function() {
-                // slug ফিল্ড খালি করে দিলে আবার auto-generate মোডে ফিরে যাবে
                 $(this).data('manual', $(this).val().trim() !== '');
             });
 
             // ==========================================
-            // 2. Logo Upload + Crop (drag/zoom/rotate)
+            // 3. Logo Upload + Crop (✅ V2 Improved Validation & Fallback)
             // ==========================================
             const logoInput = document.getElementById('logo');
             const cropImage = document.getElementById('crop-image');
             const cropModalEl = document.getElementById('cropModal');
-            const cropModal = (typeof bootstrap !== 'undefined') ? new bootstrap.Modal(cropModalEl) : null;
-
+            const cropModal = new bootstrap.Modal(cropModalEl);
             let cropper = null;
             let cropConfirmed = false;
-            const maxSizeBytes = 2 * 1024 * 1024; // 2MB
+
+            // ✅ V2 Additions: Strict type checking and fallback
+            const maxSizeBytes = 2 * 1024 * 1024;
             const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/svg+xml'];
 
             function showEmptyLogoPreview() {
@@ -509,39 +606,27 @@
                 showEmptyLogoPreview();
             }
 
-            function openCropperWithFile(file) {
-                const reader = new FileReader();
-                reader.onload = function(ev) {
-                    cropImage.src = ev.target.result;
-                    cropConfirmed = false;
-                    if (cropModal) {
-                        cropModal.show();
-                    }
-                };
-                reader.readAsDataURL(file);
-            }
-
             $(logoInput).on('change', function(e) {
                 const file = e.target.files[0];
-
                 if (!file) {
                     showEmptyLogoPreview();
                     return;
                 }
 
+                // ✅ V2: Size validation
                 if (file.size > maxSizeBytes) {
                     alert('লোগোর সাইজ 2MB এর বেশি হতে পারবে না। অনুগ্রহ করে ছোট সাইজের ফাইল সিলেক্ট করুন।');
                     resetLogoInput();
                     return;
                 }
 
+                // ✅ V2: Type validation
                 if (!allowedTypes.includes(file.type)) {
                     alert('শুধুমাত্র PNG, JPG অথবা SVG ফরম্যাটের ছবি আপলোড করা যাবে।');
                     resetLogoInput();
                     return;
                 }
 
-                // SVG ভেক্টর ফরম্যাট, Cropper.js এতে কাজ করে না - সরাসরি প্রিভিউ দেখাও
                 if (file.type === 'image/svg+xml') {
                     const reader = new FileReader();
                     reader.onload = function(ev) {
@@ -551,8 +636,8 @@
                     return;
                 }
 
+                // ✅ V2: Cropper.js fallback if library fails to load
                 if (typeof Cropper === 'undefined') {
-                    // Cropper.js লোড না হলে fallback হিসেবে সাধারণ প্রিভিউ দেখাও
                     const reader = new FileReader();
                     reader.onload = function(ev) {
                         showFilledLogoPreview(ev.target.result);
@@ -561,14 +646,17 @@
                     return;
                 }
 
-                openCropperWithFile(file);
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    cropImage.src = ev.target.result;
+                    cropConfirmed = false;
+                    cropModal.show();
+                };
+                reader.readAsDataURL(file);
             });
 
-            // মোডাল ওপেন হওয়ার পর Cropper ইনিশিয়ালাইজ করো (গোল সার্কেল অনুযায়ী ১:১ অনুপাত)
             $(cropModalEl).on('shown.bs.modal', function() {
-                if (cropper) {
-                    cropper.destroy();
-                }
+                if (cropper) cropper.destroy();
                 cropper = new Cropper(cropImage, {
                     aspectRatio: 1,
                     viewMode: 1,
@@ -577,40 +665,26 @@
                     cropBoxResizable: false,
                     cropBoxMovable: false,
                     background: false,
-                    guides: false,
+                    guides: false
                 });
             });
 
-            // মোডাল বন্ধ (বাতিল) করলে, এবং সেভ না করা হলে ফাইল ইনপুট রিসেট করো
             $(cropModalEl).on('hidden.bs.modal', function() {
                 if (cropper) {
                     cropper.destroy();
                     cropper = null;
                 }
-                if (!cropConfirmed) {
-                    resetLogoInput();
-                }
+                if (!cropConfirmed) resetLogoInput();
             });
 
-            $('#crop-zoom-in').on('click', function() {
-                if (cropper) cropper.zoom(0.1);
-            });
-            $('#crop-zoom-out').on('click', function() {
-                if (cropper) cropper.zoom(-0.1);
-            });
-            $('#crop-rotate-left').on('click', function() {
-                if (cropper) cropper.rotate(-45);
-            });
-            $('#crop-rotate-right').on('click', function() {
-                if (cropper) cropper.rotate(45);
-            });
-            $('#crop-reset').on('click', function() {
-                if (cropper) cropper.reset();
-            });
+            $('#crop-zoom-in').on('click', () => cropper && cropper.zoom(0.1));
+            $('#crop-zoom-out').on('click', () => cropper && cropper.zoom(-0.1));
+            $('#crop-rotate-left').on('click', () => cropper && cropper.rotate(-45));
+            $('#crop-rotate-right').on('click', () => cropper && cropper.rotate(45));
+            $('#crop-reset').on('click', () => cropper && cropper.reset());
 
             $('#crop-save-btn').on('click', function() {
                 if (!cropper) return;
-
                 cropper.getCroppedCanvas({
                     width: 400,
                     height: 400,
@@ -618,89 +692,64 @@
                     imageSmoothingQuality: 'high'
                 }).toBlob(function(blob) {
                     if (!blob) return;
-
-                    const originalFile = logoInput.files[0];
-                    const baseName = originalFile ? originalFile.name.replace(/\.[^/.]+$/, '') :
-                        'logo';
+                    const baseName = logoInput.files[0].name.replace(/\.[^/.]+$/, '');
                     const croppedFile = new File([blob], baseName + '.png', {
                         type: 'image/png'
                     });
-
-                    // cropped ফাইলটাকে আসল file input-এ বসিয়ে দাও, যাতে ফর্ম সাবমিটে এটাই সার্ভারে যায়
                     const dataTransfer = new DataTransfer();
                     dataTransfer.items.add(croppedFile);
                     logoInput.files = dataTransfer.files;
-
                     showFilledLogoPreview(URL.createObjectURL(blob));
-
                     cropConfirmed = true;
-                    if (cropModal) {
-                        cropModal.hide();
-                    }
+                    cropModal.hide();
                 }, 'image/png');
             });
 
-            // "আবার ক্রপ করুন" - বর্তমানে সেট করা ফাইল দিয়ে আবার cropper খোলো
             $('#recrop-btn').on('click', function() {
                 const currentFile = logoInput.files[0];
                 if (!currentFile || currentFile.type === 'image/svg+xml') return;
-                openCropperWithFile(currentFile);
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    cropImage.src = ev.target.result;
+                    cropConfirmed = false;
+                    cropModal.show();
+                };
+                reader.readAsDataURL(currentFile);
             });
 
             // ==========================================
-            // 3. Plan Details Display
+            // 4. Plan Details Display (✅ V1 Clean Logic, avoided V2 duplication)
             // ==========================================
             $('#plan_id').on('change', function() {
                 const selectedOption = $(this).find('option:selected');
-                const detailsDiv = $('#plan-details');
-                const infoDiv = $('#plan-info');
-
                 if ($(this).val() && selectedOption.data('price')) {
-                    const price = selectedOption.data('price');
-                    const trial = selectedOption.data('trial');
-                    const users = selectedOption.data('users');
-                    const branches = selectedOption.data('branches');
-
-                    infoDiv.html(`
+                    $('#plan-info').html(`
                         <div class="mt-1">
-                            <strong>Price:</strong> $${parseFloat(price).toFixed(2)}/month<br>
-                            <strong>Trial Period:</strong> ${trial} days<br>
-                            <strong>User Limit:</strong> ${users} users<br>
-                            <strong>Branch Limit:</strong> ${branches} branches
+                            <strong>Price:</strong> $${parseFloat(selectedOption.data('price')).toFixed(2)}/month<br>
+                            <strong>Trial Period:</strong> ${selectedOption.data('trial')} days<br>
+                            <strong>User Limit:</strong> ${selectedOption.data('users')} users<br>
+                            <strong>Branch Limit:</strong> ${selectedOption.data('branches')} branches
                         </div>
                     `);
-                    detailsDiv.show();
+                    $('#plan-details').show();
                 } else {
-                    detailsDiv.hide();
+                    $('#plan-details').hide();
                 }
             });
-
-            // Trigger plan change on page load if old value exists
-            const planSelect = $('#plan_id');
-            if (planSelect.val()) {
-                planSelect.trigger('change');
-            }
-
-            // ইউজার নিজে ইচ্ছাকৃতভাবে "Cancel" করলে ড্রাফট মুছে ফেলো
-            $('#cancel-btn').on('click', function() {
-                clearFormDraft();
-            });
+            if ($('#plan_id').val()) $('#plan_id').trigger('change');
 
             // ==========================================
-            // 4. Live Validation (Blur Event)
+            // 5. Live Validation (✅ V2 Addition: Blur Event)
             // ==========================================
-            // যখন কোনো ফিল্ড থেকে কার্সর সরে যাবে (blur), তখন ভ্যালিডেশন চেক হবে
             $('#company-form').on('blur', '.form-control, .form-select', function() {
                 let input = $(this);
-                if (this.type === 'file') return; // ফাইল ইনপুট চেক করবে না
-
+                if (this.type === 'file') return;
                 if (!this.checkValidity()) {
                     input.addClass('is-invalid');
                     let feedback = input.siblings('.invalid-feedback').first();
                     if (!feedback.length && input.parent().hasClass('input-group')) {
                         feedback = input.parent().next('.invalid-feedback');
                     }
-
                     if (feedback.length) {
                         feedback.text(this.validationMessage || 'Invalid input.').show().css('display',
                             'block');
@@ -713,94 +762,66 @@
             });
 
             // ==========================================
-            // 5. Live Error Clearing (Input Event)
+            // 6. Live Error Clearing & Draft Save
             // ==========================================
-            // ইউজার টাইপ করা শুরু করলেই সাথে সাথে এরর মেসেজ চলে যাবে
             $('#company-form').on('input change', '.form-control, .form-select', function() {
                 let input = $(this);
                 input.removeClass('is-invalid');
-
                 let feedback = input.siblings('.invalid-feedback').first();
                 if (!feedback.length && input.parent().hasClass('input-group')) {
                     feedback = input.parent().next('.invalid-feedback');
                 }
-
                 if (feedback.length) {
                     feedback.text('').hide();
                 } else {
                     let target = input.parent().hasClass('input-group') ? input.parent() : input;
                     target.next('.invalid-feedback').remove();
                 }
-
-                // প্রতিটি পরিবর্তনে ড্রাফট অটো-সেভ (file input বাদে, কারণ সেটা সেভ করা যায় না)
-                if (this.type !== 'file') {
-                    saveFormDraft();
-                }
+                if (this.type !== 'file') saveFormDraft();
             });
 
             // ==========================================
-            // 6. AJAX Form Submission (No Page Reload)
+            // 7. AJAX Form Submission with Smooth Scroll (✅ V2 Addition: Scroll to error)
             // ==========================================
             $('#company-form').on('submit', function(e) {
-                e.preventDefault(); // পেজ রিলোড হতে দেব না
-
+                e.preventDefault();
                 let form = $(this);
                 let formData = new FormData(this);
-                let url = form.attr('action');
                 let submitBtn = $('#submit-btn');
-                let originalBtnHtml = submitBtn.html();
 
-                // বাটন ডিজেবল করে লোডিং দেখাও
                 submitBtn.prop('disabled', true).html(
                     '<span class="spinner-border spinner-border-sm me-1"></span> Saving...');
-
-                // সাবমিটের আগে সব পুরনো এরর ক্লিয়ার করে দাও
                 form.find('.is-invalid').removeClass('is-invalid');
                 form.find('.invalid-feedback').text('').hide();
-                form.find('.invalid-feedback[style*="display: block"]').remove();
 
                 $.ajax({
-                    url: url,
+                    url: form.attr('action'),
                     type: 'POST',
                     data: formData,
                     processData: false,
                     contentType: false,
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                        'Accept': 'application/json' // লারাভেলকে JSON এরর রিটার্ন করতে বলছি
+                        'Accept': 'application/json'
                     },
                     success: function(response) {
-                        // ফর্ম সফলভাবে সাবমিট হয়ে গেছে, তাই সেভ করা ড্রাফট মুছে ফেলো
                         clearFormDraft();
-
-                        // ✅ toastr দিয়ে টোস্ট দেখাও, তারপর সামান্য দেরি করে রিডাইরেক্ট করো
-                        // যাতে টোস্ট রিডাইরেক্টের কারণে সাথে সাথে হারিয়ে না যায়।
-                        // নোট: কন্ট্রোলারের JSON রেসপন্স-এর ব্রাঞ্চেও যদি session()->flash('success', ...)
-                        // সেট করা থাকে, তাহলে redirect হওয়ার পর index পেজে আবার একই মেসেজ toastr
-                        // দেখাবে (partials/alerts.blade.php থেকে) - ডাবল টোস্ট এড়াতে এই ব্রাঞ্চে
-                        // flash সেট না করাই ভালো, শুধু JSON message পাঠান।
                         toastr.success(response.message || 'Company saved successfully!',
                             'Success');
-                        const redirectUrl = response.redirect ||
-                            '{{ route('superadmin.companies.index') }}';
-                        setTimeout(function() {
-                            window.location.href = redirectUrl;
+                        setTimeout(() => {
+                            window.location.href = response.redirect ||
+                                '{{ route('superadmin.companies.index') }}';
                         }, 1200);
                     },
                     error: function(xhr) {
-                        // ভ্যালিডেশন ফেইল হলেও বর্তমান ডেটা ড্রাফটে সেভ থাকুক (রিলোড করলেও যেন না হারায়)
                         saveFormDraft();
-
                         if (xhr.status === 422) {
-                            // ভ্যালিডেশন এরর হলে ফিল্ডের নিচে এরর দেখাও
-                            let errors = xhr.responseJSON.errors;
                             let firstErrorElement = null;
-
-                            $.each(errors, function(key, messages) {
-                                let input = form.find('[name="' + key + '"]');
+                            $.each(xhr.responseJSON.errors, function(key, messages) {
+                                let input = form.find('[name="' + key + '"], [name="' +
+                                    key + '[]"]');
                                 if (input.length) {
                                     input.addClass('is-invalid');
-
                                     let feedback = input.siblings('.invalid-feedback')
                                         .first();
                                     if (!feedback.length && input.parent().hasClass(
@@ -808,23 +829,21 @@
                                         feedback = input.parent().next(
                                             '.invalid-feedback');
                                     }
-
-                                    if (feedback.length) {
-                                        feedback.text(messages[0]).show().css('display',
-                                            'block');
-                                    } else {
+                                    if (!feedback.length) {
                                         let target = input.parent().hasClass(
                                             'input-group') ? input.parent() : input;
                                         target.after(
                                             '<div class="invalid-feedback" style="display:block;">' +
                                             messages[0] + '</div>');
+                                    } else {
+                                        feedback.text(messages[0]).show().css('display',
+                                            'block');
                                     }
-
                                     if (!firstErrorElement) firstErrorElement = input;
                                 }
                             });
 
-                            // প্রথম এরর ফিল্ডে স্ক্রল করো
+                            // ✅ V2 Addition: Smooth scroll to first error
                             if (firstErrorElement) {
                                 $('html, body').animate({
                                     scrollTop: firstErrorElement.offset().top - 150
@@ -833,51 +852,16 @@
                         } else {
                             toastr.error('An unexpected error occurred. Please try again.',
                                 'Error');
-                            console.error(xhr.responseText);
                         }
                     },
                     complete: function() {
-                        submitBtn.prop('disabled', false).html(originalBtnHtml);
+                        submitBtn.prop('disabled', false).html(
+                            '<i class="ti ti-device-floppy me-1"></i> Save Company');
                     }
                 });
             });
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const planSelect = document.getElementById('plan_id');
-            const planDetailsDiv = document.getElementById('plan-details');
-            const planInfoDiv = document.getElementById('plan-info');
 
-            if (planSelect) {
-                planSelect.addEventListener('change', function() {
-                    const selectedOption = this.options[this.selectedIndex];
-
-                    if (this.value !== "") {
-                        const price = selectedOption.getAttribute('data-price');
-                        const trial = selectedOption.getAttribute('data-trial');
-                        const users = selectedOption.getAttribute('data-users');
-                        const branches = selectedOption.getAttribute('data-branches');
-
-                        planInfoDiv.innerHTML = `
-                    <ul class="mb-0 mt-1">
-                        <li><strong>Price:</strong> $${parseFloat(price).toFixed(2)} / month</li>
-                        <li><strong>Trial Period:</strong> ${trial} Days</li>
-                        <li><strong>Max Users:</strong> ${users}</li>
-                        <li><strong>Max Branches:</strong> ${branches}</li>
-                    </ul>
-                `;
-                        planDetailsDiv.style.display = 'block';
-                    } else {
-                        planDetailsDiv.style.display = 'none';
-                    }
-                });
-
-                // Trigger change event on page load if a value is already selected (e.g., during validation error)
-                if (planSelect.value !== "") {
-                    planSelect.dispatchEvent(new Event('change'));
-                }
-            }
+            $('#cancel-btn').on('click', clearFormDraft);
         });
     </script>
 @endpush

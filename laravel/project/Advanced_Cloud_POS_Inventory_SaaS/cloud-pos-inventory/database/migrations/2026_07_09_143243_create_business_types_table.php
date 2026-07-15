@@ -10,12 +10,15 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-        Schema::create('business_types', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
-    }
+{
+    Schema::create('business_types', function (Blueprint $table) {
+        $table->id();
+        $table->string('name');
+        $table->string('slug')->unique();
+        $table->boolean('is_active')->default(true); // ✅ এই লাইনটি যোগ করুন
+        $table->timestamps();
+    });
+}
 
     /**
      * Reverse the migrations.

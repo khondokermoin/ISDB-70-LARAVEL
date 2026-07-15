@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ProfileController;
 
-// Super Admin Controllers (existing)
+// ==========================================
+// Super Admin Controllers
+// ==========================================
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboard;
 use App\Http\Controllers\SuperAdmin\CompanyController;
 use App\Http\Controllers\SuperAdmin\PlanController;
@@ -32,7 +34,9 @@ use App\Http\Controllers\SuperAdmin\AnnouncementController;
 use App\Http\Controllers\SuperAdmin\ImpersonateController;
 use App\Http\Controllers\SuperAdmin\ReportController as SuperAdminReportController;
 
+// ==========================================
 // Company Controllers
+// ==========================================
 use App\Http\Controllers\Company\DashboardController as CompanyDashboard;
 use App\Http\Controllers\Company\BranchController;
 use App\Http\Controllers\Company\UserController as CompanyUserController;
@@ -44,7 +48,16 @@ use App\Http\Controllers\Company\SupplierController;
 use App\Http\Controllers\Company\ExpenseController;
 use App\Http\Controllers\Company\ReportController as CompanyReportController;
 
+// Company Controllers added based on Sidebar requirements
+use App\Http\Controllers\Company\SaleController as CompanySaleController;
+use App\Http\Controllers\Company\InventoryController as CompanyInventoryController;
+use App\Http\Controllers\Company\CompanySettingController;
+use App\Http\Controllers\Company\SubscriptionController as CompanySubscriptionController;
+use App\Http\Controllers\Company\AnnouncementController as CompanyAnnouncementController;
+
+// ==========================================
 // Branch Controllers
+// ==========================================
 use App\Http\Controllers\Branch\DashboardController as BranchDashboard;
 use App\Http\Controllers\Branch\InventoryController;
 use App\Http\Controllers\Branch\PosController;
@@ -81,17 +94,14 @@ Route::middleware(['auth', 'verified', 'role:Super Admin'])
         Route::resource('users', SuperAdminUserController::class)->except(['show']);
         Route::resource('roles', RoleController::class)->except(['show']);
 
-       // Global Settings
+        // Global Settings
         Route::prefix('settings')->name('settings.')->group(function () {
-            // General
             Route::get('/general', [SettingController::class, 'general'])->name('general');
             Route::post('/general', [SettingController::class, 'update'])->name('general.update'); 
 
-            // Payment
             Route::get('/payment', [SettingController::class, 'payment'])->name('payment');
             Route::post('/payment', [SettingController::class, 'update'])->name('payment.update');
 
-            // Email
             Route::get('/email', [SettingController::class, 'email'])->name('email');
             Route::post('/email', [SettingController::class, 'update'])->name('email.update');
         });
@@ -103,7 +113,7 @@ Route::middleware(['auth', 'verified', 'role:Super Admin'])
             Route::get('/info', [SystemController::class, 'info'])->name('info');
         });
 
-        // Global Master Data (modal-based CRUD -> no create/edit views needed)
+        // Global Master Data
         Route::resource('/business-types', BusinessTypeController::class)->except(['create', 'edit', 'show']);
         Route::resource('/business-modules', BusinessModuleController::class)->except(['create', 'edit', 'show']);
         Route::resource('/global-categories', GlobalCategoryController::class)->except(['create', 'edit', 'show']);
@@ -116,7 +126,7 @@ Route::middleware(['auth', 'verified', 'role:Super Admin'])
         Route::resource('/barcode-settings', BarcodeSettingController::class)->except(['create', 'edit', 'show']);
         Route::resource('/email-templates', EmailTemplateController::class)->except(['create', 'edit', 'show']);
 
-        // Addons (marketplace route MUST come before the {addon} wildcard)
+        // Addons
         Route::get('/addons/marketplace', [AddonMarketplaceController::class, 'index'])->name('addons.marketplace');
         Route::resource('/addons', AddonController::class)->except(['create', 'edit', 'show']);
 
@@ -126,16 +136,11 @@ Route::middleware(['auth', 'verified', 'role:Super Admin'])
         Route::get('/tenants', [ImpersonateController::class, 'index'])->name('tenants.index');
 
         // Global Reports
-        /* Route::get('/reports/revenue', [SuperAdminReportController::class, 'revenue'])->name('reports.revenue');
-        Route::get('/reports/tenant-usage', [SuperAdminReportController::class, 'tenantUsage'])->name('reports.tenant-usage'); */
         Route::get('/reports', [SuperAdminReportController::class, 'index'])->name('reports.index');
     });
 
 // ==========================================
-// 1b. Impersonation Exit (must sit OUTSIDE the Super Admin
-//     middleware group — once impersonate() runs, the logged-in
-//     user is the Company Admin, not Super Admin anymore, so a
-//     'role:Super Admin' gate here would lock the admin out)
+// 1b. Impersonation Exit
 // ==========================================
 Route::middleware(['auth'])->group(function () {
     Route::get('/impersonate/leave', [ImpersonateController::class, 'leave'])->name('impersonate.leave');
@@ -150,6 +155,10 @@ Route::middleware(['auth', 'verified', 'role:Company Admin'])
     ->group(function () {
         Route::get('/dashboard', [CompanyDashboard::class, 'index'])->name('dashboard');
 
+        // ➕ NEW: Sales & Invoices (Company Level Overview)
+        Route::get('/sales', [CompanySaleController::class, 'index'])->name('sales.index');
+        // Route::get('/sales/{sale}', [CompanySaleController::class, 'show'])->name('sales.show'); // Uncomment if needed
+
         // Branch & Staff Management
         Route::resource('/branches', BranchController::class);
         Route::resource('/users', CompanyUserController::class)->except(['show']);
@@ -158,6 +167,10 @@ Route::middleware(['auth', 'verified', 'role:Company Admin'])
         // Inventory Master Data
         Route::resource('/products', ProductController::class);
         Route::resource('/categories', CategoryController::class)->except(['create', 'edit', 'show']);
+
+        //  Inventory Operations (Low Stock & Stock Adjustment)
+        Route::get('/inventory/low-stock', [CompanyInventoryController::class, 'lowStock'])->name('inventory.low-stock');
+        Route::get('/inventory/stock-adjust', [CompanyInventoryController::class, 'stockAdjust'])->name('inventory.stock-adjust');
 
         // Purchasing & Suppliers
         Route::resource('/purchases', PurchaseController::class);
@@ -170,6 +183,16 @@ Route::middleware(['auth', 'verified', 'role:Company Admin'])
         // Company-level Reports
         Route::get('/reports/sales', [CompanyReportController::class, 'sales'])->name('reports.sales');
         Route::get('/reports/stock', [CompanyReportController::class, 'stock'])->name('reports.stock');
+
+        //  Settings & Account
+        Route::prefix('settings')->name('settings.')->group(function () {
+            Route::get('/profile', [CompanySettingController::class, 'profile'])->name('profile');
+            Route::get('/invoice', [CompanySettingController::class, 'invoice'])->name('invoice');
+        });
+
+        //  Subscription & Announcements
+        Route::get('/subscription', [CompanySubscriptionController::class, 'index'])->name('subscription.index');
+        Route::get('/announcements', [CompanyAnnouncementController::class, 'index'])->name('announcements.index');
     });
 
 // ==========================================
