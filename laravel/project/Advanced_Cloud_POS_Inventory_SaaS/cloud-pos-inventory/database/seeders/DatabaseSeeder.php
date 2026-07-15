@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         $managerRole = Role::firstOrCreate(['name' => 'Manager']);
         $salesmanRole = Role::firstOrCreate(['name' => 'Salesman']);
 
-        // ৩. Super Admin (SaaS এর মালিক - এর company_id NULL থাকবে, যা স্বাভাবিক)
+        // ৩. Super Admin (SaaS এর মালিক - এর company_id NULL থাকবে)
         $superAdmin = User::create([
             'name' => 'Khondoker Moin Hossain',
             'email' => 'admin@gmail.com',
@@ -34,7 +34,11 @@ class DatabaseSeeder extends Seeder
         ]);
         $superAdmin->assignRole($superAdminRole);
 
-        // ৪. Company Admin (দোকান মালিক)
+        // ==========================================
+        // ✅ সংশোধিত লজিক: প্রথমে ইউজার, তারপর কোম্পানি
+        // ==========================================
+        
+        // ৪. প্রথমে Company Admin (Shop Owner) ইউজার তৈরি করা (company_id আপাতত ফাঁকা)
         $companyAdmin = User::create([
             'name' => 'Shop Owner',
             'email' => 'owner@gmail.com',
@@ -42,11 +46,27 @@ class DatabaseSeeder extends Seeder
         ]);
         $companyAdmin->assignRole($companyAdminRole);
 
-        // ৫. Manager এবং Salesman তৈরি
+        // ৫. এখন কোম্পানি তৈরি করা, এবং উপরের ইউজারের ID কে user_id হিসেবে পাস করা
+        $freeTrialPlan = Plan::where('slug', 'free-trial')->first();
+        
+        $company = Company::create([
+            'name' => 'Demo Super Shop',
+            'email' => 'demo@shop.com',
+            'user_id' => $companyAdmin->id, // ✅ এখানে user_id পাস করা হচ্ছে
+            'plan_id' => $freeTrialPlan ? $freeTrialPlan->id : 1, 
+            'status' => 'trial',
+            'trial_ends_at' => now()->addDays(14),
+        ]);
+
+        // ৬. এখন ইউজারের company_id আপডেট করা
+        $companyAdmin->update(['company_id' => $company->id]);
+
+        // ৭. Manager এবং Salesman তৈরি (এখন company_id রেডি আছে)
         $manager = User::create([
             'name' => 'Branch Manager',
             'email' => 'manager@gmail.com',
             'password' => Hash::make('password'),
+            'company_id' => $company->id,
         ]);
         $manager->assignRole($managerRole);
 
@@ -54,39 +74,27 @@ class DatabaseSeeder extends Seeder
             'name' => 'Cashier',
             'email' => 'salesman@gmail.com',
             'password' => Hash::make('password'),
+            'company_id' => $company->id,
         ]);
         $salesman->assignRole($salesmanRole);
 
-        // ৬. কোম্পানি তৈরি (Company Admin কে মালিক হিসেবে সেট করা)
-        $freeTrialPlan = Plan::where('slug', 'free-trial')->first();
+        // ৮. কোম্পানির জন্য সাবস্ক্রিপশন তৈরি
+        if ($freeTrialPlan) {
+            Subscription::create([
+                'company_id' => $company->id,
+                'plan_id' => $freeTrialPlan->id,
+                'status' => 'trial',
+                'started_at' => now(),
+                'trial_ends_at' => now()->addDays(14),
+                'ends_at' => now()->addDays(14),
+            ]);
+        }
+
+        // ৯. কোম্পানির জন্য ডিফল্ট মাস্টার ডাটা (Category) সিড করা
+        $this->call([
+            CategorySeeder::class,
+        ]);
         
-        $company = Company::create([
-            'name' => 'Demo Super Shop',
-            'email' => 'demo@shop.com',
-            'user_id' => $companyAdmin->id, 
-            'plan_id' => $freeTrialPlan->id, 
-            'status' => 'trial',
-            'trial_ends_at' => now()->addDays(14),
-        ]);
-
-        // ==========================================
-        // 🌟 সবচেয়ে গুরুত্বপূর্ণ ধাপ (যা আগে মিসিং ছিল)
-        // ==========================================
-        // কোম্পানি তৈরি হওয়ার পর, এই কোম্পানির অধীনে থাকা ইউজারদের company_id আপডেট করা
-        $companyAdmin->update(['company_id' => $company->id]);
-        $manager->update(['company_id' => $company->id]);
-        $salesman->update(['company_id' => $company->id]);
-        // (Super Admin এর company_id NULL থাকবে, কারণ তিনি SaaS এর মালিক)
-
-
-        // ৭. কোম্পানির জন্য সাবস্ক্রিপশন তৈরি
-        Subscription::create([
-            'company_id' => $company->id,
-            'plan_id' => $freeTrialPlan->id,
-            'status' => 'trial',
-            'started_at' => now(),
-            'trial_ends_at' => now()->addDays(14),
-            'ends_at' => now()->addDays(14),
-        ]);
+        $this->command->info('Database seeding completed successfully!');
     }
 }

@@ -155,7 +155,7 @@ Route::middleware(['auth', 'verified', 'role:Company Admin'])
     ->group(function () {
         Route::get('/dashboard', [CompanyDashboard::class, 'index'])->name('dashboard');
 
-        // ➕ NEW: Sales & Invoices (Company Level Overview)
+        //  Sales & Invoices (Company Level Overview)
         Route::get('/sales', [CompanySaleController::class, 'index'])->name('sales.index');
         // Route::get('/sales/{sale}', [CompanySaleController::class, 'show'])->name('sales.show'); // Uncomment if needed
 
@@ -166,7 +166,9 @@ Route::middleware(['auth', 'verified', 'role:Company Admin'])
 
         // Inventory Master Data
         Route::resource('/products', ProductController::class);
-        Route::resource('/categories', CategoryController::class)->except(['create', 'edit', 'show']);
+        // Inventory Master Data
+        Route::resource('/products', ProductController::class);
+        Route::resource('/categories', CategoryController::class); 
 
         //  Inventory Operations (Low Stock & Stock Adjustment)
         Route::get('/inventory/low-stock', [CompanyInventoryController::class, 'lowStock'])->name('inventory.low-stock');
