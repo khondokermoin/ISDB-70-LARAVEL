@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE SIGNAL — Independent News, Clearly Reported</title>
+<meta name="description" content="Breaking news, politics, business, sports, technology and in-depth reporting from Bangladesh and around the world — brought to you by The Signal.">
+<meta name="theme-color" content="#12181f">
+
+<meta name="keywords" content="Bangladesh news, breaking news, politics, business, sports, technology, The Signal">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.thesignalnews.example/index.html">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="THE SIGNAL">
+<meta property="og:title" content="THE SIGNAL — Independent News, Clearly Reported">
+<meta property="og:description" content="Breaking news, politics, business, sports, technology and in-depth reporting from Bangladesh and around the world — brought to you by The Signal.">
+<meta property="og:url" content="https://www.thesignalnews.example/index.html">
+<meta property="og:image" content="https://picsum.photos/seed/heroflood/1200/630">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="bn_BD">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="THE SIGNAL — Independent News, Clearly Reported">
+<meta name="twitter:description" content="Breaking news, politics, business, sports, technology and in-depth reporting from Bangladesh and around the world — brought to you by The Signal.">
+<meta name="twitter:image" content="https://picsum.photos/seed/heroflood/1200/630">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsMediaOrganization",
+  "name": "THE SIGNAL",
+  "url": "https://www.thesignalnews.example/index.html",
+  "logo": "https://www.thesignalnews.example/assets/img/logo.png",
+  "sameAs": [
+    "https://facebook.com/thesignal",
+    "https://x.com/thesignal",
+    "https://instagram.com/thesignal",
+    "https://youtube.com/thesignal"
+  ]
+}
+</script>
+
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,500&family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&family=Hind+Siliguri:wght@400;600&display=swap" rel="stylesheet">
+
+<!-- Bootstrap 5 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+<!-- Custom -->
+<link href="assets/css/style.css" rel="stylesheet">
+<link href="assets/css/responsive.css" rel="stylesheet">
+</head>
+<body>
+
+<a href="#mainContent" class="visually-hidden-focusable" data-i18n="skip_link">Skip to main content</a>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- ============================= TOP UTILITY BAR ============================= -->
+<div class="topbar">
+  <div class="container-fluid px-3 px-lg-5 topbar-inner">
+    <div class="topbar-ticker">
+      <span class="pulse-dot" aria-hidden="true"></span>
+      <div class="ticker-track">
+        <span id="liveDateTime">Loading date…</span>
+        <span>·</span>
+        <span><i class="fa-solid fa-cloud-sun me-1"></i> Dhaka 31°C, Partly Cloudy</span>
+        <span>·</span>
+        <span>Dollar: ৳119.40</span>
+        <span>·</span>
+        <span>DSEX: 5,412.6 <i class="fa-solid fa-arrow-up text-success"></i></span>
+      </div>
+    </div>
+    <div class="topbar-meta">
+      <select class="lang-switch" id="langSwitch" aria-label="Language switcher">
+        <option value="en">English</option>
+        <option value="bn">বাংলা</option>
+      </select>
+      <div class="social-links d-none d-md-flex">
+        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" aria-label="Twitter / X"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================= MASTHEAD ============================= -->
+<header class="masthead">
+  <div class="container-fluid px-3 px-lg-5 masthead-inner">
+    <a href="index.html" class="brand text-decoration-none">
+      <span class="mark">S</span>
+      <div>
+        <div class="brand-name">THE <em>SIGNAL</em></div>
+        <div class="brand-tagline" data-i18n="tagline">Cutting through the noise</div>
+      </div>
+    </a>
+
+    <form class="masthead-search d-none d-md-flex" role="search">
+      <div class="input-group">
+        <input type="search" class="form-control" placeholder="Search news, topics, authors…" aria-label="Search" data-i18n-placeholder="search_placeholder">
+        <button class="btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </div>
+    </form>
+
+    <div class="masthead-actions">
+      <button class="icon-btn d-md-none" id="searchToggle" aria-label="Toggle search"><i class="fa-solid fa-magnifying-glass"></i></button>
+      <button class="icon-btn dark-toggle" aria-label="Toggle dark mode">
+        <i class="fa-solid fa-moon"></i>
+        <i class="fa-solid fa-sun"></i>
+      </button>
+      <button class="icon-btn" aria-label="Notifications" data-toast="You're all caught up — no new alerts" data-toast-icon="fa-bell">
+        <i class="fa-regular fa-bell"></i>
+        <span class="badge-dot">3</span>
+      </button>
+      <a href="#" class="btn btn-outline-ink btn-sm d-none d-lg-inline-block rounded-pill px-3" data-i18n="btn_login">Log in</a>
+      <a href="#" class="btn btn-signal btn-sm d-none d-lg-inline-block rounded-pill px-3" data-i18n="btn_register">Register</a>
+      <button class="icon-btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu" aria-label="Open menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ============================= MAIN NAVIGATION ============================= -->
+<nav class="main-nav d-none d-lg-block" aria-label="Primary navigation">
+  <div class="container-fluid px-lg-5">
+    <ul class="navbar-nav flex-row flex-wrap">
+      <li class="nav-item active"><a class="nav-link" href="index.html" data-i18n="nav_home">Home</a></li>
+      <li class="nav-item"><a class="nav-link" href="category.html?cat=bangladesh" data-i18n="nav_bd">Bangladesh</a></li>
+      <li class="nav-item"><a class="nav-link" href="category.html?cat=international" data-i18n="nav_intl">International</a></li>
+      <li class="nav-item has-mega position-relative">
+        <a class="nav-link" href="category.html?cat=politics" data-i18n="nav_politics">Politics</a>
+        <div class="mega-menu">
+          <div class="container-fluid px-lg-5">
+            <div class="row g-4">
+              <div class="col-lg-3">
+                <h6>Sub Topics</h6>
+                <a href="category.html?cat=politics">Parliament</a>
+                <a href="category.html?cat=politics">Elections</a>
+                <a href="category.html?cat=politics">Policy &amp; Law</a>
+                <a href="category.html?cat=politics">Local Government</a>
+              </div>
+              <div class="col-lg-3">
+                <h6>Opinion</h6>
+                <a href="category.html?cat=opinion">Editorial Desk</a>
+                <a href="category.html?cat=opinion">Columnists</a>
+                <a href="category.html?cat=opinion">Fact Check</a>
+              </div>
+              <div class="col-lg-6">
+                <h6>Featured</h6>
+                <div class="row g-3 mega-feature">
+                  <div class="col-6">
+                    <img src="https://picsum.photos/seed/parliament1/300/160" alt="Parliament session in session hall" loading="lazy" class="mb-2">
+                    <a href="single.html" class="fw-semibold">Budget session begins Monday with new tax proposals</a>
+                  </div>
+                  <div class="col-6">
+                    <img src="https://picsum.photos/seed/election2/300/160" alt="Voters lining up outside a polling station" loading="lazy" class="mb-2">
+                    <a href="single.html" class="fw-semibold">Election commission announces revised voter rolls</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item"><a class="nav-link" href="category.html?cat=economy" data-i18n="nav_economy">Economy</a></li>
+      <li class="nav-item"><a class="nav-link" href="category.html?cat=sports" data-i18n="nav_sports">Sports</a></li>
+      <li class="nav-item"><a class="nav-link" href="category.html?cat=entertainment" data-i18n="nav_entertainment">Entertainment</a></li>
+      <li class="nav-item has-mega position-relative">
+        <a class="nav-link" href="category.html?cat=technology" data-i18n="nav_tech">Technology</a>
+        <div class="mega-menu">
+          <div class="container-fluid px-lg-5">
+            <div class="row g-4">
+              <div class="col-lg-3"><h6>Coverage</h6><a href="category.html?cat=technology">AI &amp; Software</a><a href="category.html?cat=technology">Gadgets</a><a href="category.html?cat=technology">Startups</a><a href="category.html?cat=technology">Cybersecurity</a></div>
+              <div class="col-lg-3"><h6>Science</h6><a href="category.html?cat=science">Space</a><a href="category.html?cat=science">Climate</a><a href="category.html?cat=science">Health Research</a></div>
+              <div class="col-lg-6">
+                <div class="row g-3 mega-feature">
+                  <div class="col-6"><img src="https://picsum.photos/seed/aichip3/300/160" alt="Close-up of a computer processor chip" loading="lazy" class="mb-2"><a href="single.html" class="fw-semibold">Local startups race to build Bengali-language AI models</a></div>
+                  <div class="col-6"><img src="https://picsum.photos/seed/rocket4/300/160" alt="Rocket launching with exhaust trail" loading="lazy" class="mb-2"><a href="single.html" class="fw-semibold">Satellite launch to expand rural internet access</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item"><a class="nav-link" href="category.html?cat=science" data-i18n="nav_science">Science</a></li>
+      <li class="nav-item"><a class="nav-link" href="category.html?cat=education" data-i18n="nav_education">Education</a></li>
+      <li class="nav-item"><a class="nav-link" href="category.html?cat=health" data-i18n="nav_health">Health</a></li>
+      <li class="nav-item"><a class="nav-link" href="category.html?cat=lifestyle" data-i18n="nav_lifestyle">Lifestyle</a></li>
+      <li class="nav-item"><a class="nav-link" href="category.html?cat=travel" data-i18n="nav_travel">Travel</a></li>
+      <li class="nav-item"><a class="nav-link" href="category.html?cat=opinion" data-i18n="nav_opinion">Opinion</a></li>
+      <li class="nav-item"><a class="nav-link" href="#videoNews" data-i18n="nav_videos">Videos</a></li>
+      <li class="nav-item"><a class="nav-link" href="#photoGallery" data-i18n="nav_gallery">Photo Gallery</a></li>
+      <li class="nav-item ms-auto"><a class="nav-link live-tv-link" href="#liveNews" data-i18n="nav_livetv"><span class="pulse-dot"></span> Live TV</a></li>
+      <li class="nav-item"><a class="nav-link" href="contact.html" data-i18n="nav_contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Mobile Offcanvas Menu -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="mobileMenu">
+  <div class="offcanvas-header">
+    <span class="brand-name">THE <em>SIGNAL</em></span>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <nav class="nav flex-column">
+      <a class="nav-link" href="index.html" data-i18n="nav_home">Home</a>
+      <a class="nav-link" href="category.html?cat=bangladesh" data-i18n="nav_bd">Bangladesh</a>
+      <a class="nav-link" href="category.html?cat=international" data-i18n="nav_intl">International</a>
+      <a class="nav-link" href="category.html?cat=politics" data-i18n="nav_politics">Politics</a>
+      <a class="nav-link" href="category.html?cat=economy" data-i18n="nav_economy">Economy</a>
+      <a class="nav-link" href="category.html?cat=sports" data-i18n="nav_sports">Sports</a>
+      <a class="nav-link" href="category.html?cat=entertainment" data-i18n="nav_entertainment">Entertainment</a>
+      <a class="nav-link" href="category.html?cat=technology" data-i18n="nav_tech">Technology</a>
+      <a class="nav-link" href="category.html?cat=science" data-i18n="nav_science">Science</a>
+      <a class="nav-link" href="category.html?cat=education" data-i18n="nav_education">Education</a>
+      <a class="nav-link" href="category.html?cat=health" data-i18n="nav_health">Health</a>
+      <a class="nav-link" href="category.html?cat=lifestyle" data-i18n="nav_lifestyle">Lifestyle</a>
+      <a class="nav-link" href="category.html?cat=travel" data-i18n="nav_travel">Travel</a>
+      <a class="nav-link" href="category.html?cat=opinion" data-i18n="nav_opinion">Opinion</a>
+      <a class="nav-link" href="contact.html" data-i18n="nav_contact">Contact</a>
+      <div class="d-flex gap-2 mt-3">
+        <a href="#" class="btn btn-outline-ink flex-fill rounded-pill" data-i18n="btn_login">Log in</a>
+        <a href="#" class="btn btn-signal flex-fill rounded-pill" data-i18n="btn_register">Register</a>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<!-- ============================= BREAKING NEWS TICKER ============================= -->
+<div class="breaking-bar">
+  <div class="container-fluid px-3 px-lg-5 d-flex align-items-center">
+    <span class="breaking-label"><span class="pulse-dot"></span><span class="label-text" data-i18n="breaking_label">Breaking</span></span>
+    <div class="breaking-marquee">
+      <div class="track">
+        <a href="single.html">Central bank holds interest rates steady amid inflation concerns</a>
+        <a href="single.html">National cricket team seals series win with last-over finish</a>
+        <a href="single.html">Cyclone warning signal raised for coastal districts</a>
+        <a href="single.html">Cabinet approves new digital commerce policy</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Top banner ad -->
+<div class="container my-3">
+  <div class="ad-slot leaderboard">Advertisement · 970×90</div>
+</div>
+
+<main id="mainContent">
+
+  <!-- ============================= HERO ============================= -->
+  <section class="hero">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <article class="hero-lead fade-up">
+            <img src="https://picsum.photos/seed/heroflood/1200/700" alt="Aerial view of flooded rural farmland after heavy monsoon rain" loading="eager">
+            <div class="hero-lead-body">
+              <span class="tag-badge tag-live"><span class="pulse-dot"></span> Live</span>
+              <h1><a href="single.html">Monsoon floods displace thousands as rivers breach embankments in the north</a></h1>
+              <p>Relief teams are being deployed to five districts as water levels continue to rise, with forecasters warning of more rainfall through the weekend.</p>
+              <div class="hero-meta">
+                <span><i class="fa-regular fa-user"></i> Nadia Rahman</span>
+                <span><i class="fa-regular fa-clock"></i> 12 min read</span>
+                <span><i class="fa-regular fa-eye"></i> 24.1k views</span>
+              </div>
+            </div>
+          </article>
+        </div>
+        <div class="col-lg-4">
+          <div class="hero-side">
+            <div class="hero-side-item fade-up">
+              <span class="hero-side-num">01</span>
+              <img src="https://picsum.photos/seed/budget5/160/140" alt="Finance minister presenting the annual budget" loading="lazy">
+              <div class="hero-side-body">
+                <h3><a href="single.html">Finance ministry unveils record national budget for next fiscal year</a></h3>
+                <div class="meta-line">Economy · 4h ago</div>
+              </div>
+            </div>
+            <div class="hero-side-item fade-up">
+              <span class="hero-side-num">02</span>
+              <img src="https://picsum.photos/seed/cricket6/160/140" alt="Cricket player celebrating a century" loading="lazy">
+              <div class="hero-side-body">
+                <h3><a href="single.html">Opener's maiden century powers home side to series lead</a></h3>
+                <div class="meta-line">Sports · 6h ago</div>
+              </div>
+            </div>
+            <div class="hero-side-item fade-up">
+              <span class="hero-side-num">03</span>
+              <img src="https://picsum.photos/seed/startup7/160/140" alt="Team of engineers working at startup office" loading="lazy">
+              <div class="hero-side-body">
+                <h3><a href="single.html">Dhaka-based fintech startup raises $12M in Series A round</a></h3>
+                <div class="meta-line">Technology · 8h ago</div>
+              </div>
+            </div>
+            <div class="hero-side-item fade-up">
+              <span class="hero-side-num">04</span>
+              <img src="https://picsum.photos/seed/film8/160/140" alt="Director on a film set with camera crew" loading="lazy">
+              <div class="hero-side-body">
+                <h3><a href="single.html">Award-winning director's next feature enters production</a></h3>
+                <div class="meta-line">Entertainment · 10h ago</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= TRENDING / MOST READ TABS ============================= -->
+  <section class="section pt-2">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">What readers are talking about</span>
+          <h2>Trending Now</h2>
+        </div>
+        <div class="section-tabs" role="tablist">
+          <button class="active" data-tab-target="trending">Trending</button>
+          <button data-tab-target="mostread">Most Read</button>
+          <button data-tab-target="mostshared">Most Shared</button>
+          <button data-tab-target="mostcommented">Most Commented</button>
+        </div>
+      </div>
+
+      <div class="trending-panel">
+        <div class="row g-4" data-tab-panel="trending">
+          <div class="col-md-3 col-6 d-flex align-items-start gap-2">
+            <span class="rank-num">1</span>
+            <div>
+              <span class="tag-badge bg-politics mb-2">Politics</span>
+              <h4 class="row-card-title" style="font-size:.9rem;font-weight:600;"><a href="single.html">Coalition talks resume after two-week deadlock</a></h4>
+            </div>
+          </div>
+          <div class="col-md-3 col-6 d-flex align-items-start gap-2">
+            <span class="rank-num">2</span>
+            <div>
+              <span class="tag-badge bg-tech mb-2">Tech</span>
+              <h4 style="font-size:.9rem;font-weight:600;"><a href="single.html">New data protection law takes effect nationwide</a></h4>
+            </div>
+          </div>
+          <div class="col-md-3 col-6 d-flex align-items-start gap-2">
+            <span class="rank-num">3</span>
+            <div>
+              <span class="tag-badge bg-sports mb-2">Sports</span>
+              <h4 style="font-size:.9rem;font-weight:600;"><a href="single.html">Young football academy sends first player abroad</a></h4>
+            </div>
+          </div>
+          <div class="col-md-3 col-6 d-flex align-items-start gap-2">
+            <span class="rank-num">4</span>
+            <div>
+              <span class="tag-badge bg-business mb-2">Business</span>
+              <h4 style="font-size:.9rem;font-weight:600;"><a href="single.html">Garment exports climb for third straight month</a></h4>
+            </div>
+          </div>
+        </div>
+        <div class="row g-4 d-none" data-tab-panel="mostread">
+          <div class="col-md-3 col-6 d-flex align-items-start gap-2"><span class="rank-num">1</span><div><span class="tag-badge bg-health mb-2">Health</span><h4 style="font-size:.9rem;font-weight:600;"><a href="single.html">Dengue cases rise as monsoon season peaks</a></h4></div></div>
+          <div class="col-md-3 col-6 d-flex align-items-start gap-2"><span class="rank-num">2</span><div><span class="tag-badge bg-intl mb-2">World</span><h4 style="font-size:.9rem;font-weight:600;"><a href="single.html">Regional summit ends with new trade framework</a></h4></div></div>
+          <div class="col-md-3 col-6 d-flex align-items-start gap-2"><span class="rank-num">3</span><div><span class="tag-badge bg-education mb-2">Education</span><h4 style="font-size:.9rem;font-weight:600;"><a href="single.html">University entrance exam schedule released</a></h4></div></div>
+          <div class="col-md-3 col-6 d-flex align-items-start gap-2"><span class="rank-num">4</span><div><span class="tag-badge bg-entertainment mb-2">Culture</span><h4 style="font-size:.9rem;font-weight:600;"><a href="single.html">Folk music festival draws record crowd</a></h4></div></div>
+        </div>
+        <div class="row g-4 d-none" data-tab-panel="mostshared">
+          <div class="col-md-3 col-6 d-flex align-items-start gap-2"><span class="rank-num">1</span><div><span class="tag-badge bg-science mb-2">Science</span><h4 style="font-size:.9rem;font-weight:600;"><a href="single.html">Researchers map new river delta shift patterns</a></h4></div></div>
+          <div class="col-md-3 col-6 d-flex align-items-start gap-2"><span class="rank-num">2</span><div><span class="tag-badge bg-lifestyle mb-2">Lifestyle</span><h4 style="font-size:.9rem;font-weight:600;"><a href="single.html">Street food vendors turn viral sensations</a></h4></div></div>
+          <div class="col-md-3 col-6 d-flex align-items-start gap-2"><span class="rank-num">3</span><div><span class="tag-badge bg-politics mb-2">Politics</span><h4 style="font-size:.9rem;font-weight:600;"><a href="single.html">Youth voter turnout hits decade high</a></h4></div></div>
+          <div class="col-md-3 col-6 d-flex align-items-start gap-2"><span class="rank-num">4</span><div><span class="tag-badge bg-tech mb-2">Tech</span><h4 style="font-size:.9rem;font-weight:600;"><a href="single.html">Ride-share app expands to six new cities</a></h4></div></div>
+        </div>
+        <div class="row g-4 d-none" data-tab-panel="mostcommented">
+          <div class="col-md-3 col-6 d-flex align-items-start gap-2"><span class="rank-num">1</span><div><span class="tag-badge bg-business mb-2">Business</span><h4 style="font-size:.9rem;font-weight:600;"><a href="single.html">Fuel price adjustment sparks public debate</a></h4></div></div>
+          <div class="col-md-3 col-6 d-flex align-items-start gap-2"><span class="rank-num">2</span><div><span class="tag-badge bg-sports mb-2">Sports</span><h4 style="font-size:.9rem;font-weight:600;"><a href="single.html">Selectors' squad choices divide fans</a></h4></div></div>
+          <div class="col-md-3 col-6 d-flex align-items-start gap-2"><span class="rank-num">3</span><div><span class="tag-badge bg-intl mb-2">World</span><h4 style="font-size:.9rem;font-weight:600;"><a href="single.html">Border talks yield cautious optimism</a></h4></div></div>
+          <div class="col-md-3 col-6 d-flex align-items-start gap-2"><span class="rank-num">4</span><div><span class="tag-badge bg-education mb-2">Education</span><h4 style="font-size:.9rem;font-weight:600;"><a href="single.html">Debate over exam reform continues in parliament</a></h4></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= LATEST NEWS + SIDEBAR ============================= -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="row g-5">
+
+        <!-- Main column -->
+        <div class="col-lg-8">
+
+          <!-- Latest News -->
+          <div class="section-head">
+            <div><span class="eyebrow">Fresh off the desk</span><h2>Latest News</h2></div>
+            <a href="category.html" class="view-all">View all <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+          <div class="row g-4" id="latestGrid">
+
+            <div class="col-md-6 fade-up">
+              <article class="news-card">
+                <div class="thumb">
+                  <img src="https://picsum.photos/seed/portcargo9/500/340" alt="Cargo containers being loaded at a shipping port" loading="lazy">
+                  <span class="tag-badge bg-business">Business</span>
+                  <button class="bookmark-btn" aria-label="Bookmark article"><i class="fa-regular fa-bookmark"></i></button>
+                </div>
+                <div class="news-card-body">
+                  <h3><a href="single.html">Port authority reports record container volume this quarter</a></h3>
+                  <p>Officials credit upgraded scanning equipment and a new berth for faster turnaround on cargo ships.</p>
+                  <div class="news-card-foot">
+                    <span class="author-mini"><img src="https://i.pravatar.cc/60?img=12" alt="" loading="lazy"> Imran Kabir</span>
+                    <div class="card-stats">
+                      <span><i class="fa-regular fa-eye"></i> 3.2k</span>
+                      <span><i class="fa-regular fa-comment"></i> 18</span>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <div class="col-md-6 fade-up">
+              <article class="news-card">
+                <div class="thumb">
+                  <img src="https://picsum.photos/seed/classroom10/500/340" alt="Students raising hands in a classroom" loading="lazy">
+                  <span class="tag-badge bg-education">Education</span>
+                  <button class="bookmark-btn" aria-label="Bookmark article"><i class="fa-regular fa-bookmark"></i></button>
+                </div>
+                <div class="news-card-body">
+                  <h3><a href="single.html">Ministry pilots revised curriculum in 200 schools</a></h3>
+                  <p>The trial focuses on project-based learning and reduced textbook load for secondary students.</p>
+                  <div class="news-card-foot">
+                    <span class="author-mini"><img src="https://i.pravatar.cc/60?img=32" alt="" loading="lazy"> Farzana Ahmed</span>
+                    <div class="card-stats">
+                      <span><i class="fa-regular fa-eye"></i> 1.9k</span>
+                      <span><i class="fa-regular fa-comment"></i> 7</span>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <div class="col-md-6 fade-up">
+              <article class="news-card">
+                <div class="thumb">
+                  <img src="https://picsum.photos/seed/hospital11/500/340" alt="Doctors reviewing charts in a hospital corridor" loading="lazy">
+                  <span class="tag-badge bg-health">Health</span>
+                  <button class="bookmark-btn" aria-label="Bookmark article"><i class="fa-regular fa-bookmark"></i></button>
+                </div>
+                <div class="news-card-body">
+                  <h3><a href="single.html">Free health camps expand to 40 rural upazilas</a></h3>
+                  <p>The initiative aims to provide basic diagnostics and maternal care ahead of the winter season.</p>
+                  <div class="news-card-foot">
+                    <span class="author-mini"><img src="https://i.pravatar.cc/60?img=45" alt="" loading="lazy"> Dr. Shafiq Islam</span>
+                    <div class="card-stats"><span><i class="fa-regular fa-eye"></i> 2.4k</span><span><i class="fa-regular fa-comment"></i> 11</span></div>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <div class="col-md-6 fade-up">
+              <article class="news-card">
+                <div class="thumb">
+                  <img src="https://picsum.photos/seed/stadium12/500/340" alt="Floodlit stadium filled with cheering spectators" loading="lazy">
+                  <span class="tag-badge bg-sports">Sports</span>
+                  <button class="bookmark-btn" aria-label="Bookmark article"><i class="fa-regular fa-bookmark"></i></button>
+                </div>
+                <div class="news-card-body">
+                  <h3><a href="single.html">Home crowd roars as underdogs force extra time</a></h3>
+                  <p>A stoppage-time equaliser sent the match into extra time in front of a sold-out stadium.</p>
+                  <div class="news-card-foot">
+                    <span class="author-mini"><img src="https://i.pravatar.cc/60?img=15" alt="" loading="lazy"> Tanvir Hossain</span>
+                    <div class="card-stats"><span><i class="fa-regular fa-eye"></i> 5.6k</span><span><i class="fa-regular fa-comment"></i> 29</span></div>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <div class="col-md-6 fade-up">
+              <article class="news-card">
+                <div class="thumb">
+                  <img src="https://picsum.photos/seed/concert13/500/340" alt="Singer performing on stage under colorful lights" loading="lazy">
+                  <span class="tag-badge bg-entertainment">Entertainment</span>
+                  <button class="bookmark-btn" aria-label="Bookmark article"><i class="fa-regular fa-bookmark"></i></button>
+                </div>
+                <div class="news-card-body">
+                  <h3><a href="single.html">Homecoming concert tickets sell out within hours</a></h3>
+                  <p>Organisers add a second show date after overwhelming demand crashed the ticketing site.</p>
+                  <div class="news-card-foot">
+                    <span class="author-mini"><img src="https://i.pravatar.cc/60?img=23" alt="" loading="lazy"> Mim Chowdhury</span>
+                    <div class="card-stats"><span><i class="fa-regular fa-eye"></i> 4.1k</span><span><i class="fa-regular fa-comment"></i> 33</span></div>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <div class="col-md-6 fade-up">
+              <article class="news-card">
+                <div class="thumb">
+                  <img src="https://picsum.photos/seed/solarfarm14/500/340" alt="Solar panel farm under a clear sky" loading="lazy">
+                  <span class="tag-badge bg-science">Environment</span>
+                  <button class="bookmark-btn" aria-label="Bookmark article"><i class="fa-regular fa-bookmark"></i></button>
+                </div>
+                <div class="news-card-body">
+                  <h3><a href="single.html">Nation's largest solar plant reaches full capacity</a></h3>
+                  <p>The 200MW facility is expected to cut regional diesel dependency by a third.</p>
+                  <div class="news-card-foot">
+                    <span class="author-mini"><img src="https://i.pravatar.cc/60?img=51" alt="" loading="lazy"> Rezaul Karim</span>
+                    <div class="card-stats"><span><i class="fa-regular fa-eye"></i> 2.8k</span><span><i class="fa-regular fa-comment"></i> 14</span></div>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+          </div>
+          <button class="load-more-btn ripple" data-target="#latestGrid">Load more stories</button>
+
+          <div class="ad-slot between">Advertisement · 728×90</div>
+
+          <!-- Category tab bundle: Health / Science / Education / Lifestyle / Travel -->
+          <div class="section-head">
+            <div><span class="eyebrow">More to explore</span><h2>Explore by Category</h2></div>
+            <div class="section-tabs">
+              <button class="active" data-tab-target="catlife">Lifestyle</button>
+              <button data-tab-target="cattravel">Travel</button>
+              <button data-tab-target="catcrime">Crime</button>
+              <button data-tab-target="catagri">Agriculture</button>
+            </div>
+          </div>
+          <div class="trending-panel">
+            <div class="row g-4" data-tab-panel="catlife">
+              <div class="col-md-4"><div class="row-card"><img src="https://picsum.photos/seed/lifestyle15/160/130" alt="A minimalist home interior with natural light" loading="lazy"><div><h4><a href="single.html">Minimalist living finds new fans among young renters</a></h4><span class="meta-line">Lifestyle · 3h ago</span></div></div></div>
+              <div class="col-md-4"><div class="row-card"><img src="https://picsum.photos/seed/food16/160/130" alt="Traditional Bengali dishes served on a table" loading="lazy"><div><h4><a href="single.html">Home cooks revive grandmother-era recipes online</a></h4><span class="meta-line">Lifestyle · 5h ago</span></div></div></div>
+              <div class="col-md-4"><div class="row-card"><img src="https://picsum.photos/seed/fashion17/160/130" alt="Models walking a fashion show runway" loading="lazy"><div><h4><a href="single.html">Local designers showcase at regional fashion week</a></h4><span class="meta-line">Lifestyle · 7h ago</span></div></div></div>
+            </div>
+            <div class="row g-4 d-none" data-tab-panel="cattravel">
+              <div class="col-md-4"><div class="row-card"><img src="https://picsum.photos/seed/hillsview18/160/130" alt="Hilltop viewpoint overlooking green valleys" loading="lazy"><div><h4><a href="single.html">New hill trail opens to eco-tourists this season</a></h4><span class="meta-line">Travel · 2h ago</span></div></div></div>
+              <div class="col-md-4"><div class="row-card"><img src="https://picsum.photos/seed/beach19/160/130" alt="Sunset over a quiet sandy beach" loading="lazy"><div><h4><a href="single.html">Coastal town sees tourism rebound after resort upgrades</a></h4><span class="meta-line">Travel · 4h ago</span></div></div></div>
+              <div class="col-md-4"><div class="row-card"><img src="https://picsum.photos/seed/riverboat20/160/130" alt="Wooden boat gliding on a calm river" loading="lazy"><div><h4><a href="single.html">River cruise operators add new overnight routes</a></h4><span class="meta-line">Travel · 9h ago</span></div></div></div>
+            </div>
+            <div class="row g-4 d-none" data-tab-panel="catcrime">
+              <div class="col-md-4"><div class="row-card"><img src="https://picsum.photos/seed/police21/160/130" alt="Police vehicle parked near a cordoned area" loading="lazy"><div><h4><a href="single.html">Task force dismantles cross-border smuggling ring</a></h4><span class="meta-line">Crime · 1h ago</span></div></div></div>
+              <div class="col-md-4"><div class="row-card"><img src="https://picsum.photos/seed/court22/160/130" alt="Exterior of a district courthouse" loading="lazy"><div><h4><a href="single.html">Verdict expected this week in high-profile fraud case</a></h4><span class="meta-line">Crime · 6h ago</span></div></div></div>
+              <div class="col-md-4"><div class="row-card"><img src="https://picsum.photos/seed/cyber23/160/130" alt="Person typing on a laptop keyboard in dim light" loading="lazy"><div><h4><a href="single.html">Cybercrime unit warns of new phishing scheme</a></h4><span class="meta-line">Crime · 11h ago</span></div></div></div>
+            </div>
+            <div class="row g-4 d-none" data-tab-panel="catagri">
+              <div class="col-md-4"><div class="row-card"><img src="https://picsum.photos/seed/paddyfield24/160/130" alt="Farmers working in a green paddy field" loading="lazy"><div><h4><a href="single.html">New rice variety promises higher yield in saline soil</a></h4><span class="meta-line">Agriculture · 3h ago</span></div></div></div>
+              <div class="col-md-4"><div class="row-card"><img src="https://picsum.photos/seed/fishfarm25/160/130" alt="Workers tending a fish farming pond" loading="lazy"><div><h4><a href="single.html">Fish farmers adopt low-cost aeration technology</a></h4><span class="meta-line">Agriculture · 5h ago</span></div></div></div>
+              <div class="col-md-4"><div class="row-card"><img src="https://picsum.photos/seed/market26/160/130" alt="Vendors selling fresh vegetables at a market" loading="lazy"><div><h4><a href="single.html">Wholesale vegetable prices ease after supply boost</a></h4><span class="meta-line">Agriculture · 8h ago</span></div></div></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="col-lg-4">
+          <div class="sticky-sidebar">
+
+            <div class="widget">
+              <h3 class="widget-title"><i class="fa-solid fa-fire"></i> Popular Posts</h3>
+              <div class="row-card">
+                <div class="read-ring" style="--p:70"><span>7m</span></div>
+                <div><h4><a href="single.html">Why river erosion is accelerating in the delta region</a></h4><span class="meta-line">Environment · 18.2k views</span></div>
+              </div>
+              <div class="row-card">
+                <div class="read-ring" style="--p:40"><span>4m</span></div>
+                <div><h4><a href="single.html">Inside the city's new elevated expressway project</a></h4><span class="meta-line">Infrastructure · 12.7k views</span></div>
+              </div>
+              <div class="row-card">
+                <div class="read-ring" style="--p:55"><span>5m</span></div>
+                <div><h4><a href="single.html">The rise of neighbourhood micro-libraries</a></h4><span class="meta-line">Community · 9.4k views</span></div>
+              </div>
+            </div>
+
+            <div class="widget">
+              <h3 class="widget-title"><i class="fa-solid fa-cloud-sun"></i> Weather</h3>
+              <div class="weather-widget">
+                <div>
+                  <div class="temp">31°C</div>
+                  <div class="font-mono" style="font-size:.78rem;opacity:.85;">Dhaka · Partly Cloudy</div>
+                  <div class="font-mono" style="font-size:.72rem;opacity:.7;">H:33° L:27° · Humidity 78%</div>
+                </div>
+                <i class="fa-solid fa-cloud-sun-rain"></i>
+              </div>
+            </div>
+
+            <div class="widget">
+              <h3 class="widget-title"><i class="fa-solid fa-layer-group"></i> Categories</h3>
+              <ul class="category-list list-unstyled mb-0">
+                <li><a href="category.html?cat=politics">Politics</a><span class="count">482</span></li>
+                <li><a href="category.html?cat=sports">Sports</a><span class="count">361</span></li>
+                <li><a href="category.html?cat=technology">Technology</a><span class="count">298</span></li>
+                <li><a href="category.html?cat=business">Business</a><span class="count">274</span></li>
+                <li><a href="category.html?cat=entertainment">Entertainment</a><span class="count">210</span></li>
+                <li><a href="category.html?cat=health">Health</a><span class="count">156</span></li>
+              </ul>
+            </div>
+
+            <div class="widget poll-widget">
+              <h3 class="widget-title"><i class="fa-solid fa-square-poll-vertical"></i> Reader Poll</h3>
+              <p class="font-mono" style="font-size:.8rem;color:var(--text-muted);">Should the school year include a mid-term break?</p>
+              <div class="option">
+                <div class="option-label"><span>Yes, students need it</span><span>64%</span></div>
+                <div class="poll-bar"><span style="width:64%"></span></div>
+                <button class="poll-option-btn btn btn-sm btn-outline-ink mt-2 rounded-pill">Vote Yes</button>
+              </div>
+              <div class="option">
+                <div class="option-label"><span>No, keep current schedule</span><span>36%</span></div>
+                <div class="poll-bar"><span style="width:36%"></span></div>
+                <button class="poll-option-btn btn btn-sm btn-outline-ink mt-2 rounded-pill">Vote No</button>
+              </div>
+              <p class="font-mono mb-0" style="font-size:.7rem;color:var(--text-faint);">3,204 votes so far</p>
+            </div>
+
+            <div class="widget newsletter-widget">
+              <h4>Get the morning briefing</h4>
+              <p>Top stories, curated every day at 7am — straight to your inbox.</p>
+              <form class="newsletter-form d-flex gap-2">
+                <input type="email" class="form-control" placeholder="you@email.com" required aria-label="Email address">
+                <button class="btn btn-signal" type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+              </form>
+            </div>
+
+            <div class="widget">
+              <h3 class="widget-title"><i class="fa-solid fa-tags"></i> Popular Tags</h3>
+              <div class="tag-cloud">
+                <a href="search.html?q=election">Election</a>
+                <a href="search.html?q=budget">Budget</a>
+                <a href="search.html?q=cricket">Cricket</a>
+                <a href="search.html?q=ai">AI</a>
+                <a href="search.html?q=climate">Climate</a>
+                <a href="search.html?q=startup">Startup</a>
+                <a href="search.html?q=dhaka">Dhaka</a>
+                <a href="search.html?q=export">Export</a>
+              </div>
+            </div>
+
+            <div class="widget">
+              <h3 class="widget-title"><i class="fa-solid fa-share-nodes"></i> Follow Us</h3>
+              <div class="social-follow-widget">
+                <a href="#" class="sf-fb"><i class="fa-brands fa-facebook-f"></i> 128k</a>
+                <a href="#" class="sf-tw"><i class="fa-brands fa-x-twitter"></i> 94k</a>
+                <a href="#" class="sf-ig"><i class="fa-brands fa-instagram"></i> 210k</a>
+                <a href="#" class="sf-yt"><i class="fa-brands fa-youtube"></i> 66k</a>
+              </div>
+            </div>
+
+            <div class="widget p-0" style="overflow:hidden;">
+              <div class="ad-slot sidebar-ad">Advertisement · 300×250</div>
+            </div>
+
+            <div class="widget">
+              <h3 class="widget-title"><i class="fa-solid fa-star"></i> Editor's Choice</h3>
+              <div class="row-card">
+                <img src="https://picsum.photos/seed/editorpick27/120/100" alt="Editor's choice featured photo" loading="lazy">
+                <div><h4><a href="single.html">A year inside the city's last handloom weaving village</a></h4><span class="meta-line">Feature · 15 min read</span></div>
+              </div>
+            </div>
+
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= VIDEO NEWS ============================= -->
+  <section class="section" id="videoNews">
+    <div class="container">
+      <div class="section-head">
+        <div><span class="eyebrow">Watch</span><h2>Video News</h2></div>
+        <a href="#" class="view-all">All videos <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      <div class="row g-4">
+        <div class="col-lg-6 col-md-6 fade-up">
+          <div class="video-card">
+            <img src="https://picsum.photos/seed/videonews28/700/440" alt="News anchor in studio delivering evening bulletin" loading="lazy">
+            <span class="play-btn"><i class="fa-solid fa-play"></i></span>
+            <span class="video-duration">04:12</span>
+            <span class="video-title">Evening Bulletin: Top five stories of the day</span>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 fade-up">
+          <div class="video-card">
+            <img src="https://picsum.photos/seed/videonews29/500/440" alt="Reporter on location near a construction site" loading="lazy">
+            <span class="play-btn"><i class="fa-solid fa-play"></i></span>
+            <span class="video-duration">02:31</span>
+            <span class="video-title">Inside the new metro rail extension</span>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 fade-up">
+          <div class="video-card">
+            <img src="https://picsum.photos/seed/videonews30/500/440" alt="Athletes training on a track field" loading="lazy">
+            <span class="play-btn"><i class="fa-solid fa-play"></i></span>
+            <span class="video-duration">03:05</span>
+            <span class="video-title">National team's fitness camp ahead of finals</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= PHOTO GALLERY ============================= -->
+  <section class="section section-alt" id="photoGallery">
+    <div class="container">
+      <div class="section-head">
+        <div><span class="eyebrow">In pictures</span><h2>Photo Gallery</h2></div>
+        <a href="#" class="view-all">Full gallery <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      <div class="masonry-gallery">
+        <div class="g-item"><img src="https://picsum.photos/seed/gal1/500/650" alt="Street procession during a cultural festival" loading="lazy"><div class="g-overlay">Cultural festival procession downtown</div></div>
+        <div class="g-item"><img src="https://picsum.photos/seed/gal2/500/380" alt="Fishermen casting nets at sunrise" loading="lazy"><div class="g-overlay">Fishermen at sunrise on the bay</div></div>
+        <div class="g-item"><img src="https://picsum.photos/seed/gal3/500/560" alt="Children playing cricket on a village field" loading="lazy"><div class="g-overlay">Village cricket after school</div></div>
+        <div class="g-item"><img src="https://picsum.photos/seed/gal4/500/420" alt="Tea garden workers picking leaves" loading="lazy"><div class="g-overlay">Tea garden harvest season</div></div>
+        <div class="g-item"><img src="https://picsum.photos/seed/gal5/500/620" alt="Skyline view of the city at dusk" loading="lazy"><div class="g-overlay">City skyline at dusk</div></div>
+        <div class="g-item"><img src="https://picsum.photos/seed/gal6/500/400" alt="Artisan shaping clay pottery" loading="lazy"><div class="g-overlay">Traditional pottery workshop</div></div>
+        <div class="g-item"><img src="https://picsum.photos/seed/gal7/500/500" alt="Rally of supporters holding flags" loading="lazy"><div class="g-overlay">Supporters rally ahead of the match</div></div>
+        <div class="g-item"><img src="https://picsum.photos/seed/gal8/500/440" alt="Rain falling over a busy street market" loading="lazy"><div class="g-overlay">Monsoon rain over the market</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= LIVE NEWS ============================= -->
+  <section class="section" id="liveNews">
+    <div class="container">
+      <div class="row g-5">
+        <div class="col-lg-7">
+          <div class="section-head">
+            <div><span class="eyebrow">As it happens</span><h2>Live Updates</h2></div>
+            <span class="tag-badge tag-live"><span class="pulse-dot"></span> Live</span>
+          </div>
+          <div class="live-timeline">
+            <div class="live-item">
+              <time>6:42 PM</time>
+              <h4>Water levels begin to recede in Kurigram district</h4>
+              <p>Local authorities report a slow drop in river levels for the first time in four days, offering cautious relief to residents.</p>
+            </div>
+            <div class="live-item">
+              <time>5:10 PM</time>
+              <h4>Relief boats reach two previously cut-off villages</h4>
+              <p>Volunteers delivered food and clean water supplies after a two-day delay caused by strong currents.</p>
+            </div>
+            <div class="live-item">
+              <time>3:55 PM</time>
+              <h4>Prime Minister's office announces emergency relief fund</h4>
+              <p>An initial allocation will support temporary shelters and medical camps in the worst-affected areas.</p>
+            </div>
+            <div class="live-item">
+              <time>1:20 PM</time>
+              <h4>Met office extends heavy rainfall warning by 48 hours</h4>
+              <p>Forecasters say an active monsoon trough will continue to bring intense spells of rain through the weekend.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="video-card mb-3" style="aspect-ratio:16/11;">
+            <img src="https://picsum.photos/seed/livecam31/700/500" alt="Live camera feed overlooking a flooded street" loading="lazy">
+            <span class="tag-badge tag-live" style="position:absolute;top:.7rem;left:.7rem;"><span class="pulse-dot"></span> On Air</span>
+            <span class="play-btn"><i class="fa-solid fa-play"></i></span>
+            <span class="video-title">Live TV: Flood coverage special</span>
+          </div>
+          <div class="ad-slot sidebar-ad">Advertisement · 300×250</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= STATS STRIP ============================= -->
+  <section class="section pt-0">
+    <div class="container">
+      <div class="stats-strip">
+        <div class="row text-center g-4">
+          <div class="col-6 col-md-3 stat-item">
+            <div class="num"><span data-count-to="4200000" data-suffix="+">0</span></div>
+            <div class="label">Monthly Readers</div>
+          </div>
+          <div class="col-6 col-md-3 stat-item">
+            <div class="num"><span data-count-to="18500">0</span></div>
+            <div class="label">Articles Published</div>
+          </div>
+          <div class="col-6 col-md-3 stat-item">
+            <div class="num"><span data-count-to="120">0</span></div>
+            <div class="label">Journalists &amp; Editors</div>
+          </div>
+          <div class="col-6 col-md-3 stat-item">
+            <div class="num"><span data-count-to="64">0</span></div>
+            <div class="label">Districts Covered</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================= FOOTER ============================= -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <a href="index.html" class="brand text-decoration-none mb-3 d-inline-flex">
+          <span class="mark">S</span>
+          <div><div class="brand-name" style="color:#fff;">THE <em>SIGNAL</em></div></div>
+        </a>
+        <p style="max-width:38ch;">Independent, deadline-driven journalism from Bangladesh and beyond — verified first, published fast.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" aria-label="X / Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-6">
+        <h5 data-i18n="footer_quicklinks">Quick Links</h5>
+        <ul class="footer-links list-unstyled">
+          <li><a href="about.html" data-i18n="footer_about">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="search.html" data-i18n="footer_search">Search</a></li>
+          <li><a href="#" data-i18n="footer_advertise">Advertise</a></li>
+          <li><a href="#" data-i18n="footer_careers">Careers</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-2 col-6">
+        <h5 data-i18n="footer_categories">Categories</h5>
+        <ul class="footer-links list-unstyled">
+          <li><a href="category.html?cat=politics">Politics</a></li>
+          <li><a href="category.html?cat=sports">Sports</a></li>
+          <li><a href="category.html?cat=technology">Technology</a></li>
+          <li><a href="category.html?cat=business">Business</a></li>
+          <li><a href="category.html?cat=opinion">Opinion</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-4">
+        <h5 data-i18n="footer_newsletter_heading">Newsletter</h5>
+        <p data-i18n="footer_newsletter_text">Subscribe for the morning briefing, delivered daily.</p>
+        <form class="newsletter-form d-flex gap-2 mb-3">
+          <input type="email" class="form-control" placeholder="you@email.com" required aria-label="Email address">
+          <button class="btn btn-signal" type="submit" data-i18n="footer_newsletter_btn">Join</button>
+        </form>
+        <h5 class="mt-4" data-i18n="footer_contact_heading">Contact</h5>
+        <ul class="footer-links list-unstyled">
+          <li><i class="fa-regular fa-envelope me-2"></i>newsroom@thesignal.example</li>
+          <li><i class="fa-solid fa-phone me-2"></i>+880 2-XXXX-XXXX</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <span data-i18n="footer_copyright">© 2026 The Signal. All rights reserved.</span>
+      <div class="d-flex gap-3 flex-wrap">
+        <a href="#" data-i18n="footer_privacy">Privacy Policy</a>
+        <a href="#" data-i18n="footer_terms">Terms of Service</a>
+        <a href="#" data-i18n="footer_cookie">Cookie Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<button class="back-to-top" id="backToTop" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+
+<!-- Bootstrap Bundle (Popper included) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
