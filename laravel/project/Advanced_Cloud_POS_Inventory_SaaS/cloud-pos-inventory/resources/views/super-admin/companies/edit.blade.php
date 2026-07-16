@@ -19,7 +19,42 @@
         </div>
     </div>
 
-    {{-- ✅ id="company-form" এবং @method('PUT') যোগ করা হয়েছে --}}
+    @php
+        // ✅ ULTRA-ROBUST Logo URL Generator
+        $logoUrl = null;
+        if (!empty($company->logo)) {
+            $rawPath = trim($company->logo);
+
+            // 1. If it's already a full URL
+    if (\Illuminate\Support\Str::startsWith($rawPath, ['http://', 'https://'])) {
+        $logoUrl = $rawPath;
+    } else {
+        // 2. Clean the path (remove leading 'public/', 'storage/', or '/')
+        $cleanPath = ltrim($rawPath, '/');
+        $cleanPath = preg_replace('/^(public|storage)\//i', '', $cleanPath);
+
+        // 3. Check if it exists in the standard storage/app/public directory
+        if (\Illuminate\Support\Facades\Storage::disk('public')->exists($cleanPath)) {
+            $logoUrl = \Illuminate\Support\Facades\Storage::disk('public')->url($cleanPath);
+        }
+        // 4. Fallback: Check if it was mistakenly saved directly in the public/ directory
+        elseif (file_exists(public_path($cleanPath))) {
+            $logoUrl = asset($cleanPath);
+        }
+        // 5. Last resort: Assume it's in storage and format it correctly
+                else {
+                    $logoUrl = asset('storage/' . $cleanPath);
+                }
+            }
+        }
+
+        // Safe access to JSON settings
+        $settings = is_array($company->settings) ? $company->settings : json_decode($company->settings, true);
+        $s = function ($key, $default = null) use ($settings) {
+            return $settings[$key] ?? $default;
+        };
+    @endphp
+
     <form id="company-form" action="{{ route('superadmin.companies.update', $company->id) }}" method="POST"
         enctype="multipart/form-data">
         @csrf
@@ -42,6 +77,25 @@
                                     id="name" name="name" value="{{ old('name', $company->name) }}"
                                     placeholder="Enter company name" required>
                                 @error('name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            {{-- ✅ ADDED: Business Type (Missing in original edit form) --}}
+                            <div class="mb-3 col-md-6">
+                                <label for="business_type_id" class="form-label">Business Type <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select @error('business_type_id') is-invalid @enderror"
+                                    id="business_type_id" name="business_type_id" required>
+                                    <option value="">Select Business Type</option>
+                                    @foreach ($business_types ?? [] as $type)
+                                        <option value="{{ $type->id }}" data-slug="{{ $type->slug }}"
+                                            {{ old('business_type_id', $company->business_type_id) == $type->id ? 'selected' : '' }}>
+                                            {{ $type->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('business_type_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -99,7 +153,6 @@
                                 @enderror
                             </div>
 
-                            <!-- Assign Company Admin -->
                             <div class="mb-3 col-md-6">
                                 <label for="user_id" class="form-label">Assign Company Admin <span
                                         class="text-danger">*</span></label>
@@ -150,7 +203,6 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
 
-                                {{-- Plan Details Display --}}
                                 <div id="plan-details" class="p-2 mt-2 rounded bg-light small" style="display: none;">
                                     <strong>Plan Details:</strong>
                                     <div id="plan-info"></div>
@@ -174,6 +226,20 @@
                                     </option>
                                 </select>
                                 @error('status')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            {{-- ✅ FIX 2: Added Trial Ends At field to manually fix "Expired" status --}}
+                            <div class="mb-3 col-md-6">
+                                <label for="trial_ends_at" class="form-label">Trial Ends At</label>
+                                <input type="datetime-local"
+                                    class="form-control @error('trial_ends_at') is-invalid @enderror" id="trial_ends_at"
+                                    name="trial_ends_at"
+                                    value="{{ old('trial_ends_at', $company->trial_ends_at ? \Carbon\Carbon::parse($company->trial_ends_at)->format('Y-m-d\TH:i') : '') }}">
+                                <small class="text-muted">Set or extend the trial expiration date to fix "Expired"
+                                    status.</small>
+                                @error('trial_ends_at')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -263,7 +329,6 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-
                             <div class="mb-3 col-md-4">
                                 <label for="city" class="form-label">City</label>
                                 <input type="text" class="form-control @error('city') is-invalid @enderror"
@@ -273,7 +338,6 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-
                             <div class="mb-3 col-md-4">
                                 <label for="country" class="form-label">Country</label>
                                 <input type="text" class="form-control @error('country') is-invalid @enderror"
@@ -283,7 +347,6 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-
                             <div class="mb-3 col-md-4">
                                 <label for="zip_code" class="form-label">Zip / Postal Code</label>
                                 <input type="text" class="form-control @error('zip_code') is-invalid @enderror"
@@ -298,26 +361,103 @@
                 </div>
 
                 {{-- ==========================================
-                    4. Media & Logo
+                    4. Industry-Specific Settings (Dynamic)
                 ========================================== --}}
-                @php
-                    // ✅ BUG FIX: asset($company->logo) is wrong when the file was saved with
-                    // Storage::disk('public')->put(...). That returns a path like "logos/xyz.png"
-                    // which lives in storage/app/public and is served from /storage/... (via the
-                    // storage:link symlink), NOT from the app's public/ root. Using asset() directly
-// on it points to a URL that doesn't exist, so the <img> silently fails to load.
-                    // This builds the correct URL regardless of how the path was stored.
-                    $logoUrl = null;
-                    if (!empty($company->logo)) {
-                        if (\Illuminate\Support\Str::startsWith($company->logo, ['http://', 'https://'])) {
-                            $logoUrl = $company->logo;
-                        } elseif (\Illuminate\Support\Str::startsWith($company->logo, 'storage/')) {
-                            $logoUrl = asset($company->logo);
-                        } else {
-                            $logoUrl = asset('storage/' . ltrim($company->logo, '/'));
-                        }
-                    }
-                @endphp
+                <div class="mt-3 card dynamic-business-section" data-applicable-to="grocery,pharmacy,food"
+                    style="display: none;">
+                    <div class="card-body">
+                        <h4 class="mb-3 header-title text-primary"><i class="ti ti-clock me-2"></i>Expiry & Batch Tracking
+                        </h4>
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label">Track Expiry Dates?</label>
+                                <select class="form-select" name="settings[track_expiry]">
+                                    <option value="1"
+                                        {{ $s('track_expiry') == '1' || $s('track_expiry') === true ? 'selected' : '' }}>
+                                        Yes, Mandatory</option>
+                                    <option value="0"
+                                        {{ $s('track_expiry') == '0' || $s('track_expiry') === false ? 'selected' : '' }}>
+                                        No, Not required</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label">Track Batch/Lot Numbers?</label>
+                                <select class="form-select" name="settings[track_batch]">
+                                    <option value="1"
+                                        {{ $s('track_batch') == '1' || $s('track_batch') === true ? 'selected' : '' }}>Yes
+                                    </option>
+                                    <option value="0"
+                                        {{ $s('track_batch') == '0' || $s('track_batch') === false ? 'selected' : '' }}>No
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-3 card dynamic-business-section" data-applicable-to="clothing,fashion,footwear"
+                    style="display: none;">
+                    <div class="card-body">
+                        <h4 class="mb-3 header-title text-primary"><i class="ti ti-color-swatch me-2"></i>Variant &
+                            Attribute Settings</h4>
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label">Default Variant Attributes to Enable</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="settings[enable_size]"
+                                        value="1" {{ $s('enable_size') ? 'checked' : '' }}>
+                                    <label class="form-check-label">Size (S, M, L, XL)</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="settings[enable_color]"
+                                        value="1" {{ $s('enable_color') ? 'checked' : '' }}>
+                                    <label class="form-check-label">Color</label>
+                                </div>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label">Default Unit for Items</label>
+                                <select class="form-select" name="settings[default_unit]">
+                                    <option value="pieces" {{ $s('default_unit') == 'pieces' ? 'selected' : '' }}>Pieces
+                                        (pcs)</option>
+                                    <option value="pairs" {{ $s('default_unit') == 'pairs' ? 'selected' : '' }}>Pairs
+                                        (for footwear)</option>
+                                    <option value="meters" {{ $s('default_unit') == 'meters' ? 'selected' : '' }}>Meters
+                                        (for fabrics)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-3 card dynamic-business-section" data-applicable-to="electronics,gadgets"
+                    style="display: none;">
+                    <div class="card-body">
+                        <h4 class="mb-3 header-title text-primary"><i class="ti ti-shield-check me-2"></i>Warranty &
+                            Serial Tracking</h4>
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label">Track IMEI / Serial Numbers?</label>
+                                <select class="form-select" name="settings[track_imei]">
+                                    <option value="1"
+                                        {{ $s('track_imei') == '1' || $s('track_imei') === true ? 'selected' : '' }}>Yes,
+                                        Mandatory</option>
+                                    <option value="0"
+                                        {{ $s('track_imei') == '0' || $s('track_imei') === false ? 'selected' : '' }}>No
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label">Default Warranty Period (Months)</label>
+                                <input type="number" class="form-control" name="settings[default_warranty_months]"
+                                    value="{{ $s('default_warranty_months', 12) }}" min="0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- ==========================================
+                    5. Media & Logo
+                ========================================== --}}
                 <div class="mt-3 card">
                     <div class="card-body">
                         <h4 class="mb-3 header-title">Company Logo</h4>
@@ -358,7 +498,6 @@
                         <a href="{{ route('superadmin.companies.index') }}" class="btn btn-secondary me-2">
                             <i class="ti ti-x me-1"></i> Cancel
                         </a>
-                        {{-- ✅ id="submit-btn" যোগ করা হয়েছে --}}
                         <button type="submit" id="submit-btn" class="btn btn-primary">
                             <i class="ti ti-device-floppy me-1"></i> Update Company
                         </button>
@@ -372,41 +511,51 @@
 
 @push('scripts')
     <script>
-        // ✅ Note: this app already loads toastr globally (see partials/scripts.blade.php
-        // + partials/alerts.blade.php, included on every page via admin_master). No need
-        // for a separate toast implementation here - just call toastr directly below.
-
         $(document).ready(function() {
+            // ==========================================
+            // 0. Dynamic Business Type Field Toggling
+            // ==========================================
+            function toggleBusinessFields() {
+                const selectedOption = $('#business_type_id option:selected');
+                const businessSlug = selectedOption.data('slug');
+                $('.dynamic-business-section').hide();
+
+                if (businessSlug) {
+                    $('.dynamic-business-section').each(function() {
+                        const applicableTo = $(this).data('applicable-to').split(',');
+                        if (applicableTo.includes(businessSlug)) {
+                            $(this).fadeIn(300);
+                        }
+                    });
+                }
+            }
+            // Call on load to show relevant sections for existing company
+            toggleBusinessFields();
+            $('#business_type_id').on('change', toggleBusinessFields);
+
             // ==========================================
             // 1. Auto-generate slug from company name
             // ==========================================
+            if ($('#slug').val()) {
+                $('#slug').data('manual', true);
+            }
             $('#name').on('input', function() {
                 let slugInput = $('#slug');
-                // Only auto-generate if slug is empty or hasn't been manually changed
                 if (!slugInput.data('manual')) {
                     slugInput.val($(this).val().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(
                         /^-+|-+$/g, ''));
                 }
             });
-
             $('#slug').on('input', function() {
-                $(this).data('manual', true);
+                $(this).data('manual', $(this).val().trim() !== '');
             });
 
-            // ✅ Edit page-এ পুরনো slug থাকলে সেটা overwrite করবে না
-            if ($('#slug').val()) {
-                $('#slug').data('manual', true);
-            }
-
             // ==========================================
-            // 2. Logo Preview
+            // 2. Logo Preview with Safe Reset
             // ==========================================
             const maxLogoSizeBytes = 2 * 1024 * 1024; // 2MB
             const allowedLogoTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/svg+xml'];
-
-            // ✅ ফাইল ক্যান্সেল/রিসেট করলে আগের (সঠিক URL সহ) লোগো ফিরিয়ে আনার জন্য
-            const originalLogoHtml =
-                `@if ($logoUrl)<img src="{{ $logoUrl }}" alt="Company Logo" style="max-width: 150px; max-height: 150px;" class="img-fluid">@else<i class="ti ti-photo text-muted" style="font-size: 2rem;"></i><p class="mb-0 text-muted small">No logo selected</p>@endif`;
+            let currentLogoUrl = "{{ $logoUrl ?? '' }}";
 
             $('#logo').on('change', function(e) {
                 const file = e.target.files[0];
@@ -414,24 +563,37 @@
                 const logoInputEl = this;
 
                 if (!file) {
-                    preview.html(originalLogoHtml);
+                    if (currentLogoUrl) {
+                        preview.html(
+                            `<img src="${currentLogoUrl}" alt="Company Logo" style="max-width: 150px; max-height: 150px;" class="img-fluid">`
+                        );
+                    } else {
+                        preview.html(
+                            `<i class="ti ti-photo text-muted" style="font-size: 2rem;"></i><p class="mb-0 text-muted small">No logo selected</p>`
+                        );
+                    }
                     return;
                 }
 
-                // ✅ Bug fix: create.blade.php validates file size/type before accepting it,
-                // edit.blade.php had no such check — invalid files just went straight to submit
-                // and failed only after a round trip to the server.
                 if (file.size > maxLogoSizeBytes) {
                     alert('Logo size must not exceed 2MB. Please choose a smaller file.');
                     $(logoInputEl).val('');
-                    preview.html(originalLogoHtml);
+                    if (currentLogoUrl) {
+                        preview.html(
+                            `<img src="${currentLogoUrl}" alt="Company Logo" style="max-width: 150px; max-height: 150px;" class="img-fluid">`
+                        );
+                    }
                     return;
                 }
 
                 if (!allowedLogoTypes.includes(file.type)) {
                     alert('Only PNG, JPG or SVG images are allowed.');
                     $(logoInputEl).val('');
-                    preview.html(originalLogoHtml);
+                    if (currentLogoUrl) {
+                        preview.html(
+                            `<img src="${currentLogoUrl}" alt="Company Logo" style="max-width: 150px; max-height: 150px;" class="img-fluid">`
+                        );
+                    }
                     return;
                 }
 
@@ -439,7 +601,7 @@
                 reader.onload = function(e) {
                     preview.html(
                         `<img src="${e.target.result}" alt="Logo Preview" style="max-width: 150px; max-height: 150px;" class="img-fluid">`
-                        );
+                    );
                 };
                 reader.readAsDataURL(file);
             });
@@ -447,12 +609,12 @@
             // ==========================================
             // 3. Plan Details Display
             // ==========================================
-            $('#plan_id').on('change', function() {
-                const selectedOption = $(this).find('option:selected');
+            function updatePlanDetails() {
+                const selectedOption = $('#plan_id option:selected');
                 const detailsDiv = $('#plan-details');
                 const infoDiv = $('#plan-info');
 
-                if ($(this).val() && selectedOption.data('price')) {
+                if ($('#plan_id').val() && selectedOption.data('price') !== undefined) {
                     const price = selectedOption.data('price');
                     const trial = selectedOption.data('trial');
                     const users = selectedOption.data('users');
@@ -470,21 +632,17 @@
                 } else {
                     detailsDiv.hide();
                 }
-            });
-
-            // Trigger plan change on page load if old value exists
-            const planSelect = $('#plan_id');
-            if (planSelect.val()) {
-                planSelect.trigger('change');
             }
+
+            $('#plan_id').on('change', updatePlanDetails);
+            updatePlanDetails(); // Trigger on load
 
             // ==========================================
             // 4. Live Validation (Blur Event)
             // ==========================================
-            // যখন কোনো ফিল্ড থেকে কার্সর সরে যাবে (blur), তখন ভ্যালিডেশন চেক হবে
             $('#company-form').on('blur', '.form-control, .form-select', function() {
                 let input = $(this);
-                if (this.type === 'file') return; // ফাইল ইনপুট চেক করবে না
+                if (this.type === 'file') return;
 
                 if (!this.checkValidity()) {
                     input.addClass('is-invalid');
@@ -507,7 +665,6 @@
             // ==========================================
             // 5. Live Error Clearing (Input Event)
             // ==========================================
-            // ইউজার টাইপ করা শুরু করলেই সাথে সাথে এরর মেসেজ চলে যাবে
             $('#company-form').on('input change', '.form-control, .form-select', function() {
                 let input = $(this);
                 input.removeClass('is-invalid');
@@ -526,10 +683,10 @@
             });
 
             // ==========================================
-            // 6. AJAX Form Submission (No Page Reload)
+            // 6. AJAX Form Submission
             // ==========================================
             $('#company-form').on('submit', function(e) {
-                e.preventDefault(); // পেজ রিলোড হতে দেব না
+                e.preventDefault();
 
                 let form = $(this);
                 let formData = new FormData(this);
@@ -537,35 +694,24 @@
                 let submitBtn = $('#submit-btn');
                 let originalBtnHtml = submitBtn.html();
 
-                // বাটন ডিজেবল করে লোডিং দেখাও
                 submitBtn.prop('disabled', true).html(
                     '<span class="spinner-border spinner-border-sm me-1"></span> Updating...');
 
-                // সাবমিটের আগে সব পুরনো এরর ক্লিয়ার করে দাও
                 form.find('.is-invalid').removeClass('is-invalid');
                 form.find('.invalid-feedback').text('').hide();
                 form.find('.invalid-feedback[style*="display: block"]').remove();
 
                 $.ajax({
                     url: url,
-                    // ✅ CRITICAL BUG FIX: always send POST here. The form already has
-                    // @method('PUT') as a hidden _method field, which Laravel's
-                    // MethodOverride middleware reads to treat this as a PUT *logically*.
-                    // If we instead set the actual AJAX verb to PUT, PHP never parses a
-                    // multipart/form-data body for PUT requests — $_POST and $_FILES stay
-                    // empty, so none of the form fields (including the uploaded logo) ever
-                    // reach the controller. This is why data/image updates were failing.
-                    type: 'POST',
+                    type: 'POST', // Laravel handles PUT via @method('PUT') hidden field
                     data: formData,
                     processData: false,
                     contentType: false,
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                        'Accept': 'application/json' // লারাভেলকে JSON এরর রিটার্ন করতে বলছি
+                        'Accept': 'application/json'
                     },
                     success: function(response) {
-                        // ✅ toastr দিয়ে টোস্ট দেখাও, তারপর সামান্য দেরি করে রিডাইরেক্ট করো
-                        // যাতে টোস্ট রিডাইরেক্টের কারণে সাথে সাথে হারিয়ে না যায়।
                         toastr.success(response.message || 'Company updated successfully!',
                             'Success');
                         const redirectUrl = response.redirect ||
@@ -576,15 +722,14 @@
                     },
                     error: function(xhr) {
                         if (xhr.status === 422) {
-                            // ভ্যালিডেশন এরর হলে ফিল্ডের নিচে এরর দেখাও
                             let errors = xhr.responseJSON.errors;
                             let firstErrorElement = null;
 
                             $.each(errors, function(key, messages) {
-                                let input = form.find('[name="' + key + '"]');
+                                let input = form.find('[name="' + key + '"], [name="' +
+                                    key + '[]"]');
                                 if (input.length) {
                                     input.addClass('is-invalid');
-
                                     let feedback = input.siblings('.invalid-feedback')
                                         .first();
                                     if (!feedback.length && input.parent().hasClass(
@@ -608,7 +753,6 @@
                                 }
                             });
 
-                            // প্রথম এরর ফিল্ডে স্ক্রল করো
                             if (firstErrorElement) {
                                 $('html, body').animate({
                                     scrollTop: firstErrorElement.offset().top - 150
@@ -627,41 +771,4 @@
             });
         });
     </script>
-    <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const planSelect = document.getElementById('plan_id');
-    const planDetailsDiv = document.getElementById('plan-details');
-    const planInfoDiv = document.getElementById('plan-info');
-
-    if (planSelect) {
-        planSelect.addEventListener('change', function() {
-            const selectedOption = this.options[this.selectedIndex];
-            
-            if (this.value !== "") {
-                const price = selectedOption.getAttribute('data-price');
-                const trial = selectedOption.getAttribute('data-trial');
-                const users = selectedOption.getAttribute('data-users');
-                const branches = selectedOption.getAttribute('data-branches');
-
-                planInfoDiv.innerHTML = `
-                    <ul class="mb-0 mt-1">
-                        <li><strong>Price:</strong> $${parseFloat(price).toFixed(2)} / month</li>
-                        <li><strong>Trial Period:</strong> ${trial} Days</li>
-                        <li><strong>Max Users:</strong> ${users}</li>
-                        <li><strong>Max Branches:</strong> ${branches}</li>
-                    </ul>
-                `;
-                planDetailsDiv.style.display = 'block';
-            } else {
-                planDetailsDiv.style.display = 'none';
-            }
-        });
-
-        // Trigger change event on page load if a value is already selected (e.g., during validation error)
-        if (planSelect.value !== "") {
-            planSelect.dispatchEvent(new Event('change'));
-        }
-    }
-});
-</script>
 @endpush

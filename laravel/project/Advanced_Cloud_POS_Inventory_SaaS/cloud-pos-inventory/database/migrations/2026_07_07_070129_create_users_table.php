@@ -11,30 +11,25 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // ১. প্রথমে শুধু বেসিক Users টেবিল তৈরি হবে (কোনো Foreign Key ছাড়া)
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-
-            // SaaS Company Relationship
-          /*   $table->foreignId('company_id')
-                ->nullable()
-                ->constrained()
-                ->nullOnDelete(); */
-
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-
             $table->rememberToken();
             $table->timestamps();
         });
 
+        // ২. Password Reset Tokens টেবিল
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
 
+        // ৩. Sessions টেবিল (এটি না থাকলে Laravel Session এরর দেয়)
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();

@@ -65,6 +65,7 @@ use App\Http\Controllers\Branch\PosController;
 use App\Http\Controllers\Branch\SaleController;
 use App\Http\Controllers\Branch\StockAdjustmentController;
 use App\Http\Controllers\Branch\PurchaseController as BranchPurchaseController; // <-- NEW: For Branch-level Purchasing
+use App\Http\Controllers\Branch\SortingController; // <-- NEW: For Branch Sorting
 
 Route::get('/', function () {
     return view('welcome');
@@ -202,7 +203,7 @@ Route::middleware(['auth', 'verified', 'role:Company Admin'])
 // ==========================================
 // 3. Branch Routes (Manager / Salesman)
 // ==========================================
-Route::middleware(['auth', 'verified', 'role:Manager|Salesman'])
+Route::middleware(['auth', 'verified', 'role:Manager|Salesman']) // Note: Change to 'role:branch' here if that is your specific role name
     ->prefix('branch')
     ->name('branch.')
     ->group(function () {
@@ -211,11 +212,17 @@ Route::middleware(['auth', 'verified', 'role:Manager|Salesman'])
         // Inventory
         Route::resource('/inventory', InventoryController::class)->except(['create', 'edit', 'show']);
 
-        // Branch Stock Adjustment (Page + Action) <-- UPDATED
+        // Branch Stock Adjustment (Page + Action)
         Route::get('/inventory/adjust', [InventoryController::class, 'adjust'])->name('inventory.adjust');
         Route::post('/inventory/adjust', [InventoryController::class, 'storeAdjustment'])->name('inventory.adjust.store');
 
-        // Branch Purchases (Receive Stock from Supplier or Head Office) <-- NEW
+        // Branch Sorting Routes <-- NEW
+        Route::get('/inventory/receive-sort', [SortingController::class, 'receiveSort'])->name('inventory.receive-sort');
+        Route::post('/inventory/sort-items', [SortingController::class, 'storeSortedItems'])->name('inventory.sort-items');
+        Route::get('/inventory/sorting-history', [SortingController::class, 'history'])->name('inventory.sorting-history');
+        Route::get('/inventory/sorting-history/{id}', [SortingController::class, 'showHistory'])->name('inventory.sorting-history.show');
+
+        // Branch Purchases (Receive Stock from Supplier or Head Office)
         Route::resource('/purchases', BranchPurchaseController::class)->only(['index', 'create', 'store']);
 
         // POS Terminal

@@ -40,7 +40,7 @@
 
             <li class="side-nav-title mt-3">Sales & POS</li>
 
-            <!-- POS Terminal: Primary daily-use screen -->
+            <!-- POS Terminal -->
             <li class="side-nav-item">
                 <a href="{{ route('branch.pos.index') }}"
                     class="side-nav-link {{ request()->routeIs('branch.pos.*') ? 'active' : '' }}">
@@ -63,7 +63,8 @@
             <!-- Inventory & Stock Management (Collapsible Menu) -->
             @php
                 $isBranchInventoryActive =
-                    request()->routeIs('branch.inventory.*') || request()->routeIs('branch.purchases.*');
+                    request()->routeIs('branch.inventory.*') || 
+                    request()->routeIs('branch.purchases.*');
             @endphp
             <li class="side-nav-item {{ $isBranchInventoryActive ? 'menu-open' : '' }}">
                 <a data-bs-toggle="collapse" href="#sidebarBranchInventory"
@@ -75,7 +76,18 @@
                 </a>
                 <div class="collapse {{ $isBranchInventoryActive ? 'show' : '' }}" id="sidebarBranchInventory">
                     <ul class="sub-menu">
-                        <!-- Current Stock of this specific branch -->
+                        
+                        <!-- 🔥 নতুন যোগ করা হয়েছে: বাল্ক আইটেম রিসিভ ও সর্টিং -->
+                        <li class="side-nav-item">
+                            <a href="{{ route('branch.inventory.receive-sort') }}"
+                                class="side-nav-link {{ request()->routeIs('branch.inventory.receive-sort') ? 'active' : '' }}">
+                                <span class="menu-icon"><i class="ti ti-box-multiple"></i></span>
+                                <span class="menu-text"> Receive & Sort Bulk </span>
+                                <span class="badge bg-success-lt text-success ms-auto">New</span>
+                            </a>
+                        </li>
+
+                        <!-- Current Stock -->
                         <li class="side-nav-item">
                             <a href="{{ route('branch.inventory.index') }}"
                                 class="side-nav-link {{ request()->routeIs('branch.inventory.index') ? 'active' : '' }}">

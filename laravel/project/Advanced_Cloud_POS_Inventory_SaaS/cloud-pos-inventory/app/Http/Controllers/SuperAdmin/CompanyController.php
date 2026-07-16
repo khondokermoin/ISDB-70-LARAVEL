@@ -19,6 +19,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
+        // ✅ 'owner' রিলেশনশিপ ব্যবহার করা হয়েছে (আপনার মডেল অনুযায়ী)
         $companies = Company::with(['plan', 'owner', 'businessType'])
             ->withCount(['users', 'branches'])
             ->latest()
@@ -82,11 +83,11 @@ class CompanyController extends Controller
             $validated['slug'] = Str::slug($validated['name']) . '-' . Str::random(5);
         }
 
-        // ✅ FIX 1: Trial End Date অটোমেটিক ক্যালকুলেশন
+        // Trial End Date অটোমেটিক ক্যালকুলেশন
         $trialEndsAt = null;
         if ($validated['status'] === 'trial') {
-            $plan = \App\Models\Plan::find($validated['plan_id']);
-            $trialDays = $plan ? ($plan->trial_days ?? 14) : 14; // প্ল্যানে না থাকলে ডিফল্ট ১৪ দিন
+            $plan = Plan::find($validated['plan_id']);
+            $trialDays = $plan ? ($plan->trial_days ?? 14) : 14;
             $trialEndsAt = now()->addDays($trialDays);
         }
 
@@ -109,16 +110,11 @@ class CompanyController extends Controller
                 'timezone'         => $validated['timezone'] ?? 'Asia/Dhaka',
                 'status'           => $validated['status'],
                 'plan_id'          => $validated['plan_id'],
-
-                // ✅ FIX 2: 'owner_id' এর বদলে সঠিক কলামের নাম 'user_id' ব্যবহার করা হয়েছে
                 'user_id'          => $validated['user_id'],
-
                 'business_type_id' => $validated['business_type_id'],
-
-                // ✅ FIX 3: trial_ends_at যোগ করা হয়েছে
                 'trial_ends_at'    => $trialEndsAt,
-
-                'settings'         => $validated['settings'] ?? null,
+                // ✅ Laravel Model Cast ('array') অটোমেটিক JSON এ কনভার্ট করবে
+                'settings'         => $validated['settings'] ?? null, 
             ]);
 
             DB::commit();
@@ -163,7 +159,7 @@ class CompanyController extends Controller
         $company        = Company::findOrFail($id);
         $plans          = Plan::where('status', 'active')->get();
         $users          = User::all();
-        $business_types = BusinessType::where('is_active', true)->get(); // ✅ এডিটের জন্যও ডাটা আনা হচ্ছে
+        $business_types = BusinessType::where('is_active', true)->get();
 
         return view('super-admin.companies.edit', compact('company', 'plans', 'users', 'business_types'));
     }
@@ -193,22 +189,37 @@ class CompanyController extends Controller
             'status'           => 'required|in:active,inactive,suspended,trial',
             'plan_id'          => 'required|exists:plans,id',
             'user_id'          => 'required|exists:users,id',
-            'business_type_id' => 'required|exists:business_types,id', // ✅ ভ্যালিডেশন যোগ করা হয়েছে
+            'business_type_id' => 'required|exists:business_types,id',
             'logo'             => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
             'settings'         => 'nullable|array',
+            'trial_ends_at'    => 'nullable|date', // ✅ Expired স্ট্যাটাস ফিক্স করার জন্য
         ]);
 
+        // লোগো আপলোড হ্যান্ডলিং
         if ($request->hasFile('logo')) {
             if ($company->logo && Storage::disk('public')->exists($company->logo)) {
                 Storage::disk('public')->delete($company->logo);
             }
             $validated['logo'] = $request->file('logo')->store('companies/logos', 'public');
+        } else {
+            // নতুন লোগো না থাকলে পুরনোটা মুছে যাবে না তাই এটি আনসেট করা হলো
+            unset($validated['logo']);
         }
 
         if (empty($validated['slug'])) {
             $validated['slug'] = Str::slug($validated['name']) . '-' . Str::random(5);
         }
 
+        // Trial Ends At লজিক
+        $trialEndsAt = $request->filled('trial_ends_at') ? $request->trial_ends_at : $company->trial_ends_at;
+        
+        if ($validated['status'] === 'trial' && empty($trialEndsAt)) {
+            $plan = Plan::find($validated['plan_id']);
+            $trialDays = $plan ? ($plan->trial_days ?? 14) : 14;
+            $trialEndsAt = now()->addDays($trialDays);
+        }
+
+        // ✅ ডাটাবেস আপডেট (Model Cast অটোমেটিক settings অ্যারে হ্যান্ডেল করবে)
         $company->update([
             'name'             => $validated['name'],
             'slug'             => $validated['slug'],
@@ -226,9 +237,10 @@ class CompanyController extends Controller
             'timezone'         => $validated['timezone'] ?? 'Asia/Dhaka',
             'status'           => $validated['status'],
             'plan_id'          => $validated['plan_id'],
-            'owner_id'         => $validated['user_id'],
-            'business_type_id' => $validated['business_type_id'], // ✅ আপডেট করা হচ্ছে
-            'settings'         => $validated['settings'] ?? $company->settings,
+            'user_id'          => $validated['user_id'], // ✅ সঠিক কলাম নাম
+            'business_type_id' => $validated['business_type_id'],
+            'trial_ends_at'    => $trialEndsAt,          // ✅ আপডেট হচ্ছে
+            'settings'         => $request->has('settings') ? $request->settings : $company->settings,
         ]);
 
         if ($request->wantsJson()) {

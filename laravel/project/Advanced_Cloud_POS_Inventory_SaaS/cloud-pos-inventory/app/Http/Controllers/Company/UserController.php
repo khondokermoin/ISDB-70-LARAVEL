@@ -3,63 +3,43 @@
 namespace App\Http\Controllers\Company;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Models\Branch;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        // বর্তমান কোম্পানির সব ব্রাঞ্চ লোড করা
+        $branches = Branch::where('company_id', auth()->user()->company_id)->get();
+        
+        return view('company.users.create', compact('branches'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6',
+            'role' => 'required|string',
+            'branch_id' => 'nullable|exists:branches,id', 
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'company_id' => auth()->user()->company_id, // ✅ অটোমেটিক বর্তমান কোম্পানির আইডি
+            'branch_id' => $request->branch_id,         // ✅ UI থেকে সিলেক্ট করা ব্রাঞ্চ আইডি
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        // Spatie Permission ব্যবহার করলে রোল অ্যাসাইন
+        $user->assignRole($request->role);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('company.users.index')
+            ->with('success', 'User created and assigned to branch successfully!');
     }
 }

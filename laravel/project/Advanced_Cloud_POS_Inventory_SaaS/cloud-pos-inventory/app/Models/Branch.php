@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Branch extends Model
 {
+    // সব কলাম ফিলাবেল রাখার জন্য guarded empty রাখা হয়েছে, যা ঠিক আছে
     protected $guarded = [];
 
     public function company()
@@ -16,5 +17,14 @@ class Branch extends Model
     public function users()
     {
         return $this->hasMany(User::class);
+    }
+
+    /**
+     * ✅ এই নতুন মেথডটি যুক্ত করুন
+     * এটি branches টেবিলের manager_id কলামকে users টেবিলের id এর সাথে ম্যাপ করবে
+     */
+    public function manager()
+    {
+        return $this->belongsTo(User::class, 'manager_id');
     }
 }
