@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us — THE SIGNAL</title>
+<meta name="description" content="Learn about THE SIGNAL's mission, vision and newsroom team.">
+<meta name="theme-color" content="#12181f">
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,500&family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&family=Hind+Siliguri:wght@400;600&display=swap" rel="stylesheet">
+
+<!-- Bootstrap 5 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+<!-- Custom -->
+<link href="assets/css/style.css" rel="stylesheet">
+<link href="assets/css/responsive.css" rel="stylesheet">
+</head>
+<body>
+
+<a href="#mainContent" class="visually-hidden-focusable">Skip to main content</a>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- ============================= TOP UTILITY BAR ============================= -->
+<div class="topbar">
+  <div class="container-fluid px-3 px-lg-5 topbar-inner">
+    <div class="topbar-ticker">
+      <span class="pulse-dot" aria-hidden="true"></span>
+      <div class="ticker-track">
+        <span id="liveDateTime">Loading date…</span>
+        <span>·</span>
+        <span><i class="fa-solid fa-cloud-sun me-1"></i> Dhaka 31°C, Partly Cloudy</span>
+        <span>·</span>
+        <span>Dollar: ৳119.40</span>
+        <span>·</span>
+        <span>DSEX: 5,412.6 <i class="fa-solid fa-arrow-up text-success"></i></span>
+      </div>
+    </div>
+    <div class="topbar-meta">
+      <select class="lang-switch" aria-label="Language switcher">
+        <option>English</option>
+        <option>বাংলা</option>
+      </select>
+      <div class="social-links d-none d-md-flex">
+        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" aria-label="Twitter / X"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================= MASTHEAD ============================= -->
+<header class="masthead">
+  <div class="container-fluid px-3 px-lg-5 masthead-inner">
+    <a href="index.html" class="brand text-decoration-none">
+      <span class="mark">S</span>
+      <div>
+        <div class="brand-name">THE <em>SIGNAL</em></div>
+        <div class="brand-tagline">Cutting through the noise</div>
+      </div>
+    </a>
+
+    <form class="masthead-search d-none d-md-flex" role="search">
+      <div class="input-group">
+        <input type="search" class="form-control" placeholder="Search news, topics, authors…" aria-label="Search">
+        <button class="btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </div>
+    </form>
+
+    <div class="masthead-actions">
+      <button class="icon-btn d-md-none" id="searchToggle" aria-label="Toggle search"><i class="fa-solid fa-magnifying-glass"></i></button>
+      <button class="icon-btn dark-toggle" aria-label="Toggle dark mode">
+        <i class="fa-solid fa-moon"></i>
+        <i class="fa-solid fa-sun"></i>
+      </button>
+      <button class="icon-btn" aria-label="Notifications" data-toast="You're all caught up — no new alerts" data-toast-icon="fa-bell">
+        <i class="fa-regular fa-bell"></i>
+        <span class="badge-dot">3</span>
+      </button>
+      <a href="#" class="btn btn-outline-ink btn-sm d-none d-lg-inline-block rounded-pill px-3">Log in</a>
+      <a href="#" class="btn btn-signal btn-sm d-none d-lg-inline-block rounded-pill px-3">Register</a>
+      <button class="icon-btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu" aria-label="Open menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ============================= MAIN NAVIGATION ============================= -->
+<nav class="main-nav d-none d-lg-block" aria-label="Primary navigation">
+  <div class="container-fluid px-lg-5">
+    <ul class="navbar-nav flex-row flex-wrap">
+      <li class="nav-item active"><a class="nav-link" href="index.html">Home</a></li>
+      <li class="nav-item"><a class="nav-link" href="category.html?cat=bangladesh">Bangladesh</a></li>
+      <li class="nav-item"><a class="nav-link" href="category.html?cat=international">International</a></li>
+      <li class="nav-item has-mega position-relative">
+        <a class="nav-link" href="category.html?cat=politics">Politics</a>
+        <div class="mega-menu">
+          <div class="container-fluid px-lg-5">
+            <div class="row g-4">
+              <div class="col-lg-3">
+                <h6>Sub Topics</h6>
+                <a href="category.html?cat=politics">Parliament</a>
+                <a href="category.html?cat=politics">Elections</a>
+                <a href="category.html?cat=politics">Policy &amp; Law</a>
+                <a href="category.html?cat=politics">Local Government</a>
+              </div>
+              <div class="col-lg-3">
+                <h6>Opinion</h6>
+                <a href="category.html?cat=opinion">Editorial Desk</a>
+                <a href="category.html?cat=opinion">Columnists</a>
+                <a href="category.html?cat=opinion">Fact Check</a>
+              </div>
+              <div class="col-lg-6">
+                <h6>Featured</h6>
+                <div class="row g-3 mega-feature">
+                  <div class="col-6">
+                    <img src="https://picsum.photos/seed/parliament1/300/160" alt="Parliament session in session hall" loading="lazy" class="mb-2">
+                    <a href="single.html" class="fw-semibold">Budget session begins Monday with new tax proposals</a>
+                  </div>
+                  <div class="col-6">
+                    <img src="https://picsum.photos/seed/election2/300/160" alt="Voters lining up outside a polling station" loading="lazy" class="mb-2">
+                    <a href="single.html" class="fw-semibold">Election commission announces revised voter rolls</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item"><a class="nav-link" href="category.html?cat=economy">Economy</a></li>
+      <li class="nav-item"><a class="nav-link" href="category.html?cat=sports">Sports</a></li>
+      <li class="nav-item"><a class="nav-link" href="category.html?cat=entertainment">Entertainment</a></li>
+      <li class="nav-item has-mega position-relative">
+        <a class="nav-link" href="category.html?cat=technology">Technology</a>
+        <div class="mega-menu">
+          <div class="container-fluid px-lg-5">
+            <div class="row g-4">
+              <div class="col-lg-3"><h6>Coverage</h6><a href="category.html?cat=technology">AI &amp; Software</a><a href="category.html?cat=technology">Gadgets</a><a href="category.html?cat=technology">Startups</a><a href="category.html?cat=technology">Cybersecurity</a></div>
+              <div class="col-lg-3"><h6>Science</h6><a href="category.html?cat=science">Space</a><a href="category.html?cat=science">Climate</a><a href="category.html?cat=science">Health Research</a></div>
+              <div class="col-lg-6">
+                <div class="row g-3 mega-feature">
+                  <div class="col-6"><img src="https://picsum.photos/seed/aichip3/300/160" alt="Close-up of a computer processor chip" loading="lazy" class="mb-2"><a href="single.html" class="fw-semibold">Local startups race to build Bengali-language AI models</a></div>
+                  <div class="col-6"><img src="https://picsum.photos/seed/rocket4/300/160" alt="Rocket launching with exhaust trail" loading="lazy" class="mb-2"><a href="single.html" class="fw-semibold">Satellite launch to expand rural internet access</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item"><a class="nav-link" href="category.html?cat=science">Science</a></li>
+      <li class="nav-item"><a class="nav-link" href="category.html?cat=education">Education</a></li>
+      <li class="nav-item"><a class="nav-link" href="category.html?cat=health">Health</a></li>
+      <li class="nav-item"><a class="nav-link" href="category.html?cat=lifestyle">Lifestyle</a></li>
+      <li class="nav-item"><a class="nav-link" href="category.html?cat=travel">Travel</a></li>
+      <li class="nav-item"><a class="nav-link" href="category.html?cat=opinion">Opinion</a></li>
+      <li class="nav-item"><a class="nav-link" href="#videoNews">Videos</a></li>
+      <li class="nav-item"><a class="nav-link" href="#photoGallery">Photo Gallery</a></li>
+      <li class="nav-item ms-auto"><a class="nav-link live-tv-link" href="#liveNews"><span class="pulse-dot"></span> Live TV</a></li>
+      <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Mobile Offcanvas Menu -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="mobileMenu">
+  <div class="offcanvas-header">
+    <span class="brand-name">THE <em>SIGNAL</em></span>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <nav class="nav flex-column">
+      <a class="nav-link" href="index.html">Home</a>
+      <a class="nav-link" href="category.html?cat=bangladesh">Bangladesh</a>
+      <a class="nav-link" href="category.html?cat=international">International</a>
+      <a class="nav-link" href="category.html?cat=politics">Politics</a>
+      <a class="nav-link" href="category.html?cat=economy">Economy</a>
+      <a class="nav-link" href="category.html?cat=sports">Sports</a>
+      <a class="nav-link" href="category.html?cat=entertainment">Entertainment</a>
+      <a class="nav-link" href="category.html?cat=technology">Technology</a>
+      <a class="nav-link" href="category.html?cat=science">Science</a>
+      <a class="nav-link" href="category.html?cat=education">Education</a>
+      <a class="nav-link" href="category.html?cat=health">Health</a>
+      <a class="nav-link" href="category.html?cat=lifestyle">Lifestyle</a>
+      <a class="nav-link" href="category.html?cat=travel">Travel</a>
+      <a class="nav-link" href="category.html?cat=opinion">Opinion</a>
+      <a class="nav-link" href="contact.html">Contact</a>
+      <div class="d-flex gap-2 mt-3">
+        <a href="#" class="btn btn-outline-ink flex-fill rounded-pill">Log in</a>
+        <a href="#" class="btn btn-signal flex-fill rounded-pill">Register</a>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<!-- ============================= BREAKING NEWS TICKER ============================= -->
+<div class="breaking-bar">
+  <div class="container-fluid px-3 px-lg-5 d-flex align-items-center">
+    <span class="breaking-label"><span class="pulse-dot"></span><span class="label-text">Breaking</span></span>
+    <div class="breaking-marquee">
+      <div class="track">
+        <a href="single.html">Central bank holds interest rates steady amid inflation concerns</a>
+        <a href="single.html">National cricket team seals series win with last-over finish</a>
+        <a href="single.html">Cyclone warning signal raised for coastal districts</a>
+        <a href="single.html">Cabinet approves new digital commerce policy</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Top banner ad -->
+<div class="container my-3">
+  <div class="ad-slot leaderboard">Advertisement · 970×90</div>
+</div>
+<main id="mainContent">
+  <div class="page-hero">
+    <div class="container position-relative">
+      <div class="breadcrumb-wrap text-white-50 mb-2"><a href="index.html" class="text-white-50">Home</a> / <span class="text-white">About</span></div>
+      <h1>Reporting that cuts through the noise</h1>
+      <p>THE SIGNAL is an independent newsroom covering Bangladesh and the world — verified first, published fast, and accountable to our readers above all else.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="row g-4 text-center mb-5">
+        <div class="col-md-4">
+          <div class="widget h-100">
+            <i class="fa-solid fa-bullseye fa-2x mb-3" style="color:var(--signal-red);"></i>
+            <h3 class="h5 mb-2">Our Mission</h3>
+            <p class="text-muted mb-0" style="font-size:.9rem;">To deliver accurate, timely and independent journalism that helps our readers understand the world and make informed decisions.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="widget h-100">
+            <i class="fa-solid fa-eye fa-2x mb-3" style="color:var(--signal-teal);"></i>
+            <h3 class="h5 mb-2">Our Vision</h3>
+            <p class="text-muted mb-0" style="font-size:.9rem;">A better-informed Bangladesh, where reliable reporting strengthens public debate and holds power to account.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="widget h-100">
+            <i class="fa-solid fa-shield-halved fa-2x mb-3" style="color:var(--signal-gold);"></i>
+            <h3 class="h5 mb-2">Our Standards</h3>
+            <p class="text-muted mb-0" style="font-size:.9rem;">Every story is fact-checked and sourced before publication. Corrections are issued transparently and promptly.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 align-items-center mb-5">
+        <div class="col-lg-6 fade-up">
+          <img src="https://picsum.photos/seed/newsroom33/700/460" alt="Journalists working at a busy newsroom" loading="lazy" style="border-radius:var(--radius-lg);">
+        </div>
+        <div class="col-lg-6 fade-up">
+          <span class="eyebrow">Since 2014</span>
+          <h2 class="mb-3">Twelve years in the field, not behind a desk</h2>
+          <p class="text-muted">THE SIGNAL began as a three-person desk covering local government meetings that no one else showed up to. Today our reporters work across all 64 districts, backed by a dedicated fact-checking and data desk.</p>
+          <p class="text-muted">We remain privately funded by subscriptions and advertising — never by political parties or state grants — because independence is the only thing we're not willing to negotiate.</p>
+        </div>
+      </div>
+
+      <div class="stats-strip mb-5">
+        <div class="row text-center g-4">
+          <div class="col-6 col-md-3 stat-item"><div class="num"><span data-count-to="120">0</span></div><div class="label">Journalists</div></div>
+          <div class="col-6 col-md-3 stat-item"><div class="num"><span data-count-to="64">0</span></div><div class="label">Districts Covered</div></div>
+          <div class="col-6 col-md-3 stat-item"><div class="num"><span data-count-to="18500">0</span></div><div class="label">Stories Published</div></div>
+          <div class="col-6 col-md-3 stat-item"><div class="num"><span data-count-to="12">0</span></div><div class="label">Years Reporting</div></div>
+        </div>
+      </div>
+
+      <div class="section-head"><div><span class="eyebrow">The people behind the desk</span><h2>Newsroom Leadership</h2></div></div>
+      <div class="row g-4">
+        <div class="col-md-3 col-6 fade-up team-card">
+          <img src="https://i.pravatar.cc/300?img=33" alt="Portrait of Ayesha Siddiqua" loading="lazy">
+          <h5>Ayesha Siddiqua</h5>
+          <div class="role">Editor-in-Chief</div>
+        </div>
+        <div class="col-md-3 col-6 fade-up team-card">
+          <img src="https://i.pravatar.cc/300?img=52" alt="Portrait of Kamrul Hasan" loading="lazy">
+          <h5>Kamrul Hasan</h5>
+          <div class="role">Managing Editor</div>
+        </div>
+        <div class="col-md-3 col-6 fade-up team-card">
+          <img src="https://i.pravatar.cc/300?img=44" alt="Portrait of Nadia Rahman" loading="lazy">
+          <h5>Nadia Rahman</h5>
+          <div class="role">Head of Investigations</div>
+        </div>
+        <div class="col-md-3 col-6 fade-up team-card">
+          <img src="https://i.pravatar.cc/300?img=13" alt="Portrait of Rezaul Karim" loading="lazy">
+          <h5>Rezaul Karim</h5>
+          <div class="role">Digital Editor</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="section-head justify-content-center border-0 text-center"><div><span class="eyebrow">Common questions</span><h2>Frequently Asked Questions</h2></div></div>
+          <div class="accordion" id="faqAccordion">
+            <div class="accordion-item">
+              <h3 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">How do you verify breaking news before publishing?</button></h3>
+              <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                <div class="accordion-body text-muted">Every breaking story passes through at least two independent sources and a senior editor before it goes live. We label developing stories clearly and update them as facts are confirmed.</div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">Can I submit a news tip or story idea?</button></h3>
+              <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body text-muted">Yes — use the contact form or email our newsroom directly. Tips involving sensitive information can be sent through our secure contact channel, listed on the Contact page.</div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">How does THE SIGNAL make money?</button></h3>
+              <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body text-muted">Through reader subscriptions and display advertising only. We do not accept funding from political parties, government bodies, or undisclosed sponsors.</div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">What happens if you publish something inaccurate?</button></h3>
+              <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body text-muted">We issue a visible correction on the article itself along with a note explaining what changed and why, in line with our published corrections policy.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<!-- ============================= FOOTER ============================= -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <a href="index.html" class="brand text-decoration-none mb-3 d-inline-flex">
+          <span class="mark">S</span>
+          <div><div class="brand-name" style="color:#fff;">THE <em>SIGNAL</em></div></div>
+        </a>
+        <p style="max-width:38ch;">Independent, deadline-driven journalism from Bangladesh and beyond — verified first, published fast.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" aria-label="X / Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-6">
+        <h5>Quick Links</h5>
+        <ul class="footer-links list-unstyled">
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="search.html">Search</a></li>
+          <li><a href="#">Advertise</a></li>
+          <li><a href="#">Careers</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-2 col-6">
+        <h5>Categories</h5>
+        <ul class="footer-links list-unstyled">
+          <li><a href="category.html?cat=politics">Politics</a></li>
+          <li><a href="category.html?cat=sports">Sports</a></li>
+          <li><a href="category.html?cat=technology">Technology</a></li>
+          <li><a href="category.html?cat=business">Business</a></li>
+          <li><a href="category.html?cat=opinion">Opinion</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-4">
+        <h5>Newsletter</h5>
+        <p>Subscribe for the morning briefing, delivered daily.</p>
+        <form class="newsletter-form d-flex gap-2 mb-3">
+          <input type="email" class="form-control" placeholder="you@email.com" required aria-label="Email address">
+          <button class="btn btn-signal" type="submit">Join</button>
+        </form>
+        <h5 class="mt-4">Contact</h5>
+        <ul class="footer-links list-unstyled">
+          <li><i class="fa-regular fa-envelope me-2"></i>newsroom@thesignal.example</li>
+          <li><i class="fa-solid fa-phone me-2"></i>+880 2-XXXX-XXXX</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <span>© 2026 The Signal. All rights reserved.</span>
+      <div class="d-flex gap-3 flex-wrap">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<button class="back-to-top" id="backToTop" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+
+<!-- Bootstrap Bundle (Popper included) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
