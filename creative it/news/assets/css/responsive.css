@@ -1,0 +1,68 @@
+/* ==========================================================================
+   RESPONSIVE.CSS — breakpoint refinements
+   Desktop-first tokens already fluid via clamp(); this file handles
+   structural changes: stacking, hiding, and touch-target sizing.
+   ========================================================================== */
+
+/* ----- Laptop / small desktop (<=1199px) ----- */
+@media (max-width:1199.98px){
+  .masonry-gallery{column-count:3;}
+  .mega-menu{position:static;box-shadow:none;border-top:none;}
+}
+
+/* ----- Tablet (<=991.98px) ----- */
+@media (max-width:991.98px){
+  .topbar-meta .lang-switch{display:none;}
+  .masthead-search{max-width:260px;}
+  .hero-lead{min-height:360px;}
+  .sticky-sidebar{position:static;}
+  .masonry-gallery{column-count:2;}
+  .article-share-rail{position:static;flex-direction:row;justify-content:center;margin-bottom:1.5rem;}
+  .stats-strip .row>div{margin-bottom:1.5rem;}
+  .stats-strip .row>div:last-child{margin-bottom:0;}
+  .author-hero{flex-direction:column;text-align:center;}
+}
+
+/* ----- Mobile (<=767.98px) ----- */
+@media (max-width:767.98px){
+  .topbar-ticker{display:none;}
+  .topbar .topbar-inner{justify-content:flex-end;}
+  .masthead-inner{flex-wrap:wrap;}
+  .masthead-search{order:3;max-width:100%;flex:0 0 100%;margin-top:.75rem;}
+  .brand-tagline{display:none;}
+  .hero-lead-body{padding:1.25rem;}
+  .hero-lead-body h1{font-size:1.4rem;}
+  .section-head{flex-direction:column;align-items:flex-start;gap:.6rem;}
+  .section-tabs{flex-wrap:wrap;}
+  .masonry-gallery{column-count:2;column-gap:.6rem;}
+  .masonry-gallery .g-item{margin-bottom:.6rem;}
+  .breaking-label span.label-text{display:none;}
+  .video-title{font-size:.82rem;}
+  .comment-item.reply{margin-left:1.2rem;}
+  .prevnext-nav{flex-direction:column;}
+  .prevnext-nav>div:first-child{border-right:none;border-bottom:1px solid var(--border);}
+  .error-page .code{font-size:5.5rem;}
+  .weather-widget .temp{font-size:1.8rem;}
+}
+
+/* ----- Small mobile (<=479.98px) ----- */
+@media (max-width:479.98px){
+  .masonry-gallery{column-count:1;}
+  .hero-side-item img{width:66px;height:56px;}
+  .stat-item .num{font-size:1.8rem;}
+  .icon-btn{width:36px;height:36px;}
+  .brand-name{font-size:1.3rem;}
+  .brand .mark{width:36px;height:36px;font-size:1.05rem;}
+  .search-hero{padding:2rem 0;}
+}
+
+/* ----- Landscape phones ----- */
+@media (max-height:480px) and (orientation:landscape){
+  .hero-lead{min-height:280px;}
+  .main-nav{position:relative;}
+}
+
+/* ----- Larger screens: cap ultra-wide line lengths ----- */
+@media (min-width:1600px){
+  .article-body{font-size:1.15rem;}
+}
