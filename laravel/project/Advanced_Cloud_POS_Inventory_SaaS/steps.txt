@@ -17,11 +17,7 @@
 17. & "$env:LOCALAPPDATA\Programs\Ollama\ollama.exe" run qwen2.5-coder:7b
 18. cmd - ("%LOCALAPPDATA%\Programs\Ollama\ollama.exe" run qwen2.5-coder:7b)
 
-Publishable key:
-pk_test_51TuRbr7sFATHPaIzxqKo3MTZn8RAgJko3oNOb4bmOnqrtJqYgMy8aG4lfYo2qzJSpo7LiXUYDfxJK071xL7RzNs3002xX7DCCi
 
-Secret key:
-sk_test_51TuRbr7sFATHPaIzbzOp77jY2yGqBTpMrq2rHUQHMxQFQ0esWQeRpH90AS6L559H1rH5mYxLiVjI8uTiz7rzXjLY004dogP8by
 
 
 php unit and trinker
