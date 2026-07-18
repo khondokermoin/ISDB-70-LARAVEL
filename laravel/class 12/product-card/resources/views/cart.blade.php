@@ -90,7 +90,7 @@
 
                 <a href="{{ url('/') }}" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a>
 
-                <button class="btn btn-success">Checkout</button>
+                <a href="{{ url('stripe') }}" class="btn btn-success">Checkout</a>
 
             </td>
 
