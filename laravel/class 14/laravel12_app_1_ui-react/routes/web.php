@@ -21,6 +21,7 @@ Route::get('/', [TestController::class, 'index']);
 Route::get('/about', [TestController::class, 'about']);
 Route::get('/contact', [TestController::class, 'contact']);
 Route::get('/product', [TestController::class, 'product']);
+Route::post('/send', [TestController::class, 'send']);
 
 /* Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

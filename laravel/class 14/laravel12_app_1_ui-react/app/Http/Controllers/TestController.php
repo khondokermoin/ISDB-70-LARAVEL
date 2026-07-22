@@ -23,6 +23,11 @@ class TestController extends Controller
         return Inertia::render('Contact');
         
     }
+    public function send(Request $request)
+    {
+        dd($request);
+        
+    }
     public function login()
     {
         return Inertia::render('Login');
@@ -34,4 +39,5 @@ class TestController extends Controller
         return Inertia::render('Product',compact('product'));
         
     }
+
 }
