@@ -2,18 +2,18 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
     // 1. ALWAYS prevent the default form submission/page reload first
     event.preventDefault(); 
     
-    // Get the text values from the input fields and remove whitespace
-    const emailValue = document.getElementById("email").value.trim();
-    const passwordValue = document.getElementById("password").value.trim();
+    // Get the raw text values from the input fields without trim
+    const emailValue = document.getElementById("email").value;
+    const passwordValue = document.getElementById("password").value;
 
-    // Check if the email field is empty
-    if (emailValue === "") {
+    // Check if the email field is empty using !
+    if (!emailValue) {
         alert("Please enter your email address."); 
         return false;                             
     }
 
-    // Check if the password field is empty
-    if (passwordValue === "") {
+    // Check if the password field is empty using !
+    if (!passwordValue) {
         alert("Please enter your password.");      
         return false;                             
     }
