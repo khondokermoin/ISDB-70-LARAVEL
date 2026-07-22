@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+
+<head>
+    <title>Image Gallery Popup</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS v5.3.8 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" />
+        <style>
+
+            .popup {
+                width: 100%;
+                height: 100vh;
+                position: fixed; 
+                left: 0;
+                top: 0;
+                background: rgba(0, 0, 0, 0.9);
+                display: none; 
+                justify-content: center;
+                align-items: center;
+                z-index: 9999; 
+            }
+       
+            .popup img {
+                max-width: 85%;
+                max-height: 85vh;
+                object-fit: contain;
+                border: 3px solid white;
+                border-radius: 4px;
+            }
+ 
+            .close-btn {
+                position: absolute;
+                top: 20px;
+                right: 30px;
+                font-size: 40px;
+                color: white;
+                cursor: pointer;
+                user-select: none;
+            }
+        </style>
+</head>
+
+<body>
+    <header>
+        <!-- place navbar here -->
+    </header>
+    <main class="py-5">
+
+        <section>
+            <div class="container">
+                <!-- Gallery -->
+                <div class="row">
+                    <div class="col-lg-4 col-md-12 mb-4 mb-lg-0">
+                        <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp"
+                            class="w-100 shadow-1-strong rounded mb-4 gallery-img" alt="Boat on Calm Water" />
+
+                        <img src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain1.webp"
+                            class="w-100 shadow-1-strong rounded mb-4 gallery-img" alt="Wintry Mountain Landscape" />
+                    </div>
+
+                    <div class="col-lg-4 mb-4 mb-lg-0">
+                        <img src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain2.webp"
+                            class="w-100 shadow-1-strong rounded mb-4 gallery-img" alt="Mountains in the Clouds" />
+
+                        <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp"
+                            class="w-100 shadow-1-strong rounded mb-4 gallery-img" alt="Boat on Calm Water" />
+                    </div>
+
+                    <div class="col-lg-4 mb-4 mb-lg-0">
+                        <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(18).webp"
+                            class="w-100 shadow-1-strong rounded mb-4 gallery-img" alt="Waves at Sea" />
+
+                        <img src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain3.webp"
+                            class="w-100 shadow-1-strong rounded mb-4 gallery-img" alt="Yosemite National Park" />
+                    </div>
+                </div>
+                <!-- Gallery -->
+
+                <!-- পপআপ বক্সের কোড -->
+                <div class="popup" id="imagePopup">
+                    <span class="close-btn" id="closePopup">&times;</span>
+                    <img src="" id="popupImg" alt="Popup Image">
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <!-- place footer here -->
+    </footer>
+    <!-- Bootstrap JavaScript Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="./script.js"></script>
+</body>
+
+</html>
