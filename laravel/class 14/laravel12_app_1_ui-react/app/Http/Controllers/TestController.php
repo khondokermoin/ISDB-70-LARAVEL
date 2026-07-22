@@ -22,4 +22,14 @@ class TestController extends Controller
         return Inertia::render('Contact');
         
     }
+    public function login()
+    {
+        return Inertia::render('Login');
+        
+    }
+    public function product()
+    {
+        return Inertia::render('Product');
+        
+    }
 }

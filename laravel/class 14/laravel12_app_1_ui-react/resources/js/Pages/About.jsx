@@ -5,7 +5,7 @@ import Footer from '@/Partials/Footer';
 
 
 
-export default function Test() {
+export default function About() {
   return (
     <>
      <Banner/>

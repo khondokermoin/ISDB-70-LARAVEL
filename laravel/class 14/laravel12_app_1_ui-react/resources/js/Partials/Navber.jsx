@@ -11,13 +11,19 @@ export default function Navber() {
         <Link className="nav-link active" href="/">Home</Link>
       </li>
       <li className="nav-item">
+        <Link className="nav-link " href="/product">Product</Link>
+      </li>
+      <li className="nav-item">
         <Link className="nav-link" href="/about">About</Link>
       </li>
       <li className="nav-item">
         <Link className="nav-link" href="/contact">Contact</Link>
       </li>
       <li className="nav-item">
-        <a className="nav-link disabled" href="#">Disabled</a>
+        <Link className="nav-link disabled" href="#">Disabled</Link>
+      </li>
+      <li className="nav-item">
+        <Link className="nav-link" href="/login">Login</Link>
       </li>
     </ul>
   </div>

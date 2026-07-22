@@ -20,6 +20,7 @@ use App\Http\Controllers\TestController;
 Route::get('/', [TestController::class, 'index']);
 Route::get('/about', [TestController::class, 'about']);
 Route::get('/contact', [TestController::class, 'contact']);
+Route::get('/product', [TestController::class, 'product']);
 
 /* Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -39,5 +40,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
+Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('auth.google.callback');
 
 require __DIR__.'/auth.php';

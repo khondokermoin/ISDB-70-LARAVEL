@@ -1,1 +1,6 @@
 @import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+
+@import '/public/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css';
+@import '/public/assets/plugins/metismenu/css/metisMenu.min.css';
+@import '/public/assets/plugins/simplebar/css/simplebar.css';
+@import 'https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap';
