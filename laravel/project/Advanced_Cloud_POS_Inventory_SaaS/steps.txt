@@ -29,3 +29,27 @@ https://hungrycoding.com/ (check how to cms Laravel SmartEnd CMS - Laravel Admin
 
 "Next.js Blog Template", "React Markdown Blog", "Gatsby Tech Blog"।
 "Tailwind CSS Blog HTML", "Tech Blog Template", "Minimalist Magazine HTML", "Developer Blog Template"।
+
+
+Before migrating any dashboard or business pages, perform a template verification.
+
+Check the converted React components against the original Blade files:
+
+resources/views/layouts/admin_master.blade.php
+resources/views/partials/sidebar.blade.php
+resources/views/partials/topbar.blade.php
+resources/views/partials/footer.blade.php
+resources/views/partials/super_admin_sidebar.blade.php
+resources/views/partials/company_sidebar.blade.php
+resources/views/partials/branch_sidebar.blade.php
+
+Report:
+
+1. Which Bootstrap classes were preserved.
+2. Which JavaScript behaviors from the old template are missing.
+3. Which vendor assets are required.
+4. Whether dropdowns, sidebar collapse, search modal, theme settings, and responsive menu still work.
+
+Do not migrate dashboard yet.
+Do not modify files.
+Only audit and report.
