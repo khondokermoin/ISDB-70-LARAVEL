@@ -15,7 +15,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
     return (
         <>
             <div>
-                <div id="loading">
+                {/* <div id="loading">
                     <div id="loading-center">
                         <div id="loading-center-absolute">
                             <div className="object" id="object_four" />
@@ -24,7 +24,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                             <div className="object" id="object_one" />
                         </div>
                     </div>
-                </div>
+                </div> */}
                 {/* pre loader area end */}
                 {/* back to top start */}
                 <div className="back-to-top-wrapper">
