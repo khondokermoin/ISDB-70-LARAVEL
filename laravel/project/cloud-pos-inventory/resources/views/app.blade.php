@@ -10,16 +10,16 @@
     <!-- Fonts -->
     {{-- <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" /> --}}
-    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/animate.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/swiper-bundle.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/slick.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/magnific-popup.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/flaticon_broadx.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/font-awesome-pro.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/spacing.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/custom-animation.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/animate.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/swiper-bundle.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/slick.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/magnific-popup.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/flaticon_broadx.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/font-awesome-pro.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/spacing.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/custom-animation.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}"> --}}
 
     <!-- Scripts -->
     @routes
