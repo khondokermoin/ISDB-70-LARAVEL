@@ -209,6 +209,7 @@ Route::middleware(['auth', 'verified', 'role:Company Admin', 'tenant.access'])
         Route::prefix('settings')->name('settings.')->group(function () {
             Route::get('/profile', [CompanySettingController::class, 'profile'])->name('profile');
             Route::get('/invoice', [CompanySettingController::class, 'invoice'])->name('invoice');
+            Route::resource('/attributes', \App\Http\Controllers\Tenant\AttributeController::class)->except(['create', 'edit', 'show']);
         });
 
         // Subscription & Announcements

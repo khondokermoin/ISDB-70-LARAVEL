@@ -23,6 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
             'tenant.access' => \App\Http\Middleware\EnsureTenantAccess::class,
+            'tenant.domain' => \App\Http\Middleware\IdentifyTenantByDomain::class,
             'inertia' => \App\Http\Middleware\HandleInertiaRequests::class,
         ]);
 

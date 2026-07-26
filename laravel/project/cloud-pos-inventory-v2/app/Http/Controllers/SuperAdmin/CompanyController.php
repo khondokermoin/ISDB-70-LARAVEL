@@ -54,44 +54,91 @@ class CompanyController extends Controller
     {
         $validated = $request->validated();
 
+        $uploadedPaths = [];
+
         if ($request->hasFile('logo')) {
-            $validated['logo'] = $request->file('logo')->store('companies/logos', 'public');
+            $uploadedPaths['logo'] = $request->file('logo')->store('companies/logos', 'public');
+            $validated['logo'] = $uploadedPaths['logo'];
+        }
+
+        if ($request->hasFile('favicon')) {
+            $uploadedPaths['favicon'] = $request->file('favicon')->store('companies/logos', 'public');
+            $validated['favicon'] = $uploadedPaths['favicon'];
         }
 
         if (empty($validated['slug'])) {
             $validated['slug'] = Str::slug($validated['name']) . '-' . Str::random(5);
         }
 
-        // Trial End Date অটোমেটিক ক্যালকুলেশন
+        $themeSettings = [
+            'primary_color' => $request->input('primary_color', '#2563eb'),
+        ];
+
         $trialEndsAt = null;
         if ($validated['status'] === 'trial') {
-            $plan = Plan::find($validated['plan_id']);
+            $plan = Plan::find($request->input('plan_id'));
             $trialDays = $plan ? ($plan->trial_days ?? 14) : 14;
             $trialEndsAt = now()->addDays($trialDays);
         }
 
-        // Simplified: create company and the initial company admin user
         DB::beginTransaction();
         try {
             $company = Company::create([
                 'name' => $validated['name'],
+                'slug' => $validated['slug'] ?? null,
                 'email' => $validated['email'] ?? null,
                 'phone' => $validated['phone'] ?? null,
+                'contact_person' => $request->input('contact_person'),
+                'website' => $request->input('website'),
                 'address' => $validated['address'] ?? null,
+                'city' => $request->input('city'),
+                'country' => $request->input('country'),
+                'zip_code' => $request->input('zip_code'),
+                'logo' => $validated['logo'] ?? null,
+                'favicon' => $validated['favicon'] ?? null,
+                'theme_settings' => $themeSettings,
+                'social_links' => $request->input('social_links', []),
+                'contact_info' => $request->input('contact_info', []),
                 'subdomain' => $validated['subdomain'],
                 'custom_domain' => $validated['custom_domain'] ?? null,
+                'currency' => $request->input('currency', 'BDT'),
+                'timezone' => $request->input('timezone', 'Asia/Dhaka'),
+                'settings' => $request->input('settings', []),
                 'status' => $validated['status'],
+                'trial_ends_at' => $trialEndsAt,
+                'plan_id' => $request->input('plan_id'),
+                'business_type_id' => $request->input('business_type_id'),
             ]);
 
-            // create company admin user
-            $user = User::create([
-                'name' => $validated['admin_name'],
-                'email' => $validated['admin_email'],
-                'password' => \Illuminate\Support\Facades\Hash::make($validated['admin_password']),
-                'company_id' => $company->id,
-            ]);
+            // Handle Company Admin Assignment
+            // Priority: 1. New admin creation, 2. Existing user selection
+            $user = null;
+            
+            $adminName = $request->input('admin_name');
+            $adminEmail = $request->input('admin_email');
+            $adminPassword = $request->input('admin_password');
+            $existingUserId = $request->input('user_id');
 
-            if (method_exists($user, 'assignRole')) {
+            // Create new admin if provided
+            if (! empty($adminName) && ! empty($adminEmail) && ! empty($adminPassword)) {
+                $user = User::create([
+                    'name' => $adminName,
+                    'email' => $adminEmail,
+                    'password' => \Illuminate\Support\Facades\Hash::make($adminPassword),
+                    'company_id' => $company->id,
+                ]);
+            } 
+            // Use existing user if selected and no new admin is being created
+            elseif (! empty($existingUserId)) {
+                $user = User::find($existingUserId);
+                if ($user) {
+                    // Update company_id if needed
+                    $user->update(['company_id' => $company->id]);
+                }
+            }
+
+            // Assign Company Admin role if user exists and has the method
+            if ($user && method_exists($user, 'assignRole')) {
                 $user->assignRole('Company Admin');
             }
 
@@ -99,9 +146,16 @@ class CompanyController extends Controller
 
             return redirect()->route('superadmin.companies.index')
                 ->with('success', 'Company and admin user created successfully!');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             DB::rollBack();
-            return back()->withInput()->with('error', 'Something went wrong: ' . $e->getMessage());
+
+            foreach ($uploadedPaths as $path) {
+                if (! empty($path) && Storage::disk('public')->exists($path)) {
+                    Storage::disk('public')->delete($path);
+                }
+            }
+
+            return back()->withInput()->with('error', 'Something went wrong while creating the company. Please try again.');
         }
     }
 
@@ -176,7 +230,7 @@ class CompanyController extends Controller
             $validated['slug'] = Str::slug($validated['name']) . '-' . Str::random(5);
         }
 
-        // Trial Ends At লজিক
+        // Trial Ends At logic
         $trialEndsAt = $request->filled('trial_ends_at') ? $request->trial_ends_at : $company->trial_ends_at;
         
         if ($validated['status'] === 'trial' && empty($trialEndsAt)) {
@@ -185,7 +239,11 @@ class CompanyController extends Controller
             $trialEndsAt = now()->addDays($trialDays);
         }
 
-        // ✅ ডাটাবেস আপডেট (Model Cast অটোমেটিক settings অ্যারে হ্যান্ডেল করবে)
+        // Store old user_id to unassign role if it changes
+        $oldUserId = $company->user_id;
+        $newUserId = $validated['user_id'];
+
+        // ✅ Database Update (Model Cast automatically handles settings array)
         $company->update([
             'name'             => $validated['name'],
             'slug'             => $validated['slug'],
@@ -203,11 +261,28 @@ class CompanyController extends Controller
             'timezone'         => $validated['timezone'] ?? 'Asia/Dhaka',
             'status'           => $validated['status'],
             'plan_id'          => $validated['plan_id'],
-            'user_id'          => $validated['user_id'], // ✅ সঠিক কলাম নাম
+            'user_id'          => $newUserId, // ✅ Correct column name
             'business_type_id' => $validated['business_type_id'],
-            'trial_ends_at'    => $trialEndsAt,          // ✅ আপডেট হচ্ছে
+            'trial_ends_at'    => $trialEndsAt,          // ✅ Being updated
             'settings'         => $request->has('settings') ? $request->settings : $company->settings,
         ]);
+
+        // Handle role assignment when user changes
+        if ($oldUserId !== $newUserId) {
+            // Remove role from old user if exists
+            if (! empty($oldUserId)) {
+                $oldUser = User::find($oldUserId);
+                if ($oldUser && method_exists($oldUser, 'removeRole')) {
+                    $oldUser->removeRole('Company Admin');
+                }
+            }
+
+            // Assign role to new user
+            $newUser = User::find($newUserId);
+            if ($newUser && method_exists($newUser, 'assignRole')) {
+                $newUser->assignRole('Company Admin');
+            }
+        }
 
         if ($request->wantsJson()) {
             return response()->json([

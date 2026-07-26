@@ -129,7 +129,8 @@
                                             </option>
                                         @endforeach
                                     </select>
-                                    <button class="btn btn-outline-secondary" type="button" id="toggle-new-admin">New Admin</button>
+                                    <button class="btn btn-outline-secondary" type="button" id="toggle-new-admin">New
+                                        Admin</button>
                                 </div>
                                 @error('user_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -137,23 +138,39 @@
 
                                 <div id="new-admin-section" style="display: none;">
                                     <div class="mb-3">
-                                        <label for="admin_name" class="form-label">Admin Name <span class="text-danger">*</span></label>
-                                        <input type="text" name="admin_name" id="admin_name" class="form-control @error('admin_name') is-invalid @enderror" value="{{ old('admin_name') }}">
-                                        @error('admin_name')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                        <label for="admin_name" class="form-label">Admin Name <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" name="admin_name" id="admin_name"
+                                            class="form-control @error('admin_name') is-invalid @enderror"
+                                            value="{{ old('admin_name') }}">
+                                        @error('admin_name')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="mb-3">
-                                        <label for="admin_email" class="form-label">Admin Email <span class="text-danger">*</span></label>
-                                        <input type="email" name="admin_email" id="admin_email" class="form-control @error('admin_email') is-invalid @enderror" value="{{ old('admin_email') }}">
-                                        @error('admin_email')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                        <label for="admin_email" class="form-label">Admin Email <span
+                                                class="text-danger">*</span></label>
+                                        <input type="email" name="admin_email" id="admin_email"
+                                            class="form-control @error('admin_email') is-invalid @enderror"
+                                            value="{{ old('admin_email') }}">
+                                        @error('admin_email')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="mb-3">
-                                        <label for="admin_password" class="form-label">Password <span class="text-danger">*</span></label>
-                                        <input type="password" name="admin_password" id="admin_password" class="form-control @error('admin_password') is-invalid @enderror">
-                                        @error('admin_password')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                        <label for="admin_password" class="form-label">Password <span
+                                                class="text-danger">*</span></label>
+                                        <input type="password" name="admin_password" id="admin_password"
+                                            class="form-control @error('admin_password') is-invalid @enderror">
+                                        @error('admin_password')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="mb-3">
-                                        <label for="admin_password_confirmation" class="form-label">Confirm Password <span class="text-danger">*</span></label>
-                                        <input type="password" name="admin_password_confirmation" id="admin_password_confirmation" class="form-control">
+                                        <label for="admin_password_confirmation" class="form-label">Confirm Password <span
+                                                class="text-danger">*</span></label>
+                                        <input type="password" name="admin_password_confirmation"
+                                            id="admin_password_confirmation" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -162,7 +179,48 @@
                 </div>
 
                 {{-- ==========================================
-                    2. SaaS & POS Settings
+                    2. Branding & Theme
+                ========================================== --}}
+                <div class="mt-3 card">
+                    <div class="card-body">
+                        <h4 class="mb-3 header-title">Branding & Theme</h4>
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label for="logo" class="form-label">Company Logo</label>
+                                <input type="file" class="form-control @error('logo') is-invalid @enderror"
+                                    id="logo" name="logo" accept="image/*">
+                                <small class="text-muted">Recommended: PNG/SVG, up to 2MB.</small>
+                                @error('logo')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="favicon" class="form-label">Favicon</label>
+                                <input type="file" class="form-control @error('favicon') is-invalid @enderror"
+                                    id="favicon" name="favicon" accept="image/*">
+                                <small class="text-muted">Used for browser tabs and bookmarks.</small>
+                                @error('favicon')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="primary_color" class="form-label">Primary Brand Color</label>
+                                <input type="color"
+                                    class="form-control form-control-color @error('primary_color') is-invalid @enderror"
+                                    id="primary_color" name="primary_color"
+                                    value="{{ old('primary_color', '#2563eb') }}">
+                                @error('primary_color')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- ==========================================
+                    3. SaaS & POS Settings
                 ========================================== --}}
                 <div class="mt-3 card">
                     <div class="card-body">
@@ -259,7 +317,7 @@
                                     <input type="text" class="form-control @error('subdomain') is-invalid @enderror"
                                         id="subdomain" name="subdomain" value="{{ old('subdomain') }}"
                                         placeholder="company-name">
-                                    <span class="input-group-text">.yourdomain.com</span>
+                                    <span class="input-group-text">.westernwatchbd.com</span>
                                 </div>
                                 @error('subdomain')
                                     <div class="invalid-feedback">{{ $message }}</div>

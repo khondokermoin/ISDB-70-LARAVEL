@@ -9,6 +9,6 @@ class CompanyObserver
 {
     public function created(Company $company): void
     {
-        (new TenantProvisioningService())->provisionNewCompany($company);
+        resolve(TenantProvisioningService::class)->provision($company);
     }
 }

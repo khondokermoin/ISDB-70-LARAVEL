@@ -13,7 +13,7 @@
                 <ol class="mb-0 breadcrumb justify-content-end">
                     <li class="breadcrumb-item"><a href="{{ route('superadmin.dashboard') }}">Dashboard</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('superadmin.companies.index') }}">Companies</a></li>
-                    <li class="breadcrumb-item active">Edit Company</li>
+                    <li class="breadcrumb-item active">{{ $company->name }}</li>
                 </ol>
             </nav>
         </div>
@@ -24,25 +24,16 @@
         $logoUrl = null;
         if (!empty($company->logo)) {
             $rawPath = trim($company->logo);
-
-            // 1. If it's already a full URL
-    if (\Illuminate\Support\Str::startsWith($rawPath, ['http://', 'https://'])) {
-        $logoUrl = $rawPath;
-    } else {
-        // 2. Clean the path (remove leading 'public/', 'storage/', or '/')
-        $cleanPath = ltrim($rawPath, '/');
-        $cleanPath = preg_replace('/^(public|storage)\//i', '', $cleanPath);
-
-        // 3. Check if it exists in the standard storage/app/public directory
-        if (\Illuminate\Support\Facades\Storage::disk('public')->exists($cleanPath)) {
-            $logoUrl = \Illuminate\Support\Facades\Storage::disk('public')->url($cleanPath);
-        }
-        // 4. Fallback: Check if it was mistakenly saved directly in the public/ directory
-        elseif (file_exists(public_path($cleanPath))) {
-            $logoUrl = asset($cleanPath);
-        }
-        // 5. Last resort: Assume it's in storage and format it correctly
-                else {
+            if (\Illuminate\Support\Str::startsWith($rawPath, ['http://', 'https://'])) {
+                $logoUrl = $rawPath;
+            } else {
+                $cleanPath = ltrim($rawPath, '/');
+                $cleanPath = preg_replace('/^(public|storage)\//i', '', $cleanPath);
+                if (\Illuminate\Support\Facades\Storage::disk('public')->exists($cleanPath)) {
+                    $logoUrl = \Illuminate\Support\Facades\Storage::disk('public')->url($cleanPath);
+                } elseif (file_exists(public_path($cleanPath))) {
+                    $logoUrl = asset($cleanPath);
+                } else {
                     $logoUrl = asset('storage/' . $cleanPath);
                 }
             }

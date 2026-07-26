@@ -22,6 +22,10 @@ class Company extends Model
         'country',
         'zip_code',
         'logo',
+        'favicon',
+        'theme_settings',
+        'social_links',
+        'contact_info',
         'subdomain',
         'custom_domain',
         'currency',
@@ -36,6 +40,9 @@ class Company extends Model
 
     protected $casts = [
         'settings' => 'array',
+        'theme_settings' => 'array',
+        'social_links' => 'array',
+        'contact_info' => 'array',
         'trial_ends_at' => 'datetime',
     ];
 

@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Customer extends Model
 {
     use HasCompanyScope;
+
+    protected $fillable = ['company_id', 'name', 'phone', 'email', 'is_walk_in'];
+
+    protected $casts = [
+        'is_walk_in' => 'boolean',
+    ];
 }

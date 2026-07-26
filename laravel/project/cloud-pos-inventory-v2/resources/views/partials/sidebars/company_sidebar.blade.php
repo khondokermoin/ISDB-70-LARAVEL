@@ -216,7 +216,8 @@
                 $isSettingsActive =
                     request()->routeIs('company.settings.*') ||
                     request()->routeIs('company.subscription.*') ||
-                    request()->routeIs('company.announcements.*');
+                    request()->routeIs('company.announcements.*') ||
+                    request()->routeIs('company.settings.attributes.*');
             @endphp
             <li class="side-nav-item {{ $isSettingsActive ? 'menu-open' : '' }}">
                 <a data-bs-toggle="collapse" href="#sidebarSettings"
@@ -240,6 +241,14 @@
                                 <span class="menu-text">Invoice Settings</span>
                             </a>
                         </li>
+                        @can('manage attributes')
+                        <li class="side-nav-item">
+                            <a href="{{ route('company.settings.attributes.index') }}"
+                                class="side-nav-link {{ request()->routeIs('company.settings.attributes.*') ? 'active' : '' }}">
+                                <span class="menu-text">Variant & Attribute Settings</span>
+                            </a>
+                        </li>
+                        @endcan
                         <li class="side-nav-item">
                             <a href="{{ route('company.subscription.index') }}"
                                 class="side-nav-link {{ request()->routeIs('company.subscription.*') ? 'active' : '' }}">

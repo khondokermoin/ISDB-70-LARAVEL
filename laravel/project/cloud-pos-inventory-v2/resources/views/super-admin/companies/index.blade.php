@@ -9,8 +9,8 @@
 
     <style>
         /* ========================================
-               1. SEARCH BOX STYLING (v1 Theme Adapted)
-               ======================================== */
+                   1. SEARCH BOX STYLING (v1 Theme Adapted)
+                   ======================================== */
         .company-search-wrapper {
             position: relative;
             max-width: 300px;
@@ -66,8 +66,8 @@
         }
 
         /* ========================================
-               2. SEARCH RESULT COUNTER
-               ======================================== */
+                   2. SEARCH RESULT COUNTER
+                   ======================================== */
         .search-counter {
             font-size: 0.8rem;
             color: var(--bs-secondary-color);
@@ -80,8 +80,8 @@
         }
 
         /* ========================================
-               3. DATATABLES CUSTOM STYLING
-               ======================================== */
+                   3. DATATABLES CUSTOM STYLING
+                   ======================================== */
         .dataTables_wrapper .dataTables_length,
         .dataTables_wrapper .dataTables_filter,
         .dataTables_wrapper .dataTables_info,
@@ -127,8 +127,8 @@
         }
 
         /* ========================================
-               4. STATS CARDS STYLING
-               ======================================== */
+                   4. STATS CARDS STYLING
+                   ======================================== */
         .stats-card {
             border: 0;
             border-radius: 0.75rem;
@@ -154,8 +154,8 @@
         }
 
         /* ========================================
-               5. TRIAL COUNTDOWN STYLING
-               ======================================== */
+                   5. TRIAL COUNTDOWN STYLING
+                   ======================================== */
         .trial-countdown {
             font-size: 0.75rem;
             padding: 0.25rem 0.5rem;
@@ -179,8 +179,8 @@
         }
 
         /* ========================================
-               6. USAGE BAR STYLING
-               ======================================== */
+                   6. USAGE BAR STYLING
+                   ======================================== */
         .usage-info {
             font-size: 0.75rem;
             margin-bottom: 0.25rem;
@@ -195,8 +195,8 @@
         }
 
         /* ========================================
-               7. ACTION BUTTONS
-               ======================================== */
+                   7. ACTION BUTTONS
+                   ======================================== */
         .action-btn-group .btn {
             padding: 0.25rem 0.5rem;
             font-size: 0.875rem;

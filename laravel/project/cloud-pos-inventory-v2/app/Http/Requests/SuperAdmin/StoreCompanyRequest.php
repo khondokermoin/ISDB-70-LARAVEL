@@ -21,6 +21,9 @@ class StoreCompanyRequest extends FormRequest
             'address' => 'nullable|string',
             'subdomain' => 'required|string|lowercase|alpha_dash|unique:companies,subdomain',
             'custom_domain' => 'nullable|string|unique:companies,custom_domain',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
+            'favicon' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
+            'primary_color' => ['nullable', 'string', 'regex:/^#([a-fA-F0-9]{3}|[a-fA-F0-9]{6})$/'],
             'status' => 'required|in:active,trial,suspended',
 
             // Admin user fields

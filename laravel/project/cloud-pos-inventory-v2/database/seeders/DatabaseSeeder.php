@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
         // 3. Optional master data
         $this->call([
             CategorySeeder::class,
+            BusinessTypeSeeder::class,
         ]);
 
         $this->command->info('Database seeding completed successfully!');

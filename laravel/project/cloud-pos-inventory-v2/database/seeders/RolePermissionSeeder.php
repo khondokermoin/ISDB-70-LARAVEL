@@ -24,7 +24,7 @@ class RolePermissionSeeder extends Seeder
             'view purchases', 'create purchases', 'edit purchases', 'delete purchases',
             'view customers', 'create customers', 'edit customers', 'delete customers',
             'view suppliers', 'create suppliers', 'edit suppliers', 'delete suppliers',
-            'view reports', 'view settings', 'manage settings',
+            'view reports', 'view settings', 'manage settings', 'manage attributes',
         ];
 
         foreach ($permissions as $permission) {
@@ -42,7 +42,7 @@ class RolePermissionSeeder extends Seeder
             'view purchases', 'create purchases',
             'view customers', 'create customers',
             'view suppliers', 'create suppliers',
-            'view reports', 'view settings', 'manage settings'
+            'view reports', 'view settings', 'manage settings', 'manage attributes'
         ]);
 
         $manager = Role::firstOrCreate(['name' => 'Manager', 'guard_name' => 'web']);
