@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasCompanyScope;
 use Illuminate\Database\Eloquent\Model;
 
 class Sale extends Model
 {
+    use HasCompanyScope;
+
     protected $fillable = ['company_id', 'branch_id', 'customer_id', 'user_id', 'invoice_no', 'subtotal', 'discount', 'total_amount', 'received_amount', 'payment_method', 'status'];
 
     public function branch()

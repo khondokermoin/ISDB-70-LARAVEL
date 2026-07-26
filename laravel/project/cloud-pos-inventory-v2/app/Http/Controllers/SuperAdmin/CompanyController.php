@@ -50,30 +50,9 @@ class CompanyController extends Controller
     /**
      * Store a newly created company in storage.
      */
-    public function store(Request $request)
+    public function store(\App\Http\Requests\SuperAdmin\StoreCompanyRequest $request)
     {
-        $validated = $request->validate([
-            'name'             => 'required|string|max:255',
-            'slug'             => 'nullable|string|unique:companies,slug',
-            'email'            => 'required|email|unique:companies,email',
-            'contact_person'   => 'nullable|string|max:255',
-            'phone'            => 'nullable|string|max:50',
-            'website'          => 'nullable|url|max:255',
-            'address'          => 'nullable|string',
-            'city'             => 'nullable|string|max:100',
-            'country'          => 'nullable|string|max:100',
-            'zip_code'         => 'nullable|string|max:20',
-            'subdomain'        => 'nullable|string|unique:companies,subdomain',
-            'custom_domain'    => 'nullable|string|unique:companies,custom_domain',
-            'currency'         => 'nullable|string|max:10',
-            'timezone'         => 'nullable|string|max:50',
-            'status'           => 'required|in:active,inactive,suspended,trial',
-            'plan_id'          => 'required|exists:plans,id',
-            'user_id'          => 'required|exists:users,id',
-            'business_type_id' => 'required|exists:business_types,id',
-            'logo'             => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
-            'settings'         => 'nullable|array',
-        ]);
+        $validated = $request->validated();
 
         if ($request->hasFile('logo')) {
             $validated['logo'] = $request->file('logo')->store('companies/logos', 'public');
@@ -91,50 +70,37 @@ class CompanyController extends Controller
             $trialEndsAt = now()->addDays($trialDays);
         }
 
+        // Simplified: create company and the initial company admin user
         DB::beginTransaction();
         try {
-            Company::create([
-                'name'             => $validated['name'],
-                'slug'             => $validated['slug'],
-                'email'            => $validated['email'],
-                'contact_person'   => $validated['contact_person'] ?? null,
-                'phone'            => $validated['phone'] ?? null,
-                'website'          => $validated['website'] ?? null,
-                'address'          => $validated['address'] ?? null,
-                'city'             => $validated['city'] ?? null,
-                'country'          => $validated['country'] ?? null,
-                'zip_code'         => $validated['zip_code'] ?? null,
-                'subdomain'        => $validated['subdomain'] ?? null,
-                'custom_domain'    => $validated['custom_domain'] ?? null,
-                'currency'         => $validated['currency'] ?? 'BDT',
-                'timezone'         => $validated['timezone'] ?? 'Asia/Dhaka',
-                'status'           => $validated['status'],
-                'plan_id'          => $validated['plan_id'],
-                'user_id'          => $validated['user_id'],
-                'business_type_id' => $validated['business_type_id'],
-                'trial_ends_at'    => $trialEndsAt,
-                // ✅ Laravel Model Cast ('array') অটোমেটিক JSON এ কনভার্ট করবে
-                'settings'         => $validated['settings'] ?? null, 
+            $company = Company::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'] ?? null,
+                'phone' => $validated['phone'] ?? null,
+                'address' => $validated['address'] ?? null,
+                'subdomain' => $validated['subdomain'],
+                'custom_domain' => $validated['custom_domain'] ?? null,
+                'status' => $validated['status'],
             ]);
+
+            // create company admin user
+            $user = User::create([
+                'name' => $validated['admin_name'],
+                'email' => $validated['admin_email'],
+                'password' => \Illuminate\Support\Facades\Hash::make($validated['admin_password']),
+                'company_id' => $company->id,
+            ]);
+
+            if (method_exists($user, 'assignRole')) {
+                $user->assignRole('Company Admin');
+            }
 
             DB::commit();
 
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'message'  => 'Company saved successfully!',
-                    'redirect' => route('superadmin.companies.index')
-                ]);
-            }
-
             return redirect()->route('superadmin.companies.index')
-                ->with('success', 'Company created successfully!');
+                ->with('success', 'Company and admin user created successfully!');
         } catch (\Exception $e) {
             DB::rollBack();
-
-            if ($request->wantsJson()) {
-                return response()->json(['message' => 'Error: ' . $e->getMessage()], 500);
-            }
-
             return back()->withInput()->with('error', 'Something went wrong: ' . $e->getMessage());
         }
     }

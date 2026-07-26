@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasCompanyScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Purchase extends Model
 {
-    use HasFactory;
+    use HasFactory, HasCompanyScope;
 
     protected $fillable = [
         'company_id', 'branch_id', 'supplier_id', 'user_id', 

@@ -2,13 +2,13 @@
 
 namespace App\Http\Requests\SuperAdmin;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreUserRequest extends FormRequest
+class StoreCompanyRequest extends FormRequest
 {
     public function authorize(): bool
     {
+        // Authorization handled by middleware / gate for Super Admin
         return true;
     }
 
@@ -16,12 +16,25 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
-            'company_id' => 'nullable|exists:companies,id',
-            'branch_id' => 'nullable|exists:branches,id',
-            'roles' => 'required|array|min:1',
-            'roles.*' => 'exists:roles,name',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:50',
+            'address' => 'nullable|string',
+            'subdomain' => 'required|string|lowercase|alpha_dash|unique:companies,subdomain',
+            'custom_domain' => 'nullable|string|unique:companies,custom_domain',
+            'status' => 'required|in:active,trial,suspended',
+
+            // Admin user fields
+            'admin_name' => 'required|string|max:255',
+            'admin_email' => 'required|email|unique:users,email',
+            'admin_password' => 'required|string|min:8|confirmed',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'subdomain.alpha_dash' => 'Subdomain may only contain letters, numbers, dashes and underscores.',
         ];
     }
 }
+

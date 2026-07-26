@@ -76,11 +76,9 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->middleware(['web', 'inertia']);
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// NOTE: Dashboard rendering via Inertia removed — admin dashboards use Blade controllers
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -170,7 +168,7 @@ Route::middleware(['auth'])->group(function () {
 // ==========================================
 // 2. Company Admin Routes (Shop Owner)
 // ==========================================
-Route::middleware(['auth', 'verified', 'role:Company Admin'])
+Route::middleware(['auth', 'verified', 'role:Company Admin', 'tenant.access'])
     ->prefix('company')
     ->name('company.')
     ->group(function () {
@@ -221,7 +219,7 @@ Route::middleware(['auth', 'verified', 'role:Company Admin'])
 // ==========================================
 // 3. Branch Routes (Manager / Salesman)
 // ==========================================
-Route::middleware(['auth', 'verified', 'role:Manager|Salesman']) // Note: Change to 'role:branch' here if that is your specific role name
+Route::middleware(['auth', 'verified', 'role:Manager|Salesman', 'tenant.access']) // Note: Change to 'role:branch' here if that is your specific role name
     ->prefix('branch')
     ->name('branch.')
     ->group(function () {

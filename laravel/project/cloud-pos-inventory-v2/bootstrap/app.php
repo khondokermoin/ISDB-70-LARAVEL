@@ -13,9 +13,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(append: [
-            \App\Http\Middleware\HandleInertiaRequests::class,
-            \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
-        ]);
+                \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
+            ]);
 
         
         // Spatie Middleware Aliases
@@ -23,6 +22,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+            'tenant.access' => \App\Http\Middleware\EnsureTenantAccess::class,
+            'inertia' => \App\Http\Middleware\HandleInertiaRequests::class,
         ]);
 
         // Guest Redirect Logic (SaaS Roles)

@@ -17,6 +17,19 @@ class PosController extends Controller
     // ১. POS পেজ লোড করা
     public function index()
     {
+        $user = auth()->user();
+        $branchId = $user->branch_id;
+
+        // Ensure salesperson has an open shift for current branch
+        $hasOpenShift = \App\Models\Shift::where('branch_id', $branchId)
+            ->where('opened_by', $user->id)
+            ->where('status', 'open')
+            ->exists();
+
+        if (! $hasOpenShift && ! $user->hasRole('Company Admin') && ! $user->hasRole('Super Admin')) {
+            return redirect()->route('branch.shifts.create')->with('error', 'Please open your cash register first.');
+        }
+
         return view('branch.pos.index');
     }
 

@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasCompanyScope;
 use Illuminate\Database\Eloquent\Model;
 
 class Branch extends Model
 {
+    use HasCompanyScope;
+
     // সব কলাম ফিলাবেল রাখার জন্য guarded empty রাখা হয়েছে, যা ঠিক আছে
     protected $guarded = [];
 

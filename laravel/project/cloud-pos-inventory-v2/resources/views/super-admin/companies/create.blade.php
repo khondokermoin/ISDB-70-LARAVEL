@@ -117,19 +117,45 @@
                             <div class="mb-3 col-md-6">
                                 <label for="user_id" class="form-label">Assign Company Admin <span
                                         class="text-danger">*</span></label>
-                                <select class="form-select @error('user_id') is-invalid @enderror" id="user_id"
-                                    name="user_id" required>
-                                    <option value="">Select Admin User</option>
-                                    @foreach ($users ?? [] as $user)
-                                        <option value="{{ $user->id }}"
-                                            {{ old('user_id') == $user->id ? 'selected' : '' }}>
-                                            {{ $user->name }} ({{ $user->email }})
-                                        </option>
-                                    @endforeach
-                                </select>
+                                {{-- Allow creating new admin inline when needed --}}
+                                <div class="input-group mb-2">
+                                    <select class="form-select @error('user_id') is-invalid @enderror" id="user_id"
+                                        name="user_id">
+                                        <option value="">Select Existing Admin (optional)</option>
+                                        @foreach ($users ?? [] as $user)
+                                            <option value="{{ $user->id }}"
+                                                {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                                                {{ $user->name }} ({{ $user->email }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <button class="btn btn-outline-secondary" type="button" id="toggle-new-admin">New Admin</button>
+                                </div>
                                 @error('user_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+
+                                <div id="new-admin-section" style="display: none;">
+                                    <div class="mb-3">
+                                        <label for="admin_name" class="form-label">Admin Name <span class="text-danger">*</span></label>
+                                        <input type="text" name="admin_name" id="admin_name" class="form-control @error('admin_name') is-invalid @enderror" value="{{ old('admin_name') }}">
+                                        @error('admin_name')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="admin_email" class="form-label">Admin Email <span class="text-danger">*</span></label>
+                                        <input type="email" name="admin_email" id="admin_email" class="form-control @error('admin_email') is-invalid @enderror" value="{{ old('admin_email') }}">
+                                        @error('admin_email')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="admin_password" class="form-label">Password <span class="text-danger">*</span></label>
+                                        <input type="password" name="admin_password" id="admin_password" class="form-control @error('admin_password') is-invalid @enderror">
+                                        @error('admin_password')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="admin_password_confirmation" class="form-label">Confirm Password <span class="text-danger">*</span></label>
+                                        <input type="password" name="admin_password_confirmation" id="admin_password_confirmation" class="form-control">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -494,6 +520,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
     <script>
         $(document).ready(function() {
+            // Toggle new admin section
+            $('#toggle-new-admin').on('click', function() {
+                $('#new-admin-section').toggle();
+            });
             // ==========================================
             // 0. Dynamic Business Type Field Toggling (✅ V1 Core)
             // ==========================================
