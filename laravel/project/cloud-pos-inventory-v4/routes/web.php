@@ -70,13 +70,8 @@ use App\Http\Controllers\Branch\PurchaseController as BranchPurchaseController; 
 use App\Http\Controllers\Branch\SortingController;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-})->middleware(['web', 'inertia']);
+    return Inertia::render('HomePageOne');
+})->middleware(['web', 'inertia'])->name('home');
 
 // NOTE: Dashboard rendering via Inertia removed — admin dashboards use Blade controllers
 
