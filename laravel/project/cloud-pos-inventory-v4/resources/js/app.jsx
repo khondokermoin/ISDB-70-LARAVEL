@@ -1,9 +1,12 @@
 import '../css/app.css';
 import './bootstrap';
+import $ from 'jquery';
+window.$ = window.jQuery = $;
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import 'select2/dist/css/select2.min.css';
+import 'select2/dist/js/select2.min.js';
 import 'animate.css';
 
 import { createInertiaApp } from '@inertiajs/react';

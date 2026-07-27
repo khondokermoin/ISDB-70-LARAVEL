@@ -12,7 +12,7 @@ const Preloader = () => {
     <>
       {active ? (
         <div className="preloader">
-          <img src="assets/images/icon/preloader.gif" alt="" />
+          <img src="/assets/images/icon/preloader.gif" alt="" />
         </div>
 
       ) : (<div></div>)}
@@ -21,3 +21,4 @@ const Preloader = () => {
 };
 
 export default Preloader;
+

@@ -4,13 +4,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="{{ asset('') }}">
 
     <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
     {{-- <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" /> --}}
-    {{-- <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/animate.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/swiper-bundle.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/slick.css') }}">
@@ -19,15 +20,19 @@
     <link rel="stylesheet" href="{{ asset('assets/css/font-awesome-pro.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/spacing.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom-animation.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
 
     <!-- Scripts -->
     @routes
     @viteReactRefresh
+    @php
+        $pageComponent = file_exists(resource_path("js/Pages/{$page['component']}.jsx"))
+            ? "resources/js/Pages/{$page['component']}.jsx"
+            : "resources/js/Customer/Pages/{$page['component']}.jsx";
+    @endphp
     @vite([
         'resources/js/app.jsx',
-        "resources/js/Pages/{$page['component']}.jsx",
-        "resources/js/Customer/Pages/{$page['component']}.jsx",
+        $pageComponent,
     ])
     @inertiaHead
 </head>

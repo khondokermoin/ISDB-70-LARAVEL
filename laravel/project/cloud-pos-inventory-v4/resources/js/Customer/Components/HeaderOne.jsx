@@ -5,21 +5,26 @@ import { Link } from "@inertiajs/react";
 const HeaderOne = () => {
   const [scroll, setScroll] = useState(false);
   useEffect(() => {
-    window.onscroll = () => {
+    const onScroll = () => {
       if (window.pageYOffset < 150) {
         setScroll(false);
       } else if (window.pageYOffset > 150) {
         setScroll(true);
       }
-      return () => (window.onscroll = null);
     };
-    const selectElement = query(".js-example-basic-single");
-    selectElement.select2();
+
+    window.addEventListener('scroll', onScroll);
+
+    const selectElement = query('.js-example-basic-single');
+    if (selectElement.length && typeof selectElement.select2 === 'function') {
+      selectElement.select2();
+    }
 
     return () => {
-      if (selectElement.data("select2")) {
-        selectElement.select2("destroy");
+      if (selectElement.length && selectElement.data('select2')) {
+        selectElement.select2('destroy');
       }
+      window.removeEventListener('scroll', onScroll);
     };
   }, []);
 
@@ -111,7 +116,7 @@ const HeaderOne = () => {
         </button>
         <div className='mobile-menu__inner'>
           <Link href='/' className='mobile-menu__logo'>
-            <img src='assets/images/logo/logo.png' alt='Logo' />
+            <img src='/assets/images/logo/logo.png' alt='Logo' />
           </Link>
           <div className='mobile-menu__menu'>
             {/* Nav Menu Start */}
@@ -472,7 +477,7 @@ const HeaderOne = () => {
                       onClick={() => handleLanguageChange("English")}
                     >
                       <img
-                        src='assets/images/thumbs/flag1.png'
+                        src='/assets/images/thumbs/flag1.png'
                         alt=''
                         className='w-16 h-12 rounded-4 border border-gray-100'
                       />
@@ -486,7 +491,7 @@ const HeaderOne = () => {
                       onClick={() => handleLanguageChange("Japan")}
                     >
                       <img
-                        src='assets/images/thumbs/flag2.png'
+                        src='/assets/images/thumbs/flag2.png'
                         alt=''
                         className='w-16 h-12 rounded-4 border border-gray-100'
                       />
@@ -500,7 +505,7 @@ const HeaderOne = () => {
                       onClick={() => handleLanguageChange("French")}
                     >
                       <img
-                        src='assets/images/thumbs/flag3.png'
+                        src='/assets/images/thumbs/flag3.png'
                         alt=''
                         className='w-16 h-12 rounded-4 border border-gray-100'
                       />
@@ -514,7 +519,7 @@ const HeaderOne = () => {
                       onClick={() => handleLanguageChange("Germany")}
                     >
                       <img
-                        src='assets/images/thumbs/flag4.png'
+                        src='/assets/images/thumbs/flag4.png'
                         alt=''
                         className='w-16 h-12 rounded-4 border border-gray-100'
                       />
@@ -528,7 +533,7 @@ const HeaderOne = () => {
                       onClick={() => handleLanguageChange("Bangladesh")}
                     >
                       <img
-                        src='assets/images/thumbs/flag6.png'
+                        src='/assets/images/thumbs/flag6.png'
                         alt=''
                         className='w-16 h-12 rounded-4 border border-gray-100'
                       />
@@ -542,7 +547,7 @@ const HeaderOne = () => {
                       onClick={() => handleLanguageChange("South Korea")}
                     >
                       <img
-                        src='assets/images/thumbs/flag5.png'
+                        src='/assets/images/thumbs/flag5.png'
                         alt=''
                         className='w-16 h-12 rounded-4 border border-gray-100'
                       />
@@ -564,7 +569,7 @@ const HeaderOne = () => {
                       onClick={() => handleCurrencyChange("USD")}
                     >
                       <img
-                        src='assets/images/thumbs/flag1.png'
+                        src='/assets/images/thumbs/flag1.png'
                         alt=''
                         className='w-16 h-12 rounded-4 border border-gray-100'
                       />
@@ -578,7 +583,7 @@ const HeaderOne = () => {
                       onClick={() => handleCurrencyChange("Yen")}
                     >
                       <img
-                        src='assets/images/thumbs/flag2.png'
+                        src='/assets/images/thumbs/flag2.png'
                         alt=''
                         className='w-16 h-12 rounded-4 border border-gray-100'
                       />
@@ -592,7 +597,7 @@ const HeaderOne = () => {
                       onClick={() => handleCurrencyChange("Franc")}
                     >
                       <img
-                        src='assets/images/thumbs/flag3.png'
+                        src='/assets/images/thumbs/flag3.png'
                         alt=''
                         className='w-16 h-12 rounded-4 border border-gray-100'
                       />
@@ -606,7 +611,7 @@ const HeaderOne = () => {
                       onClick={() => handleCurrencyChange("EURO")}
                     >
                       <img
-                        src='assets/images/thumbs/flag4.png'
+                        src='/assets/images/thumbs/flag4.png'
                         alt=''
                         className='w-16 h-12 rounded-4 border border-gray-100'
                       />
@@ -620,7 +625,7 @@ const HeaderOne = () => {
                       onClick={() => handleCurrencyChange("BDT")}
                     >
                       <img
-                        src='assets/images/thumbs/flag6.png'
+                        src='/assets/images/thumbs/flag6.png'
                         alt=''
                         className='w-16 h-12 rounded-4 border border-gray-100'
                       />
@@ -634,7 +639,7 @@ const HeaderOne = () => {
                       onClick={() => handleCurrencyChange("WON")}
                     >
                       <img
-                        src='assets/images/thumbs/flag5.png'
+                        src='/assets/images/thumbs/flag5.png'
                         alt=''
                         className='w-16 h-12 rounded-4 border border-gray-100'
                       />
@@ -669,7 +674,7 @@ const HeaderOne = () => {
             {/* Logo Start */}
             <div className='logo'>
               <Link href='/' className='link'>
-                <img src='assets/images/logo/logo.png' alt='Logo' />
+                <img src='/assets/images/logo/logo.png' alt='Logo' />
               </Link>
             </div>
             {/* Logo End  */}
@@ -824,7 +829,7 @@ const HeaderOne = () => {
                   {/* Logo Start */}
                   <div className='logo px-16 d-lg-none d-block'>
                     <Link href='/' className='link'>
-                      <img src='assets/images/logo/logo.png' alt='Logo' />
+                      <img src='/assets/images/logo/logo.png' alt='Logo' />
                     </Link>
                   </div>
                   {/* Logo End */}
@@ -1440,3 +1445,4 @@ const HeaderOne = () => {
 };
 
 export default HeaderOne;
+

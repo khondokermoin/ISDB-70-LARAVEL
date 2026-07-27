@@ -24,6 +24,14 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
+        "animate.css": "^4.1.1",
+        "bootstrap": "^5.3.8",
+        "jquery": "^3.7.1",
+        "react-router-dom": "^7.18.1",
+        "react-scroll-to-top": "^3.1.0",
+        "react-slick": "^0.31.0",
+        "select2": "^4.1.0",
+        "slick-carousel": "^1.8.1",
         "swiper": "^14.0.6"
     }
 }
