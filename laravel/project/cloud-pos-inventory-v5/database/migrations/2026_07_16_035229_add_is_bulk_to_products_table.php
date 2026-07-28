@@ -7,22 +7,23 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * NOTE: This migration is now a NO-OP.
+     * 'is_bulk' column already exists in 2026_07_12_061309_create_products_table.php
+     * Kept here only to maintain migration history integrity.
      */
     public function up(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->boolean('is_bulk')->default(false)->after('name');
-        });
+        // is_bulk column already added in create_products_table migration
+        // Adding it again would cause "Duplicate column" error
+        if (!Schema::hasColumn('products', 'is_bulk')) {
+            Schema::table('products', function (Blueprint $table) {
+                $table->boolean('is_bulk')->default(false)->after('name');
+            });
+        }
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn('is_bulk');
-        });
+        // Nothing to reverse - column is managed by create_products_table migration
     }
 };

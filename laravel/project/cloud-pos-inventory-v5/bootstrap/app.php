@@ -13,10 +13,15 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(append: [
-                \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
-            ]);
+            \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
+            // Tenant domain resolution runs on every web request
+            // It reads the host header and resolves the company from DB/cache
+            \App\Http\Middleware\IdentifyTenantByDomain::class,
+            // Inertia middleware shares tenant branding + auth + flash to React
+            \App\Http\Middleware\HandleInertiaRequests::class,
+        ]);
 
-        
+
         // Spatie Middleware Aliases
         $middleware->alias([
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
@@ -30,7 +35,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Guest Redirect Logic (SaaS Roles)
         // লগইন করা ইউজার যদি /login পেজে আসে, তাকে তার রোল অনুযায়ী ড্যাশবোর্ডে পাঠানো হবে
         $middleware->redirectUsersTo(function (Request $request) {
-            
+
             $user = $request->user();
 
             if ($user) {
@@ -45,7 +50,6 @@ return Application::configure(basePath: dirname(__DIR__))
 
             return route('dashboard'); // Fallback
         });
-        
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

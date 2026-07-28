@@ -31,6 +31,10 @@ class DatabaseSeeder extends Seeder
             BusinessTypeSeeder::class,
         ]);
 
+        // 4. Dummy tenant data for testing
+        $this->call(DummyTenantSeeder::class);
+        $this->call(DummyProductSeeder::class);
+
         $this->command->info('Database seeding completed successfully!');
     }
 }

@@ -86,6 +86,22 @@
                     <hr>
 
                     <div class="row text-start mt-3">
+                        @if ($company->custom_domain)
+                            <div class="col-12 mb-2">
+                                <p class="text-muted mb-1 fs-13"><i class="ti ti-world-www me-1"></i> Custom Domain:</p>
+                                <p class="fw-semibold mb-0">{{ $company->custom_domain }}</p>
+                            </div>
+                        @endif
+
+                        @if (!empty($company->theme_settings['primary_color']))
+                            <div class="col-12 mb-2">
+                                <p class="text-muted mb-1 fs-13"><i class="ti ti-palette me-1"></i> Primary Color:</p>
+                                <div class="fw-semibold d-flex align-items-center gap-2">
+                                    <span class="border rounded" style="width: 18px; height: 18px; background-color: {{ $company->theme_settings['primary_color'] }};"></span>
+                                    <span>{{ $company->theme_settings['primary_color'] }}</span>
+                                </div>
+                            </div>
+                        @endif
                         @if ($company->contact_person)
                             <div class="col-12 mb-2">
                                 <p class="text-muted mb-1 fs-13"><i class="ti ti-user me-1"></i> Contact Person:</p>
@@ -123,13 +139,6 @@
                             <div class="col-12 mb-2">
                                 <p class="text-muted mb-1 fs-13"><i class="ti ti-link me-1"></i> Subdomain:</p>
                                 <p class="fw-semibold mb-0">{{ $company->subdomain }}.yourdomain.com</p>
-                            </div>
-                        @endif
-
-                        @if ($company->custom_domain)
-                            <div class="col-12 mb-2">
-                                <p class="text-muted mb-1 fs-13"><i class="ti ti-world-www me-1"></i> Custom Domain:</p>
-                                <p class="fw-semibold mb-0">{{ $company->custom_domain }}</p>
                             </div>
                         @endif
 

@@ -98,7 +98,7 @@ Route::middleware(['auth', 'verified', 'role:Super Admin'])
 
         // SaaS Management
         Route::resource('/companies', CompanyController::class);
-        Route::get('/companies/{company}/impersonate', [ImpersonateController::class, 'impersonate'])->name('companies.impersonate');
+        Route::post('/companies/{company}/impersonate', [CompanyController::class, 'impersonate'])->name('companies.impersonate');
         Route::resource('/plans', PlanController::class);
         Route::resource('/transactions', TransactionController::class)->only(['index']);
 

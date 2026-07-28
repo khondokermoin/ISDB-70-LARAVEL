@@ -537,12 +537,15 @@
                                             <i class="ti ti-edit"></i>
                                         </a>
 
-                                        @if ($company->owner)
-                                            <a href="{{ route('superadmin.companies.impersonate', $company->id) }}"
-                                                class="btn btn-sm btn-info" title="Login as {{ $company->name }}"
-                                                data-bs-toggle="tooltip">
-                                                <i class="ti ti-login"></i>
-                                            </a>
+                                        @if ($company->users_count > 0)
+                                            <form action="{{ route('superadmin.companies.impersonate', $company->id) }}"
+                                                method="POST" class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-outline-info"
+                                                    title="Login as Admin" data-bs-toggle="tooltip">
+                                                    <i class="ti ti-login"></i>
+                                                </button>
+                                            </form>
                                         @endif
 
                                         <form action="{{ route('superadmin.companies.destroy', $company->id) }}"

@@ -7,29 +7,28 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Add status/slug/is_active to business_types and business_type_id FK to companies.
+     *
+     * NOTE:
+     * - 'slug' already exists in create_business_types_table migration → skip
+     * - 'is_active' already exists in create_business_types_table migration → skip
+     * - 'business_type_id' already exists in create_companies_table migration → skip
+     * Only 'status' column on business_types is truly new here.
      */
     public function up(): void
     {
+        // Add 'status' to business_types if not already present
         Schema::table('business_types', function (Blueprint $table) {
             if (! Schema::hasColumn('business_types', 'status')) {
                 $table->string('status')->default('active')->after('name');
             }
 
-            if (! Schema::hasColumn('business_types', 'slug')) {
-                $table->string('slug')->nullable()->unique()->after('name');
-            }
-
-            if (! Schema::hasColumn('business_types', 'is_active')) {
-                $table->boolean('is_active')->default(true)->after('slug');
-            }
+            // 'slug' already exists in create_business_types_table - skip
+            // 'is_active' already exists in create_business_types_table - skip
         });
 
-        Schema::table('companies', function (Blueprint $table) {
-            if (! Schema::hasColumn('companies', 'business_type_id')) {
-                $table->foreignId('business_type_id')->nullable()->after('user_id')->constrained('business_types')->nullOnDelete();
-            }
-        });
+        // 'business_type_id' already exists in create_companies_table - skip
+        // Adding it again would cause "Duplicate column name" error
     }
 
     /**
@@ -37,17 +36,12 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('companies', function (Blueprint $table) {
-            if (Schema::hasColumn('companies', 'business_type_id')) {
-                $table->dropForeign(['business_type_id']);
-                $table->dropColumn('business_type_id');
-            }
-        });
-
         Schema::table('business_types', function (Blueprint $table) {
             if (Schema::hasColumn('business_types', 'status')) {
                 $table->dropColumn('status');
             }
         });
+
+        // Do NOT drop business_type_id from companies - it belongs to create_companies_table
     }
 };

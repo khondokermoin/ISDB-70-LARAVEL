@@ -179,7 +179,42 @@
                 </div>
 
                 {{-- ==========================================
-                    2. Branding & Theme
+                    2. Domain Configuration
+                ========================================== --}}
+                <div class="mt-3 card">
+                    <div class="card-body">
+                        <h4 class="mb-3 header-title">Domain Configuration</h4>
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label for="subdomain" class="form-label">Subdomain</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control @error('subdomain') is-invalid @enderror"
+                                        id="subdomain" name="subdomain" value="{{ old('subdomain') }}"
+                                        placeholder="company-name">
+                                    <span class="input-group-text">.yourdomain.com</span>
+                                </div>
+                                <small class="text-muted">Use a short slug for the tenant subdomain.</small>
+                                @error('subdomain')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="custom_domain" class="form-label">Custom Domain (White-label)</label>
+                                <input type="text" class="form-control @error('custom_domain') is-invalid @enderror"
+                                    id="custom_domain" name="custom_domain" value="{{ old('custom_domain') }}"
+                                    placeholder="pos.company.com">
+                                <small class="text-muted">Optional custom domain for the branded storefront.</small>
+                                @error('custom_domain')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- ==========================================
+                    3. Branding & Theme
                 ========================================== --}}
                 <div class="mt-3 card">
                     <div class="card-body">
@@ -189,28 +224,54 @@
                                 <label for="logo" class="form-label">Company Logo</label>
                                 <input type="file" class="form-control @error('logo') is-invalid @enderror"
                                     id="logo" name="logo" accept="image/*">
-                                <small class="text-muted">Recommended: PNG/SVG, up to 2MB.</small>
+                                <small class="text-muted">PNG, JPG, SVG up to 2MB. A preview appears instantly.</small>
                                 @error('logo')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="mb-3 col-md-6">
+                                <label class="form-label">Logo Preview</label>
+                                <div id="logo-preview" class="p-2 border rounded" style="min-height: 100px; background: #f8f9fa;">
+                                    <div id="logo-preview-empty" class="text-center">
+                                        <i class="ti ti-photo text-muted" style="font-size: 2rem;"></i>
+                                        <p class="mb-0 text-muted small">No logo selected</p>
+                                    </div>
+                                    <div id="logo-preview-filled" class="d-none text-center">
+                                        <img id="logo-preview-img" src="" class="img-fluid rounded" style="max-height: 110px; object-fit: contain;" alt="Logo Preview">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 col-md-6">
                                 <label for="favicon" class="form-label">Favicon</label>
                                 <input type="file" class="form-control @error('favicon') is-invalid @enderror"
                                     id="favicon" name="favicon" accept="image/*">
-                                <small class="text-muted">Used for browser tabs and bookmarks.</small>
+                                <small class="text-muted">Used for browser tabs and bookmarks. PNG/ICO/SVG up to 512KB.</small>
                                 @error('favicon')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="mb-3 col-md-6">
+                                <label class="form-label">Favicon Preview</label>
+                                <div id="favicon-preview" class="p-2 border rounded d-flex align-items-center justify-content-center" style="min-height: 72px; background: #f8f9fa;">
+                                    <i class="ti ti-browser text-muted" style="font-size: 1.6rem;"></i>
+                                    <span class="ms-2 text-muted small">No favicon selected</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 col-12">
                                 <label for="primary_color" class="form-label">Primary Brand Color</label>
-                                <input type="color"
-                                    class="form-control form-control-color @error('primary_color') is-invalid @enderror"
-                                    id="primary_color" name="primary_color"
-                                    value="{{ old('primary_color', '#2563eb') }}">
+                                <div class="d-flex align-items-center gap-3">
+                                    <input type="color"
+                                        class="form-control form-control-color @error('primary_color') is-invalid @enderror"
+                                        id="primary_color" name="primary_color"
+                                        value="{{ old('primary_color', '#2563eb') }}">
+                                    <span id="primary-color-badge" class="badge px-3 py-2 text-white" style="background-color: {{ old('primary_color', '#2563eb') }};">
+                                        {{ old('primary_color', '#2563eb') }}
+                                    </span>
+                                </div>
                                 @error('primary_color')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -311,28 +372,6 @@
                                 @enderror
                             </div>
 
-                            <div class="mb-3 col-md-6">
-                                <label for="subdomain" class="form-label">Subdomain</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control @error('subdomain') is-invalid @enderror"
-                                        id="subdomain" name="subdomain" value="{{ old('subdomain') }}"
-                                        placeholder="company-name">
-                                    <span class="input-group-text">.westernwatchbd.com</span>
-                                </div>
-                                @error('subdomain')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                                <label for="custom_domain" class="form-label">Custom Domain (White-label)</label>
-                                <input type="text" class="form-control @error('custom_domain') is-invalid @enderror"
-                                    id="custom_domain" name="custom_domain" value="{{ old('custom_domain') }}"
-                                    placeholder="pos.company.com">
-                                @error('custom_domain')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -457,56 +496,6 @@
                                 <label class="form-label">Default Warranty Period (Months)</label>
                                 <input type="number" class="form-control" name="settings[default_warranty_months]"
                                     value="12" min="0">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- ==========================================
-                    5. Media & Logo
-                ========================================== --}}
-                <div class="mt-3 card">
-                    <div class="card-body">
-                        <h4 class="mb-3 header-title">Company Logo</h4>
-                        <div class="row">
-                            <div class="mb-3 col-md-6">
-                                <label for="logo" class="form-label">Upload Logo</label>
-                                <input type="file" class="form-control @error('logo') is-invalid @enderror"
-                                    id="logo" name="logo"
-                                    accept="image/png, image/jpeg, image/jpg, image/svg+xml">
-                                {{-- ✅ V2 Addition: Better Bengali Instructions --}}
-                                <small class="text-muted">Recommended size: 200x200px. Max 2MB. আপলোডের পর টেনে (drag) ও
-                                    জুম করে ছবির সঠিক অংশ সিলেক্ট করতে পারবেন।</small>
-                                @error('logo')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Logo Preview</label>
-                                <div id="logo-preview" class="p-2 border rounded"
-                                    style="min-height: 100px; background: #f8f9fa;">
-                                    <div id="logo-preview-empty" class="text-center">
-                                        <i class="ti ti-photo text-muted" style="font-size: 2rem;"></i>
-                                        <p class="mb-0 text-muted small">No logo selected</p>
-                                    </div>
-                                    <div id="logo-preview-filled" class="d-none align-items-center gap-3">
-                                        <img id="logo-preview-img" src="" class="rounded-circle border"
-                                            width="70" height="70" style="object-fit: cover;" alt="Logo Preview">
-                                        <div>
-                                            <span class="d-block small text-muted mb-1">টেবিলে ঠিক এভাবে দেখাবে:</span>
-                                            <img id="logo-preview-img-small" src="" class="rounded-circle border"
-                                                width="40" height="40" style="object-fit: cover;"
-                                                alt="Logo Preview Small">
-                                            <button type="button" id="recrop-btn"
-                                                class="btn btn-sm btn-outline-secondary ms-2">
-                                                <i class="ti ti-crop"></i> আবার ক্রপ করুন
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                {{-- ✅ V2 Addition: Browser limitation warning --}}
-                                <small class="text-muted d-block mt-1">নিরাপত্তার কারণে ব্রাউজার ফাইল ইনপুট রিস্টোর করতে
-                                    পারে না — validation error হলে বা পেজ রিলোড দিলে লোগো আবার সিলেক্ট করতে হবে।</small>
                             </div>
                         </div>
                     </div>
@@ -806,7 +795,31 @@
             });
 
             // ==========================================
-            // 4. Plan Details Display (✅ V1 Clean Logic, avoided V2 duplication)
+            // 4. Favicon Preview + Theme Color Badge
+            // ==========================================
+            $('#favicon').on('change', function(e) {
+                const file = e.target.files[0];
+                const preview = $('#favicon-preview');
+
+                if (!file) {
+                    preview.html('<i class="ti ti-browser text-muted" style="font-size: 1.6rem;"></i><span class="ms-2 text-muted small">No favicon selected</span>');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    preview.html(`<img src="${ev.target.result}" alt="Favicon Preview" width="32" height="32" style="object-fit: contain;"> <span class="ms-2 text-muted small">New favicon</span>`);
+                };
+                reader.readAsDataURL(file);
+            });
+
+            $('#primary_color').on('input change', function() {
+                const color = $(this).val();
+                $('#primary-color-badge').css('background-color', color).text(color);
+            });
+
+            // ==========================================
+            // 5. Plan Details Display (✅ V1 Clean Logic, avoided V2 duplication)
             // ==========================================
             $('#plan_id').on('change', function() {
                 const selectedOption = $(this).find('option:selected');

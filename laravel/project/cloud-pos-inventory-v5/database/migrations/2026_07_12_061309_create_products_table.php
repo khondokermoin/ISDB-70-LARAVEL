@@ -8,13 +8,21 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * NOTE: category_id uses nullable() + no constrained() here because
+     * categories table is created AFTER this migration (061318 > 061309).
+     * The FK constraint is added later via a separate migration to avoid
+     * "Table doesn't exist" error.
      */
     public function up(): void
     {
+        if (Schema::hasTable('products')) {
+            return;
+        }
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id')->nullable()->constrained('companies')->nullOnDelete();
-            $table->foreignId('category_id')->nullable()->constrained('categories')->nullOnDelete();
+            // category_id stored as plain unsignedBigInteger - FK added after categories table exists
+            $table->unsignedBigInteger('category_id')->nullable();
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('image')->nullable();

@@ -3,14 +3,18 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SuperAdmin\UpdateCompanyRequest;
 use App\Models\Company;
 use App\Models\Plan;
 use App\Models\User;
 use App\Models\BusinessType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class CompanyController extends Controller
 {
@@ -53,7 +57,6 @@ class CompanyController extends Controller
     public function store(\App\Http\Requests\SuperAdmin\StoreCompanyRequest $request)
     {
         $validated = $request->validated();
-
         $uploadedPaths = [];
 
         if ($request->hasFile('logo')) {
@@ -62,7 +65,7 @@ class CompanyController extends Controller
         }
 
         if ($request->hasFile('favicon')) {
-            $uploadedPaths['favicon'] = $request->file('favicon')->store('companies/logos', 'public');
+            $uploadedPaths['favicon'] = $request->file('favicon')->store('companies/favicons', 'public');
             $validated['favicon'] = $uploadedPaths['favicon'];
         }
 
@@ -70,12 +73,25 @@ class CompanyController extends Controller
             $validated['slug'] = Str::slug($validated['name']) . '-' . Str::random(5);
         }
 
-        $themeSettings = [
+        $themeSettings = array_filter([
             'primary_color' => $request->input('primary_color', '#2563eb'),
-        ];
+        ], fn ($value) => filled($value));
+
+        $socialLinks = array_filter([
+            'facebook' => $request->input('social_facebook'),
+            'instagram' => $request->input('social_instagram'),
+            'twitter' => $request->input('social_twitter'),
+            'youtube' => $request->input('social_youtube'),
+        ], fn ($value) => filled($value));
+
+        $contactInfo = array_filter([
+            'phone' => $request->input('contact_phone'),
+            'email' => $request->input('contact_email'),
+            'address' => $request->input('contact_address'),
+        ], fn ($value) => filled($value));
 
         $trialEndsAt = null;
-        if ($validated['status'] === 'trial') {
+        if (($validated['status'] ?? null) === 'trial') {
             $plan = Plan::find($request->input('plan_id'));
             $trialDays = $plan ? ($plan->trial_days ?? 14) : 14;
             $trialEndsAt = now()->addDays($trialDays);
@@ -97,9 +113,9 @@ class CompanyController extends Controller
                 'logo' => $validated['logo'] ?? null,
                 'favicon' => $validated['favicon'] ?? null,
                 'theme_settings' => $themeSettings,
-                'social_links' => $request->input('social_links', []),
-                'contact_info' => $request->input('contact_info', []),
-                'subdomain' => $validated['subdomain'],
+                'social_links' => $socialLinks,
+                'contact_info' => $contactInfo,
+                'subdomain' => strtolower(trim((string) ($validated['subdomain'] ?? ''))),
                 'custom_domain' => $validated['custom_domain'] ?? null,
                 'currency' => $request->input('currency', 'BDT'),
                 'timezone' => $request->input('timezone', 'Asia/Dhaka'),
@@ -113,7 +129,7 @@ class CompanyController extends Controller
             // Handle Company Admin Assignment
             // Priority: 1. New admin creation, 2. Existing user selection
             $user = null;
-            
+
             $adminName = $request->input('admin_name');
             $adminEmail = $request->input('admin_email');
             $adminPassword = $request->input('admin_password');
@@ -127,7 +143,7 @@ class CompanyController extends Controller
                     'password' => \Illuminate\Support\Facades\Hash::make($adminPassword),
                     'company_id' => $company->id,
                 ]);
-            } 
+            }
             // Use existing user if selected and no new admin is being created
             elseif (! empty($existingUserId)) {
                 $user = User::find($existingUserId);
@@ -186,98 +202,109 @@ class CompanyController extends Controller
 
     /**
      * Update the specified company in storage.
+     * Handles: logo, favicon, theme_settings, social_links, contact_info
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCompanyRequest $request, $id)
     {
         $company = Company::findOrFail($id);
+        $validated = $request->validated();
+        $uploaded = [];
 
-        $validated = $request->validate([
-            'name'             => 'required|string|max:255',
-            'slug'             => 'nullable|string|unique:companies,slug,' . $company->id,
-            'email'            => 'required|email|unique:companies,email,' . $company->id,
-            'contact_person'   => 'nullable|string|max:255',
-            'phone'            => 'nullable|string|max:50',
-            'website'          => 'nullable|url|max:255',
-            'address'          => 'nullable|string',
-            'city'             => 'nullable|string|max:100',
-            'country'          => 'nullable|string|max:100',
-            'zip_code'         => 'nullable|string|max:20',
-            'subdomain'        => 'nullable|string|unique:companies,subdomain,' . $company->id,
-            'custom_domain'    => 'nullable|string|unique:companies,custom_domain,' . $company->id,
-            'currency'         => 'nullable|string|max:10',
-            'timezone'         => 'nullable|string|max:50',
-            'status'           => 'required|in:active,inactive,suspended,trial',
-            'plan_id'          => 'required|exists:plans,id',
-            'user_id'          => 'required|exists:users,id',
-            'business_type_id' => 'required|exists:business_types,id',
-            'logo'             => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
-            'settings'         => 'nullable|array',
-            'trial_ends_at'    => 'nullable|date', // ✅ Expired স্ট্যাটাস ফিক্স করার জন্য
-        ]);
-
-        // লোগো আপলোড হ্যান্ডলিং
         if ($request->hasFile('logo')) {
             if ($company->logo && Storage::disk('public')->exists($company->logo)) {
                 Storage::disk('public')->delete($company->logo);
             }
-            $validated['logo'] = $request->file('logo')->store('companies/logos', 'public');
-        } else {
-            // নতুন লোগো না থাকলে পুরনোটা মুছে যাবে না তাই এটি আনসেট করা হলো
-            unset($validated['logo']);
+            $uploaded['logo'] = $request->file('logo')->store('companies/logos', 'public');
         }
 
-        if (empty($validated['slug'])) {
-            $validated['slug'] = Str::slug($validated['name']) . '-' . Str::random(5);
+        if ($request->hasFile('favicon')) {
+            if ($company->favicon && Storage::disk('public')->exists($company->favicon)) {
+                Storage::disk('public')->delete($company->favicon);
+            }
+            $uploaded['favicon'] = $request->file('favicon')->store('companies/favicons', 'public');
         }
 
-        // Trial Ends At logic
-        $trialEndsAt = $request->filled('trial_ends_at') ? $request->trial_ends_at : $company->trial_ends_at;
-        
-        if ($validated['status'] === 'trial' && empty($trialEndsAt)) {
-            $plan = Plan::find($validated['plan_id']);
+        $slug = $validated['slug'] ?? null;
+        if (empty($slug)) {
+            $slug = Str::slug($validated['name']) . '-' . Str::random(5);
+        }
+
+        $existingTheme = is_array($company->theme_settings) ? $company->theme_settings : [];
+        $themeSettings = array_merge($existingTheme, array_filter([
+            'primary_color' => $request->filled('primary_color') ? $request->input('primary_color') : ($existingTheme['primary_color'] ?? '#2563eb'),
+            'secondary_color' => $request->filled('secondary_color') ? $request->input('secondary_color') : ($existingTheme['secondary_color'] ?? null),
+            'accent_color' => $request->filled('accent_color') ? $request->input('accent_color') : ($existingTheme['accent_color'] ?? null),
+        ], fn ($value) => filled($value)));
+
+        $socialLinks = array_filter([
+            'facebook' => $request->input('social_facebook', $company->social_links['facebook'] ?? null),
+            'instagram' => $request->input('social_instagram', $company->social_links['instagram'] ?? null),
+            'twitter' => $request->input('social_twitter', $company->social_links['twitter'] ?? null),
+            'youtube' => $request->input('social_youtube', $company->social_links['youtube'] ?? null),
+        ], fn ($value) => filled($value));
+
+        $contactInfo = array_filter([
+            'phone' => $request->input('contact_phone', $company->contact_info['phone'] ?? null),
+            'email' => $request->input('contact_email', $company->contact_info['email'] ?? null),
+            'address' => $request->input('contact_address', $company->contact_info['address'] ?? null),
+        ], fn ($value) => filled($value));
+
+        $trialEndsAt = $request->filled('trial_ends_at')
+            ? $request->trial_ends_at
+            : $company->trial_ends_at;
+
+        if (($validated['status'] ?? null) === 'trial' && empty($trialEndsAt)) {
+            $plan = Plan::find($validated['plan_id'] ?? $company->plan_id);
             $trialDays = $plan ? ($plan->trial_days ?? 14) : 14;
             $trialEndsAt = now()->addDays($trialDays);
         }
 
-        // Store old user_id to unassign role if it changes
         $oldUserId = $company->user_id;
         $newUserId = $validated['user_id'];
 
-        // ✅ Database Update (Model Cast automatically handles settings array)
+        $assignedAdmin = $newUserId ? User::find($newUserId) : null;
+        if ($request->filled('admin_password') && $assignedAdmin) {
+            $assignedAdmin->update([
+                'password' => Hash::make($request->input('admin_password')),
+            ]);
+        }
+
         $company->update([
-            'name'             => $validated['name'],
-            'slug'             => $validated['slug'],
-            'email'            => $validated['email'],
-            'contact_person'   => $validated['contact_person'] ?? null,
-            'phone'            => $validated['phone'] ?? null,
-            'website'          => $validated['website'] ?? null,
-            'address'          => $validated['address'] ?? null,
-            'city'             => $validated['city'] ?? null,
-            'country'          => $validated['country'] ?? null,
-            'zip_code'         => $validated['zip_code'] ?? null,
-            'subdomain'        => $validated['subdomain'] ?? null,
-            'custom_domain'    => $validated['custom_domain'] ?? null,
-            'currency'         => $validated['currency'] ?? 'BDT',
-            'timezone'         => $validated['timezone'] ?? 'Asia/Dhaka',
-            'status'           => $validated['status'],
-            'plan_id'          => $validated['plan_id'],
-            'user_id'          => $newUserId, // ✅ Correct column name
+            'name' => $validated['name'],
+            'slug' => $slug,
+            'email' => $validated['email'],
+            'contact_person' => $validated['contact_person'] ?? null,
+            'phone' => $validated['phone'] ?? null,
+            'website' => $validated['website'] ?? null,
+            'address' => $validated['address'] ?? null,
+            'city' => $validated['city'] ?? null,
+            'country' => $validated['country'] ?? null,
+            'zip_code' => $validated['zip_code'] ?? null,
+            'subdomain' => strtolower(trim((string) ($validated['subdomain'] ?? ''))),
+            'custom_domain' => $validated['custom_domain'] ?? null,
+            'logo' => $uploaded['logo'] ?? $company->logo,
+            'favicon' => $uploaded['favicon'] ?? $company->favicon,
+            'theme_settings' => $themeSettings,
+            'social_links' => $socialLinks,
+            'contact_info' => $contactInfo,
+            'currency' => $validated['currency'] ?? 'BDT',
+            'timezone' => $validated['timezone'] ?? 'Asia/Dhaka',
+            'status' => $validated['status'],
+            'plan_id' => $validated['plan_id'],
+            'user_id' => $newUserId,
             'business_type_id' => $validated['business_type_id'],
-            'trial_ends_at'    => $trialEndsAt,          // ✅ Being updated
-            'settings'         => $request->has('settings') ? $request->settings : $company->settings,
+            'trial_ends_at' => $trialEndsAt,
+            'settings' => $request->has('settings') ? $request->settings : $company->settings,
         ]);
 
-        // Handle role assignment when user changes
+        // ── Role Reassignment ─────────────────────────────────────────
         if ($oldUserId !== $newUserId) {
-            // Remove role from old user if exists
             if (! empty($oldUserId)) {
                 $oldUser = User::find($oldUserId);
                 if ($oldUser && method_exists($oldUser, 'removeRole')) {
                     $oldUser->removeRole('Company Admin');
                 }
             }
-
-            // Assign role to new user
             $newUser = User::find($newUserId);
             if ($newUser && method_exists($newUser, 'assignRole')) {
                 $newUser->assignRole('Company Admin');
@@ -287,12 +314,44 @@ class CompanyController extends Controller
         if ($request->wantsJson()) {
             return response()->json([
                 'message'  => 'Company updated successfully!',
-                'redirect' => route('superadmin.companies.index')
+                'redirect' => route('superadmin.companies.index'),
             ]);
         }
 
         return redirect()->route('superadmin.companies.index')
             ->with('success', 'Company updated successfully!');
+    }
+
+    /**
+     * Impersonate the company admin for the selected tenant.
+     */
+    public function impersonate(Company $company)
+    {
+        if (! Auth::check() || ! Auth::user()->hasRole('Super Admin')) {
+            abort(403);
+        }
+
+        if (Session::has('impersonator_id')) {
+            return redirect()->route('impersonate.leave')
+                ->with('error', 'You are already impersonating a tenant. Please return to Super Admin first, then try again.');
+        }
+
+        $tenantAdmin = User::query()
+            ->where('company_id', $company->id)
+            ->whereHas('roles', function ($query) {
+                $query->where('name', 'Company Admin');
+            })
+            ->first();
+
+        if (! $tenantAdmin) {
+            return back()->with('error', 'No admin user found for this company.');
+        }
+
+        Session::put('impersonator_id', Auth::id());
+        Auth::login($tenantAdmin);
+
+        return redirect()->route('company.dashboard')
+            ->with('success', 'You are now viewing as ' . $tenantAdmin->name . ' (' . $company->name . ')');
     }
 
     /**

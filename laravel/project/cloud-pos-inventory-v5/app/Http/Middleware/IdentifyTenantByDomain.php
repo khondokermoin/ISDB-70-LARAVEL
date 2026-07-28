@@ -2,57 +2,34 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Company;
+use App\Services\TenantService;
 use Closure;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Symfony\Component\HttpFoundation\Response;
 
 class IdentifyTenantByDomain
 {
-    /**
-     * Handle an incoming request.
-     */
+    public function __construct(protected TenantService $tenantService) {}
+
     public function handle(Request $request, Closure $next): Response
     {
         $host = $request->getHost();
 
         if (empty($host)) {
-            abort(404, 'Tenant Not Found');
+            return $next($request);
         }
 
-        $company = Company::query()
-            ->where(function ($query) use ($host) {
-                $query->where('custom_domain', $host)
-                    ->orWhere('subdomain', $this->normalizeDomainToken($host));
-            })
-            ->first();
+        // Resolve tenant from host using TenantService (with cache)
+        $company = $this->tenantService->resolveFromHost($host);
 
-        if (! $company) {
-            abort(404, 'Tenant Not Found');
+        if ($company) {
+            // Bind tenant to IoC container - accessible anywhere via app('tenant')
+            app()->instance('tenant', $company);
+
+            // Also bind TenantService so it's accessible with resolved tenant
+            app()->instance(TenantService::class, $this->tenantService);
         }
-
-        app()->instance('tenant', $company);
-
-        Inertia::share('tenant', $company->only([
-            'name',
-            'logo',
-            'favicon',
-            'theme_settings',
-            'contact_info',
-        ]));
 
         return $next($request);
-    }
-
-    protected function normalizeDomainToken(string $host): string
-    {
-        $host = strtolower(trim($host));
-
-        if (str_contains($host, '.')) {
-            $host = explode('.', $host)[0];
-        }
-
-        return preg_replace('/[^a-z0-9_-]+/', '', $host) ?? $host;
     }
 }

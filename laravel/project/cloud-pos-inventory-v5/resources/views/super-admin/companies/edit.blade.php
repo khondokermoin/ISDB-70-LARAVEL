@@ -20,24 +20,44 @@
     </div>
 
     @php
-        // ✅ ULTRA-ROBUST Logo URL Generator
+        // Logo URL
         $logoUrl = null;
         if (!empty($company->logo)) {
             $rawPath = trim($company->logo);
             if (\Illuminate\Support\Str::startsWith($rawPath, ['http://', 'https://'])) {
                 $logoUrl = $rawPath;
             } else {
-                $cleanPath = ltrim($rawPath, '/');
-                $cleanPath = preg_replace('/^(public|storage)\//i', '', $cleanPath);
-                if (\Illuminate\Support\Facades\Storage::disk('public')->exists($cleanPath)) {
-                    $logoUrl = \Illuminate\Support\Facades\Storage::disk('public')->url($cleanPath);
-                } elseif (file_exists(public_path($cleanPath))) {
-                    $logoUrl = asset($cleanPath);
-                } else {
-                    $logoUrl = asset('storage/' . $cleanPath);
-                }
+                $cleanPath = ltrim(preg_replace('/^(public|storage)\//i', '', $rawPath), '/');
+                $logoUrl = \Illuminate\Support\Facades\Storage::disk('public')->exists($cleanPath)
+                    ? \Illuminate\Support\Facades\Storage::disk('public')->url($cleanPath)
+                    : asset('storage/' . $cleanPath);
             }
         }
+
+        // Favicon URL
+        $faviconUrl = null;
+        if (!empty($company->favicon)) {
+            $rawFav = trim($company->favicon);
+            if (\Illuminate\Support\Str::startsWith($rawFav, ['http://', 'https://'])) {
+                $faviconUrl = $rawFav;
+            } else {
+                $cleanFav = ltrim(preg_replace('/^(public|storage)\//i', '', $rawFav), '/');
+                $faviconUrl = \Illuminate\Support\Facades\Storage::disk('public')->exists($cleanFav)
+                    ? \Illuminate\Support\Facades\Storage::disk('public')->url($cleanFav)
+                    : asset('storage/' . $cleanFav);
+            }
+        }
+
+        // Theme settings
+        $theme = is_array($company->theme_settings)
+            ? $company->theme_settings
+            : json_decode($company->theme_settings, true) ?? [];
+        $socialLinks = is_array($company->social_links)
+            ? $company->social_links
+            : json_decode($company->social_links, true) ?? [];
+        $contactInfo = is_array($company->contact_info)
+            ? $company->contact_info
+            : json_decode($company->contact_info, true) ?? [];
 
         // Safe access to JSON settings
         $settings = is_array($company->settings) ? $company->settings : json_decode($company->settings, true);
@@ -160,13 +180,57 @@
                                 @error('user_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+
+                                <div class="border rounded p-3 bg-light">
+                                    <label for="admin_password" class="form-label">Admin Password</label>
+                                    <input type="password" class="form-control @error('admin_password') is-invalid @enderror"
+                                        id="admin_password" name="admin_password" placeholder="Leave blank to keep current password">
+                                    <small class="text-muted">Only enter a new password if you want to change the assigned admin's password.</small>
+                                    @error('admin_password')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {{-- ==========================================
-                    2. SaaS & POS Settings
+                    2. Domain Configuration
+                ========================================== --}}
+                <div class="mt-3 card">
+                    <div class="card-body">
+                        <h4 class="mb-3 header-title">Domain Configuration</h4>
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label for="subdomain" class="form-label">Subdomain</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control @error('subdomain') is-invalid @enderror"
+                                        id="subdomain" name="subdomain"
+                                        value="{{ old('subdomain', $company->subdomain) }}" placeholder="company-name">
+                                    <span class="input-group-text">.yourdomain.com</span>
+                                </div>
+                                @error('subdomain')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="custom_domain" class="form-label">Custom Domain (White-label)</label>
+                                <input type="text" class="form-control @error('custom_domain') is-invalid @enderror"
+                                    id="custom_domain" name="custom_domain"
+                                    value="{{ old('custom_domain', $company->custom_domain) }}"
+                                    placeholder="pos.company.com">
+                                @error('custom_domain')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- ==========================================
+                    3. SaaS & POS Settings
                 ========================================== --}}
                 <div class="mt-3 card">
                     <div class="card-body">
@@ -274,30 +338,6 @@
                                         America/New_York (EST)</option>
                                 </select>
                                 @error('timezone')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                                <label for="subdomain" class="form-label">Subdomain</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control @error('subdomain') is-invalid @enderror"
-                                        id="subdomain" name="subdomain"
-                                        value="{{ old('subdomain', $company->subdomain) }}" placeholder="company-name">
-                                    <span class="input-group-text">.yourdomain.com</span>
-                                </div>
-                                @error('subdomain')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                                <label for="custom_domain" class="form-label">Custom Domain (White-label)</label>
-                                <input type="text" class="form-control @error('custom_domain') is-invalid @enderror"
-                                    id="custom_domain" name="custom_domain"
-                                    value="{{ old('custom_domain', $company->custom_domain) }}"
-                                    placeholder="pos.company.com">
-                                @error('custom_domain')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -482,6 +522,227 @@
                 </div>
 
                 {{-- ==========================================
+                    6. Branding & Theme Settings
+                ========================================== --}}
+                <div class="mt-3 card">
+                    <div class="card-body">
+                        <h4 class="mb-1 header-title">
+                            <i class="ti ti-palette me-2 text-primary"></i>Branding & Theme
+                        </h4>
+                        <p class="mb-3 text-muted small">These settings control how the customer's site looks on their
+                            custom domain.</p>
+                        <div class="row">
+
+                            {{-- Favicon Upload --}}
+                            <div class="mb-3 col-md-6">
+                                <label for="favicon" class="form-label">Favicon</label>
+                                <input type="file" class="form-control @error('favicon') is-invalid @enderror"
+                                    id="favicon" name="favicon"
+                                    accept="image/png, image/jpeg, image/jpg, image/x-icon, image/svg+xml">
+                                <small class="text-muted">Browser tab icon. PNG/ICO, max 512KB. Leave empty to keep
+                                    current.</small>
+                                @error('favicon')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label">Favicon Preview</label>
+                                <div id="favicon-preview"
+                                    class="p-2 text-center border rounded d-flex align-items-center gap-3"
+                                    style="min-height: 70px; background: #f8f9fa;">
+                                    @if ($faviconUrl)
+                                        <img id="favicon-preview-img" src="{{ $faviconUrl }}" alt="Favicon"
+                                            width="32" height="32" style="object-fit: contain;">
+                                        <span class="text-muted small">Current favicon</span>
+                                    @else
+                                        <i class="ti ti-browser text-muted" style="font-size: 1.5rem;"></i>
+                                        <span class="text-muted small">No favicon set</span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            {{-- Primary Color --}}
+                            <div class="mb-3 col-md-4">
+                                <label for="primary_color" class="form-label">
+                                    Primary Brand Color
+                                    <span class="badge ms-1" id="primary-color-badge"
+                                        style="background-color: {{ $theme['primary_color'] ?? '#3B82F6' }};">
+                                        {{ $theme['primary_color'] ?? '#3B82F6' }}
+                                    </span>
+                                </label>
+                                <input type="color"
+                                    class="form-control form-control-color @error('primary_color') is-invalid @enderror"
+                                    id="primary_color" name="primary_color"
+                                    value="{{ old('primary_color', $theme['primary_color'] ?? '#3B82F6') }}"
+                                    title="Choose primary brand color">
+                                <small class="text-muted">Main color for buttons, headers, links.</small>
+                                @error('primary_color')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            {{-- Secondary Color --}}
+                            <div class="mb-3 col-md-4">
+                                <label for="secondary_color" class="form-label">
+                                    Secondary Color
+                                    <span class="badge ms-1" id="secondary-color-badge"
+                                        style="background-color: {{ $theme['secondary_color'] ?? '#1E40AF' }};">
+                                        {{ $theme['secondary_color'] ?? '#1E40AF' }}
+                                    </span>
+                                </label>
+                                <input type="color"
+                                    class="form-control form-control-color @error('secondary_color') is-invalid @enderror"
+                                    id="secondary_color" name="secondary_color"
+                                    value="{{ old('secondary_color', $theme['secondary_color'] ?? '#1E40AF') }}"
+                                    title="Choose secondary color">
+                                <small class="text-muted">Sidebar, footer background.</small>
+                                @error('secondary_color')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            {{-- Accent Color --}}
+                            <div class="mb-3 col-md-4">
+                                <label for="accent_color" class="form-label">
+                                    Accent Color
+                                    <span class="badge ms-1" id="accent-color-badge"
+                                        style="background-color: {{ $theme['accent_color'] ?? '#F59E0B' }};">
+                                        {{ $theme['accent_color'] ?? '#F59E0B' }}
+                                    </span>
+                                </label>
+                                <input type="color"
+                                    class="form-control form-control-color @error('accent_color') is-invalid @enderror"
+                                    id="accent_color" name="accent_color"
+                                    value="{{ old('accent_color', $theme['accent_color'] ?? '#F59E0B') }}"
+                                    title="Choose accent color">
+                                <small class="text-muted">Highlights, badges, alerts.</small>
+                                @error('accent_color')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            {{-- Live Theme Preview --}}
+                            <div class="mb-3 col-12">
+                                <label class="form-label">Live Theme Preview</label>
+                                <div id="theme-preview" class="p-3 rounded border d-flex align-items-center gap-3"
+                                    style="background: #f8f9fa;">
+                                    <div id="preview-header" class="px-3 py-2 rounded text-white small fw-bold"
+                                        style="background-color: {{ $theme['primary_color'] ?? '#3B82F6' }};">
+                                        Header / Button
+                                    </div>
+                                    <div id="preview-sidebar" class="px-3 py-2 rounded text-white small"
+                                        style="background-color: {{ $theme['secondary_color'] ?? '#1E40AF' }};">
+                                        Sidebar
+                                    </div>
+                                    <div id="preview-accent" class="px-3 py-2 rounded text-white small"
+                                        style="background-color: {{ $theme['accent_color'] ?? '#F59E0B' }};">
+                                        Badge / Alert
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- ==========================================
+                    7. Social Links & Contact Info (React Footer)
+                ========================================== --}}
+                <div class="mt-3 card">
+                    <div class="card-body">
+                        <h4 class="mb-1 header-title">
+                            <i class="ti ti-share me-2 text-primary"></i>Social Links & Contact Info
+                        </h4>
+                        <p class="mb-3 text-muted small">These appear in the React frontend footer on the customer's
+                            domain.</p>
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label for="social_facebook" class="form-label"><i
+                                        class="ti ti-brand-facebook me-1 text-primary"></i>Facebook Page URL</label>
+                                <input type="url" class="form-control @error('social_facebook') is-invalid @enderror"
+                                    id="social_facebook" name="social_facebook"
+                                    value="{{ old('social_facebook', $socialLinks['facebook'] ?? '') }}"
+                                    placeholder="https://facebook.com/yourpage">
+                                @error('social_facebook')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="social_instagram" class="form-label"><i
+                                        class="ti ti-brand-instagram me-1 text-danger"></i>Instagram URL</label>
+                                <input type="url"
+                                    class="form-control @error('social_instagram') is-invalid @enderror"
+                                    id="social_instagram" name="social_instagram"
+                                    value="{{ old('social_instagram', $socialLinks['instagram'] ?? '') }}"
+                                    placeholder="https://instagram.com/yourpage">
+                                @error('social_instagram')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="social_twitter" class="form-label"><i
+                                        class="ti ti-brand-twitter me-1 text-info"></i>Twitter / X URL</label>
+                                <input type="url" class="form-control @error('social_twitter') is-invalid @enderror"
+                                    id="social_twitter" name="social_twitter"
+                                    value="{{ old('social_twitter', $socialLinks['twitter'] ?? '') }}"
+                                    placeholder="https://twitter.com/yourpage">
+                                @error('social_twitter')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="social_youtube" class="form-label"><i
+                                        class="ti ti-brand-youtube me-1 text-danger"></i>YouTube Channel URL</label>
+                                <input type="url" class="form-control @error('social_youtube') is-invalid @enderror"
+                                    id="social_youtube" name="social_youtube"
+                                    value="{{ old('social_youtube', $socialLinks['youtube'] ?? '') }}"
+                                    placeholder="https://youtube.com/yourchannel">
+                                @error('social_youtube')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-12">
+                                <hr class="my-2">
+                            </div>
+
+                            <div class="mb-3 col-md-4">
+                                <label for="contact_phone" class="form-label"><i class="ti ti-phone me-1"></i>Support
+                                    Phone (Footer)</label>
+                                <input type="text" class="form-control @error('contact_phone') is-invalid @enderror"
+                                    id="contact_phone" name="contact_phone"
+                                    value="{{ old('contact_phone', $contactInfo['phone'] ?? ($company->phone ?? '')) }}"
+                                    placeholder="01XXXXXXXXX">
+                                @error('contact_phone')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label for="contact_email" class="form-label"><i class="ti ti-mail me-1"></i>Support
+                                    Email (Footer)</label>
+                                <input type="email" class="form-control @error('contact_email') is-invalid @enderror"
+                                    id="contact_email" name="contact_email"
+                                    value="{{ old('contact_email', $contactInfo['email'] ?? ($company->email ?? '')) }}"
+                                    placeholder="support@company.com">
+                                @error('contact_email')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label for="contact_address" class="form-label"><i class="ti ti-map-pin me-1"></i>Display
+                                    Address (Footer)</label>
+                                <input type="text" class="form-control @error('contact_address') is-invalid @enderror"
+                                    id="contact_address" name="contact_address"
+                                    value="{{ old('contact_address', $contactInfo['address'] ?? ($company->address ?? '')) }}"
+                                    placeholder="Dhaka, Bangladesh">
+                                @error('contact_address')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- ==========================================
                     Action Buttons
                 ========================================== --}}
                 <div class="mt-3 card">
@@ -598,7 +859,67 @@
             });
 
             // ==========================================
-            // 3. Plan Details Display
+            // 3. Favicon Preview
+            // ==========================================
+            const allowedFaviconTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/x-icon', 'image/svg+xml'];
+            const maxFaviconBytes = 512 * 1024; // 512KB
+            let currentFaviconUrl = "{{ $faviconUrl ?? '' }}";
+
+            $('#favicon').on('change', function(e) {
+                const file = e.target.files[0];
+                const preview = $('#favicon-preview');
+
+                if (!file) {
+                    if (currentFaviconUrl) {
+                        preview.html(
+                            `<img src="${currentFaviconUrl}" alt="Favicon" width="32" height="32" style="object-fit:contain;"><span class="text-muted small ms-2">Current favicon</span>`
+                            );
+                    } else {
+                        preview.html(
+                            `<i class="ti ti-browser text-muted" style="font-size:1.5rem;"></i><span class="text-muted small ms-2">No favicon set</span>`
+                            );
+                    }
+                    return;
+                }
+
+                if (file.size > maxFaviconBytes) {
+                    alert('Favicon size must not exceed 512KB.');
+                    $(this).val('');
+                    return;
+                }
+
+                if (!allowedFaviconTypes.includes(file.type)) {
+                    alert('Only PNG, JPG, ICO or SVG images are allowed for favicon.');
+                    $(this).val('');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    preview.html(
+                        `<img src="${ev.target.result}" alt="Favicon Preview" width="32" height="32" style="object-fit:contain;"><span class="text-muted small ms-2">New favicon (preview)</span>`
+                        );
+                };
+                reader.readAsDataURL(file);
+            });
+
+            // ==========================================
+            // 4. Live Color Badge & Theme Preview Update
+            // ==========================================
+            function updateColorBadge(inputId, badgeId, previewId) {
+                $('#' + inputId).on('input change', function() {
+                    const color = $(this).val();
+                    $('#' + badgeId).css('background-color', color).text(color);
+                    $('#' + previewId).css('background-color', color);
+                });
+            }
+
+            updateColorBadge('primary_color', 'primary-color-badge', 'preview-header');
+            updateColorBadge('secondary_color', 'secondary-color-badge', 'preview-sidebar');
+            updateColorBadge('accent_color', 'accent-color-badge', 'preview-accent');
+
+            // ==========================================
+            // 5. Plan Details Display
             // ==========================================
             function updatePlanDetails() {
                 const selectedOption = $('#plan_id option:selected');

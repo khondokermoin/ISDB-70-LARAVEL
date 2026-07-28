@@ -7,14 +7,14 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Add branding fields to companies table.
+     * NOTE: 'logo' column already exists in create_companies_table migration,
+     * so we skip it and only add the truly new columns.
      */
     public function up(): void
     {
         Schema::table('companies', function (Blueprint $table) {
-            if (! Schema::hasColumn('companies', 'logo')) {
-                $table->string('logo')->nullable()->after('zip_code');
-            }
+            // 'logo' already exists in create_companies_table - skip it
 
             if (! Schema::hasColumn('companies', 'favicon')) {
                 $table->string('favicon')->nullable()->after('logo');
@@ -56,9 +56,7 @@ return new class extends Migration
                 $table->dropColumn('favicon');
             }
 
-            if (Schema::hasColumn('companies', 'logo')) {
-                $table->dropColumn('logo');
-            }
+            // Do NOT drop 'logo' here - it belongs to create_companies_table migration
         });
     }
 };

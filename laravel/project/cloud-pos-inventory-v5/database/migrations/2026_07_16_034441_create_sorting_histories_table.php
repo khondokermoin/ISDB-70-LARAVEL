@@ -8,6 +8,9 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (Schema::hasTable('sorting_histories')) {
+            return;
+        }
         Schema::create('sorting_histories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('branch_id')->constrained('branches')->onDelete('cascade');
