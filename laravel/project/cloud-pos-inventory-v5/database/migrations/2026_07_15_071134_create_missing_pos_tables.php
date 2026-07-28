@@ -1,53 +1,23 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
+/**
+ * NOTE: This migration is now a NO-OP.
+ * brands, units, taxes tables are created in their own migrations.
+ * Kept here only to maintain migration history integrity.
+ */
 return new class extends Migration
 {
     public function up(): void
     {
-        // ১. Brands টেবিল তৈরি করা (যদি না থাকে)
-        if (!Schema::hasTable('brands')) {
-            Schema::create('brands', function (Blueprint $table) {
-                $table->id();
-                $table->unsignedBigInteger('company_id')->nullable();
-                $table->string('name');
-                $table->boolean('is_active')->default(true);
-                $table->timestamps();
-            });
-        }
-
-        // ২. Units টেবিল তৈরি করা (যদি না থাকে)
-        if (!Schema::hasTable('units')) {
-            Schema::create('units', function (Blueprint $table) {
-                $table->id();
-                $table->unsignedBigInteger('company_id')->nullable();
-                $table->string('name');
-                $table->string('short_code')->nullable(); // যেমন: kg, pcs, ltr
-                $table->boolean('is_active')->default(true);
-                $table->timestamps();
-            });
-        }
-
-        // ৩. Taxes টেবিল তৈরি করা (যদি না থাকে)
-        if (!Schema::hasTable('taxes')) {
-            Schema::create('taxes', function (Blueprint $table) {
-                $table->id();
-                $table->unsignedBigInteger('company_id')->nullable();
-                $table->string('name');
-                $table->decimal('rate', 5, 2)->default(0); // যেমন: 15.00 (15% এর জন্য)
-                $table->boolean('is_active')->default(true);
-                $table->timestamps();
-            });
-        }
+        // brands → created in 2026_07_12 series
+        // units  → created in 2026_07_12_061324_create_units_table.php
+        // taxes  → created in 2026_07_12_061329_create_taxes_table.php
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('taxes');
-        Schema::dropIfExists('units');
-        Schema::dropIfExists('brands');
+        // Nothing to reverse
     }
 };

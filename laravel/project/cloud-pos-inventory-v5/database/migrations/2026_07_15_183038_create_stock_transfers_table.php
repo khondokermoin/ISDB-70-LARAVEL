@@ -6,20 +6,22 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('stock_transfers', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('company_id')->constrained('companies')->cascadeOnDelete();
+            $table->foreignId('from_branch_id')->constrained('branches')->cascadeOnDelete();
+            $table->foreignId('to_branch_id')->constrained('branches')->cascadeOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->string('reference_no')->nullable();
+            $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending');
+            $table->text('note')->nullable();
+            $table->date('transfer_date');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('stock_transfers');
