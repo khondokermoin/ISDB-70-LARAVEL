@@ -331,7 +331,7 @@ class CompanyController extends Controller
             abort(403);
         }
 
-        if (Session::has('impersonator_id')) {
+        if (Session::has('impersonated_by') || Session::has('impersonator_id')) {
             return redirect()->route('impersonate.leave')
                 ->with('error', 'You are already impersonating a tenant. Please return to Super Admin first, then try again.');
         }
@@ -347,11 +347,66 @@ class CompanyController extends Controller
             return back()->with('error', 'No admin user found for this company.');
         }
 
-        Session::put('impersonator_id', Auth::id());
+        $superAdminId = Auth::id();
+        Session::put('impersonated_by', $superAdminId);
+        Session::put('impersonator_id', $superAdminId);
         Auth::login($tenantAdmin);
 
-        return redirect()->route('company.dashboard')
+        return redirect($this->tenantDashboardUrl($company))
             ->with('success', 'You are now viewing as ' . $tenantAdmin->name . ' (' . $company->name . ')');
+    }
+
+    public function leaveImpersonation(Request $request)
+    {
+        $impersonatorId = Session::pull('impersonated_by');
+
+        if (! $impersonatorId) {
+            $impersonatorId = Session::pull('impersonator_id');
+        }
+
+        if (! $impersonatorId) {
+            return redirect()->route('superadmin.dashboard')
+                ->with('error', 'You are not currently impersonating any tenant.');
+        }
+
+        $originalAdmin = User::find($impersonatorId);
+
+        Session::forget('impersonated_by');
+        Session::forget('impersonator_id');
+
+        if (! $originalAdmin) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('login')
+                ->with('error', 'Your original Super Admin account could not be restored. Please log in again.');
+        }
+
+        Auth::logout();
+        Auth::login($originalAdmin);
+        $request->session()->regenerate();
+
+        return redirect()->route('superadmin.dashboard')
+            ->with('success', 'You have successfully returned to your Super Admin account.');
+    }
+
+    protected function tenantDashboardUrl(Company $company): string
+    {
+        $scheme = parse_url(config('app.url'), PHP_URL_SCHEME) ?: 'http';
+        $hostname = $company->custom_domain ?: null;
+
+        if (! $hostname && ! empty($company->subdomain)) {
+            $defaultDomain = config('app.domain', parse_url(config('app.url'), PHP_URL_HOST) ?: request()->getHost());
+            $hostname = $company->subdomain . '.' . $defaultDomain;
+        }
+
+        if (! $hostname) {
+            return route('company.dashboard');
+        }
+
+        $host = preg_replace('#^https?://#', '', trim($hostname));
+        return $scheme . '://' . trim($host, '/') . '/company/dashboard';
     }
 
     /**

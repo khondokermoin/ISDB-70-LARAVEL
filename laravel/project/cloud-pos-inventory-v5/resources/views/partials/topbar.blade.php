@@ -1,5 +1,20 @@
  <header class="app-topbar">
      <div class="page-container topbar-menu">
+         @if(session('impersonated_by'))
+             @php
+                 $tenantName = optional(auth()->user()->company)->name ?? optional(app('tenant'))->name ?? 'the tenant';
+             @endphp
+             <div class="alert alert-warning mb-2 rounded-3 d-flex align-items-center justify-content-between">
+                 <div class="me-3">
+                     <strong>Impersonation Active:</strong>
+                     You are currently impersonating <span class="fw-semibold">{{ $tenantName }}</span>.
+                 </div>
+                 <a href="{{ route('impersonate.leave') }}" class="btn btn-sm btn-danger">
+                     Return to Super Admin
+                 </a>
+             </div>
+         @endif
+
          <div class="d-flex align-items-center gap-2">
 
              <!-- Brand Logo -->

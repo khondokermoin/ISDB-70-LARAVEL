@@ -162,7 +162,7 @@ Route::middleware(['auth', 'verified', 'role:Super Admin'])
 // 1b. Impersonation Exit
 // ==========================================
 Route::middleware(['auth'])->group(function () {
-    Route::get('/impersonate/leave', [ImpersonateController::class, 'leave'])->name('impersonate.leave');
+    Route::get('/impersonate/leave', [CompanyController::class, 'leaveImpersonation'])->name('impersonate.leave');
 });
 
 // ==========================================
