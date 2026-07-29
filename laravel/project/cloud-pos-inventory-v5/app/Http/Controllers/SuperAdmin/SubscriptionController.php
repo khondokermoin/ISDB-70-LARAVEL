@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
+use App\Models\Plan;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 class SubscriptionController extends Controller
@@ -37,6 +40,41 @@ class SubscriptionController extends Controller
         ];
 
         return view('super-admin.subscriptions.index', compact('subscriptions', 'stats'));
+    }
+
+    public function create()
+    {
+        $companies = Company::orderBy('name')->get();
+        $plans = Plan::active()->orderBy('price')->get();
+
+        return view('super-admin.subscriptions.create', compact('companies', 'plans'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'company_id' => 'required|exists:companies,id',
+            'plan_id' => 'required|exists:plans,id',
+            'billing_cycle' => 'required|in:monthly,yearly,lifetime',
+            'status' => 'required|in:active,trial,pending',
+            'started_at' => 'required|date',
+            'ends_at' => 'nullable|date|after:started_at',
+        ]);
+
+        Subscription::create([
+            'company_id' => $request->company_id,
+            'plan_id' => $request->plan_id,
+            'billing_cycle' => $request->billing_cycle,
+            'status' => $request->status,
+            'started_at' => $request->started_at,
+            'ends_at' => $request->ends_at,
+            'invoice_number' => 'INV-' . strtoupper(Str::random(8)),
+        ]);
+
+        Company::find($request->company_id)->update(['plan_id' => $request->plan_id]);
+
+        return redirect()->route('superadmin.subscriptions.index')
+            ->with('success', 'Subscription created successfully.');
     }
 
     public function show(string $id)

@@ -10,9 +10,14 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
-        'company_id', 'subscription_id', 'amount', 
-        'currency', 'payment_method', 'transaction_id', 
+        'company_id', 'subscription_id', 'amount',
+        'currency', 'payment_method', 'transaction_id',
         'status', 'details'
+    ];
+
+    protected $casts = [
+        'amount' => 'decimal:2',
+        'details' => 'array',
     ];
 
     public function company()

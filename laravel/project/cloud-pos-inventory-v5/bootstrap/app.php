@@ -30,6 +30,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'tenant.access' => \App\Http\Middleware\EnsureTenantAccess::class,
             'tenant.domain' => \App\Http\Middleware\IdentifyTenantByDomain::class,
             'inertia' => \App\Http\Middleware\HandleInertiaRequests::class,
+            'subscription.check' => \App\Http\Middleware\CheckSubscription::class,
         ]);
 
         // Guest Redirect Logic (SaaS Roles)

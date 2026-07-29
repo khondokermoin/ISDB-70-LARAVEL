@@ -58,6 +58,15 @@
                 </a>
             </li>
 
+            <li class="side-nav-title mt-3">Reports</li>
+            <li class="side-nav-item">
+                <a href="{{ route('branch.reports.daily-sales') }}"
+                    class="side-nav-link {{ request()->routeIs('branch.reports.*') ? 'active' : '' }}">
+                    <span class="menu-icon"><i class="ti ti-chart-bar"></i></span>
+                    <span class="menu-text"> Daily Sales Report </span>
+                </a>
+            </li>
+
             <li class="side-nav-title mt-3">Inventory & Stock</li>
 
             <!-- Inventory & Stock Management (Collapsible Menu) -->

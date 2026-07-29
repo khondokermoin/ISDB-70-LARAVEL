@@ -4,33 +4,36 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Models\Subscription;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
     public function index(Request $request)
     {
-        $type = $request->query('type', 'revenue');
+        $type = $request->input('type', 'revenue');
+        $from = $request->input('from', now()->startOfMonth()->format('Y-m-d'));
+        $to = $request->input('to', now()->format('Y-m-d'));
 
-        if ($type === 'tenant-usage') {
-            $data = Company::withCount(['branches', 'users'])
-                ->latest()
-                ->paginate(20);
-        } else {
-            // ডিফল্ট: revenue রিপোর্ট
-            $type = 'revenue';
-            $data = Transaction::select(
-                    DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'),
-                    DB::raw('SUM(amount) as total')
-                )
-                ->groupBy('month')
-                ->orderByDesc('month')
-                ->limit(12)
-                ->get();
-        }
+        $revenue = Transaction::where('status', 'success')
+            ->whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])
+            ->sum('amount');
 
-        return view('super-admin.reports.index', compact('type', 'data'));
+        $newSubscriptions = Subscription::whereBetween('started_at', [$from, $to])->count();
+        $cancelledSubs = Subscription::where('status', 'cancelled')
+            ->whereBetween('cancelled_at', [$from, $to])
+            ->count();
+        $newCompanies = Company::whereBetween('created_at', [$from, $to])->count();
+
+        $transactions = Transaction::with(['company', 'subscription.plan'])
+            ->where('status', 'success')
+            ->whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])
+            ->latest()
+            ->paginate(20);
+
+        return view('super-admin.reports.index', compact(
+            'type', 'revenue', 'newSubscriptions', 'cancelledSubs', 'newCompanies', 'transactions', 'from', 'to'
+        ));
     }
 }

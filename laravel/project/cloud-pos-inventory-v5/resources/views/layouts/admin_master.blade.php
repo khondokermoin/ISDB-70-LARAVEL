@@ -46,8 +46,7 @@
 
     {{-- JS Files --}}
     @include('partials.scripts')
-
-
+    @stack('scripts')
 
 </body>
 

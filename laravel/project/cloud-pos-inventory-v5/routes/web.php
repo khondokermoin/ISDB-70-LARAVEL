@@ -68,6 +68,7 @@ use App\Http\Controllers\Branch\SaleController;
 use App\Http\Controllers\Branch\StockAdjustmentController;
 use App\Http\Controllers\Branch\PurchaseController as BranchPurchaseController; // <-- NEW: For Branch-level Purchasing
 use App\Http\Controllers\Branch\SortingController;
+use App\Http\Controllers\Branch\ReportController as BranchReportController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -103,6 +104,10 @@ Route::middleware(['auth', 'verified', 'role:Super Admin'])
         Route::resource('/transactions', TransactionController::class)->only(['index']);
 
         // Subscription Routes
+        // IMPORTANT: 'create' route MUST be declared BEFORE the resource to avoid
+        // Laravel matching 'subscriptions/create' as 'subscriptions/{subscription}' (show)
+        Route::get('subscriptions/create', [SubscriptionController::class, 'create'])->name('subscriptions.create');
+        Route::post('subscriptions', [SubscriptionController::class, 'store'])->name('subscriptions.store');
         Route::resource('subscriptions', SubscriptionController::class)->only(['index', 'show']);
         Route::post('subscriptions/{subscription}/cancel', [SubscriptionController::class, 'cancel'])->name('subscriptions.cancel');
         Route::post('subscriptions/{subscription}/suspend', [SubscriptionController::class, 'suspend'])->name('subscriptions.suspend');
@@ -168,7 +173,7 @@ Route::middleware(['auth'])->group(function () {
 // ==========================================
 // 2. Company Admin Routes (Shop Owner)
 // ==========================================
-Route::middleware(['auth', 'verified', 'role:Company Admin', 'tenant.access'])
+Route::middleware(['auth', 'verified', 'role:Company Admin', 'tenant.access', 'subscription.check'])
     ->prefix('company')
     ->name('company.')
     ->group(function () {
@@ -189,6 +194,7 @@ Route::middleware(['auth', 'verified', 'role:Company Admin', 'tenant.access'])
         // Inventory Operations (Low Stock & Stock Adjustment)
         Route::get('/inventory/low-stock', [CompanyInventoryController::class, 'lowStock'])->name('inventory.low-stock');
         Route::get('/inventory/stock-adjust', [CompanyInventoryController::class, 'stockAdjust'])->name('inventory.stock-adjust');
+        Route::post('/inventory/stock-adjust', [CompanyInventoryController::class, 'storeAdjustment'])->name('inventory.stock-adjust.store');
 
         // Stock Transfers (Branch to Branch) <-- NEW
         Route::resource('/transfers', TransferController::class)->only(['index', 'create', 'store']);
@@ -208,12 +214,18 @@ Route::middleware(['auth', 'verified', 'role:Company Admin', 'tenant.access'])
         // Settings & Account
         Route::prefix('settings')->name('settings.')->group(function () {
             Route::get('/profile', [CompanySettingController::class, 'profile'])->name('profile');
+            Route::post('/profile', [CompanySettingController::class, 'updateProfile'])->name('profile.update');
             Route::get('/invoice', [CompanySettingController::class, 'invoice'])->name('invoice');
+            Route::post('/invoice', [CompanySettingController::class, 'updateInvoice'])->name('invoice.update');
             Route::resource('/attributes', \App\Http\Controllers\Tenant\AttributeController::class)->except(['create', 'edit', 'show']);
         });
 
         // Subscription & Announcements
         Route::get('/subscription', [CompanySubscriptionController::class, 'index'])->name('subscription.index');
+        Route::get('/subscription/plans', [CompanySubscriptionController::class, 'showPlans'])->name('subscription.plans');
+        Route::post('/subscription/subscribe/{plan}', [CompanySubscriptionController::class, 'subscribe'])->name('subscription.subscribe');
+        Route::get('/subscription/invoice/{invoiceNumber}/download', [CompanySubscriptionController::class, 'downloadInvoice'])->name('subscription.invoice.download');
+        Route::get('/subscription/payment/callback', [CompanySubscriptionController::class, 'paymentCallback'])->name('subscription.payment.callback');
         Route::get('/announcements', [CompanyAnnouncementController::class, 'index'])->name('announcements.index');
     });
 
@@ -250,6 +262,7 @@ Route::middleware(['auth', 'verified', 'role:Manager|Salesman', 'tenant.access']
 
         // Sales History
         Route::resource('/sales', SaleController::class)->only(['index', 'show']);
+        Route::get('/reports/daily-sales', [BranchReportController::class, 'dailySales'])->name('reports.daily-sales');
     });
 
 // ==========================================
@@ -277,4 +290,3 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 require __DIR__ . '/auth.php';
-

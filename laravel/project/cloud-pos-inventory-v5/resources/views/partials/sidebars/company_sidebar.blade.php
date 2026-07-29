@@ -242,18 +242,24 @@
                             </a>
                         </li>
                         @can('manage attributes')
-                        <li class="side-nav-item">
-                            <a href="{{ route('company.settings.attributes.index') }}"
-                                class="side-nav-link {{ request()->routeIs('company.settings.attributes.*') ? 'active' : '' }}">
-                                <span class="menu-text">Variant & Attribute Settings</span>
-                            </a>
-                        </li>
+                            <li class="side-nav-item">
+                                <a href="{{ route('company.settings.attributes.index') }}"
+                                    class="side-nav-link {{ request()->routeIs('company.settings.attributes.*') ? 'active' : '' }}">
+                                    <span class="menu-text">Variant & Attribute Settings</span>
+                                </a>
+                            </li>
                         @endcan
+                        {{-- Subscription link — duplicate removed, expiry badge kept --}}
                         <li class="side-nav-item">
                             <a href="{{ route('company.subscription.index') }}"
                                 class="side-nav-link {{ request()->routeIs('company.subscription.*') ? 'active' : '' }}">
-                                <span class="menu-text">Subscription & Plan</span>
-                                <span class="badge bg-warning-lt text-warning ms-auto">Pro</span>
+                                <span class="menu-text">My Subscription</span>
+                                @php
+                                    $activeSub = Auth::user()->company?->subscription;
+                                @endphp
+                                @if ($activeSub && $activeSub->daysRemaining() <= 7 && $activeSub->daysRemaining() > 0)
+                                    <span class="badge bg-danger ms-auto">{{ $activeSub->daysRemaining() }}d</span>
+                                @endif
                             </a>
                         </li>
                         <li class="side-nav-item">

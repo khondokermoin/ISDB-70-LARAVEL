@@ -18,5 +18,3 @@
 
 <!-- Global Alert Notifications -->
 @include('partials.alerts')
-
-@stack('scripts')

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Company;
 use Illuminate\Support\Facades\Cache;
+use Throwable;
 
 /**
  * TenantService - Central service for multi-tenant domain resolution.
@@ -33,16 +34,22 @@ class TenantService
         $companyId = Cache::remember($cacheKey, now()->addMinutes(60), function () use ($host) {
             $subdomain = $this->extractSubdomain($host);
 
-            $company = Company::query()
-                ->where('status', 'active')
-                ->where(function ($query) use ($host, $subdomain) {
-                    $query->where('custom_domain', $host)
-                          ->orWhere('subdomain', $subdomain);
-                })
-                ->select('id')
-                ->first();
+            try {
+                $company = Company::query()
+                    ->where('status', 'active')
+                    ->where(function ($query) use ($host, $subdomain) {
+                        $query->where('custom_domain', $host)
+                            ->orWhere('subdomain', $subdomain);
+                    })
+                    ->select('id')
+                    ->first();
 
-            return $company?->id;
+                return $company?->id;
+            } catch (Throwable $e) {
+                report($e);
+
+                return null;
+            }
         });
 
         if (! $companyId) {
@@ -51,10 +58,16 @@ class TenantService
 
         // Load full company with fresh data (not cached to allow real-time updates)
         $this->tenant = Cache::remember('tenant_data_' . $companyId, now()->addMinutes(30), function () use ($companyId) {
-            return Company::query()
-                ->where('id', $companyId)
-                ->where('status', 'active')
-                ->first();
+            try {
+                return Company::query()
+                    ->where('id', $companyId)
+                    ->where('status', 'active')
+                    ->first();
+            } catch (Throwable $e) {
+                report($e);
+
+                return null;
+            }
         });
 
         return $this->tenant;
